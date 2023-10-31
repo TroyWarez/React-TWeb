@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import './Navbar.css';
+const NavData = ['GenericInput', 'BetterMediaKeys', 'Games' ];
 function Navbar() {
-    const [count, setCount] = useState(0)
+    const [item, setItem] = useState(NavData[0])
   
     return (
-        <nav className='Navbar'></nav>
+        <nav className='Navbar'> Item is { item }</nav>
     )
   }
   

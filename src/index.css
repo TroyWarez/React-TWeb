@@ -12,6 +12,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+  --main-bg-color: #131313;
+  --main-bg-textcolor: #ffffff;
 }
 
 a {
@@ -29,13 +31,13 @@ body {
   border: 0;
   outline: 0;
   font-size: 100%;
-  background: transparent;
+  color:var(--main-bg-color);
 }
 
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --main-bg-color: #ffffff;
+    --main-bg-textcolor: #000000;
   }
 }
