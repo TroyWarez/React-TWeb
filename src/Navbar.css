@@ -1,10 +1,11 @@
 .Navbar{
     width: 100%;
     outline: none;
-    color:white;
     box-sizing: border-box;
     border: 2px solid rgb(255, 255, 255);
     border-radius: 8px;
     background-color:var(--main-bg-color);
     padding: 4px;
+    color:var( --main-textColor);
+    color-scheme: var(--main-scheme);
     }

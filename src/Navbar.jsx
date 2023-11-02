@@ -9,6 +9,7 @@ function Navbar() {
        <nav className='Navbar'>
          
        <LightButton/>
+       <b>{NavData[0]}</b>
        </nav>
     )
   }

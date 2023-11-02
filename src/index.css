@@ -1,18 +1,14 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-
-  font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   --main-bg-color: #131313;
-  --main-bg-textcolor: #ffffff;
   --main-bg-hovercolor: #393939;
+  --main-scheme: dark;
+  --main-textColor: #ffffff;
+
 }
 
 body {
@@ -21,8 +17,9 @@ body {
   border: 0;
   outline: 0;
   font-size: 100%;
-  color: var(--main-bg-color);
   background-color: var(--main-bg-color);
+  color-scheme: var(--main-scheme);
+  color: var(textColor);
 }
 
 
@@ -31,5 +28,6 @@ body {
     --main-bg-color: #ffffff;
     --main-bg-textcolor: #000000;
     --main-bg-hovercolor: #e2e2e2;
+    --main-textColor: #131313;
   }
 }

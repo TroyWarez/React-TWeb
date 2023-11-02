@@ -20,6 +20,8 @@ function LightButton()
                 document.body.style.setProperty('--main-bg-color', '#131313');
                 Iconsrc = lightModeIcon;
                 document.body.style.setProperty('--main-bg-hovercolor', '#393939');
+                document.body.style.setProperty('--main-scheme', 'dark');
+                document.body.style.setProperty('--main-textColor', '#ffffff');
                 break;
             }
             case 'light':
@@ -27,6 +29,8 @@ function LightButton()
                 document.body.style.setProperty('--main-bg-color', '#ffffff');
                 Iconsrc = darkModeIcon;
                 document.body.style.setProperty('--main-bg-hovercolor', '#e2e2e2');
+                document.body.style.setProperty('--main-scheme', 'light');
+                document.body.style.setProperty('--main-textColor', '#131313');
                 break;
             }
         }
@@ -39,6 +43,8 @@ function LightButton()
                 document.body.style.setProperty('--main-bg-color', '#131313');
                 Iconsrc = lightModeIcon;
                 document.body.style.setProperty('--main-bg-hovercolor', '#393939');
+                document.body.style.setProperty('--main-scheme', 'light');
+                document.body.style.setProperty('--main-textColor', '#ffffff');
                 break;
             }
             case '#ffffff':
@@ -46,6 +52,8 @@ function LightButton()
                 document.body.style.setProperty('--main-bg-color', '#ffffff');
                 Iconsrc = darkModeIcon;
                 document.body.style.setProperty('--main-bg-hovercolor', '#e2e2e2');
+                document.body.style.setProperty('--main-scheme', 'dark');
+                document.body.style.setProperty('--main-textColor', '#131313');
                 break;
             }    
         }
@@ -53,9 +61,6 @@ function LightButton()
 }
 function switchLightMode(event)
 {
-    const handleClick = (event) => {
-        event.preventDefault();
-      }
       let Icon = null;
       let InputElement = document.getElementsByClassName('lightSwitch')[0];
       switch(getComputedStyle(document.body).getPropertyValue('--main-bg-color'))
@@ -66,6 +71,8 @@ function switchLightMode(event)
                 document.body.style.setProperty('--main-bg-hovercolor', '#e2e2e2');
                 localStorage.setItem('lightSwitchState', 'light');
                 InputElement.src = darkModeIcon;
+                document.body.style.setProperty('--main-scheme', 'light');
+                document.body.style.setProperty('--main-textColor', '#131313');
                 break;
               }
           case '#ffffff':
@@ -74,6 +81,8 @@ function switchLightMode(event)
                 document.body.style.setProperty('--main-bg-hovercolor', '#393939');
                 localStorage.setItem('lightSwitchState', 'dark');
                 InputElement.src = lightModeIcon;
+                document.body.style.setProperty('--main-scheme', 'dark');
+                document.body.style.setProperty('--main-textColor', '#ffffff');
                 break;
               }
                   
