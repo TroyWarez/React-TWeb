@@ -3,7 +3,8 @@
     outline: none;
     color:white;
     box-sizing: border-box;
-    border: 1px solid rgb(255, 255, 255);
+    border: 2px solid rgb(255, 255, 255);
     border-radius: 8px;
-    background-color:#131313
+    background-color:var(--main-bg-color);
+    padding: 4px;
     }

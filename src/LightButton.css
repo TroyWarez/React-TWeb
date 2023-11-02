@@ -1,0 +1,11 @@
+.lightSwitch {
+    width: 5%;
+    height: 5%;
+    border-radius: 50%;
+}
+.lightSwitch:hover {
+    background-color: var(--main-bg-hovercolor)
+}
+.lightSwitch:active {
+    transform: scale(.97);
+}
