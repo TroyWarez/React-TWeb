@@ -3,16 +3,14 @@ import LightButton from './LightButton'
 import Navbutton from './Navbutton'
 import './Navbar.css';
 const NavData = [
-  new Navbutton('GenericInput'),
-  new Navbutton('BetterMediaKeys'),
-  new Navbutton('TPONG')
+  new Navbutton('GenericInput', '0'),
+  new Navbutton('BetterMediaKeys', '1'),
+  new Navbutton('TPONG', '2')
 ]; 
 function Navbar() {
-  let testNav  = new Navbutton;
-  testNav = NavData[0];
     return (
        <nav className='Navbar'>
-       {NavData[0]}
+       {NavData}
        <LightButton/>
        </nav>
     )

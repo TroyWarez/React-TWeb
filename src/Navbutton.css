@@ -1,0 +1,11 @@
+.Navbutton{
+    background-color:var(--main-bg-color);
+    padding: 4px;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 8px;
+    color:var( --main-textColor);
+    color-scheme: var(--main-scheme);
+    padding: 15px 32px;
+    text-align: center;
+    font-size: 16px;
+}

@@ -1,8 +1,8 @@
+import './Navbutton.css';
 import React from 'react';
-import './Navbutton.css'
-function Navbutton(name)
+function Navbutton(name, key)
 {
-    return ( <><p>{name}</p><input type='button' onClick={NavButtonOnClick}></input></>);
+    return ( <input className='Navbutton' type='button' onClick={NavButtonOnClick} value={name} key={key}></input>);
 }
 function NavButtonOnClick(event)
 {

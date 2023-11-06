@@ -52,7 +52,7 @@ function LightButton()
                 break;
             }
         }
-    return (<input className='lightSwitch' type='image' src={Iconsrc} onClick={switchLightMode}/>);
+    return (<input className='lightSwitch' type='image' src={Iconsrc} onClick={switchLightMode} alt={lightSwitchState}/>);
 }
 function switchLightMode(event)
 {
@@ -64,6 +64,7 @@ function switchLightMode(event)
                 document.body.style.setProperty('--main-bg-hovercolor', '#e2e2e2');
                 localStorage.setItem('lightSwitchState', 'light');
                 event.target.src = darkModeIcon;
+                event.target.alt = 'light';
                 document.body.style.setProperty('--main-scheme', 'light');
                 document.body.style.setProperty('--main-textColor', '#131313');
                 break;
@@ -73,6 +74,7 @@ function switchLightMode(event)
                 document.body.style.setProperty('--main-bg-color', '#131313');
                 document.body.style.setProperty('--main-bg-hovercolor', '#393939');
                 localStorage.setItem('lightSwitchState', 'dark');
+                event.target.alt = 'dark';
                 event.target.src = lightModeIcon;
                 document.body.style.setProperty('--main-scheme', 'dark');
                 document.body.style.setProperty('--main-textColor', '#ffffff');
