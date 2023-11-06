@@ -8,4 +8,5 @@
     padding: 4px;
     color:var( --main-textColor);
     color-scheme: var(--main-scheme);
+    background-size: 20px 30px;
     }
