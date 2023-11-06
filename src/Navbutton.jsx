@@ -1,6 +1,11 @@
+import React from 'react';
 import './Navbutton.css'
-function Navbutton()
+function Navbutton(name)
 {
-    return <><b>Test</b></>
+    return ( <><p>{name}</p><input type='button' onClick={NavButtonOnClick}></input></>);
+}
+function NavButtonOnClick(event)
+{
+
 }
 export default Navbutton;

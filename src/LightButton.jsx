@@ -20,7 +20,7 @@ function LightButton()
         default:
         {
             lightSwitchState = 'dark';
-            console.warn('Warning: \'--main-bg-color\' was not set correctly');
+            console.warn('Warning: \'--main-bg-color\' was not set correctly in localStorage');
             break;
         }
     }
