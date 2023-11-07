@@ -1,12 +1,16 @@
-.Navbar{
-    width: 100%;
+.Navbar {
+    display: flex;
     outline: none;
     box-sizing: border-box;
-    border: 2px solid rgb(255, 255, 255);
-    border-radius: 8px;
-    background-color:var(--main-bg-color);
     padding: 4px;
-    color:var( --main-textColor);
+    color: var(--main-bg-color);
     color-scheme: var(--main-scheme);
-    background-size: 20px 30px;
-    }
+    min-width: 24px;
+    min-height: 24px;
+    justify-content: space-evenly;
+    flex-direction: row;
+    align-items: stretch;
+    align-content: center;
+    flex-wrap: nowrap;
+    margin-left: 12px;
+}

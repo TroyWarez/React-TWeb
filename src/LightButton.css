@@ -1,7 +1,11 @@
 .lightSwitch {
-    width: 3%;
-    height: 3%;
+    display: flex;
+    box-sizing:border-box;
+    flex-direction: row-reverse;
     border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    margin-left: 120px;
 }
 .lightSwitch:hover {
     background-color: var(--main-bg-hovercolor)
@@ -9,13 +13,3 @@
 .lightSwitch:active {
     transform: scale(.97);
 }
-
-.lightSwitch svg {
-    height: 20px;
-    width: 20px;
-    position: absolute;
-    right: 5px;
-    top: 0;
-    bottom: 0;
-    margin: auto;
-  }

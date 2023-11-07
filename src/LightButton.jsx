@@ -1,10 +1,12 @@
 import lightModeIcon from '/light_mode.svg'
 import darkModeIcon from '/dark_mode.svg'
 import './LightButton.css'
-function LightButton()
+function LightButton(name, key)
 {
     let Iconsrc = null;
     let lightSwitchState = null;
+    let debug = getComputedStyle(document.body).getPropertyValue('--main-bg-color');
+    let s = 2;
     switch (getComputedStyle(document.body).getPropertyValue('--main-bg-color'))
     {
         case '#131313':
@@ -52,7 +54,7 @@ function LightButton()
                 break;
             }
         }
-    return (<input className='lightSwitch' type='image' src={Iconsrc} onClick={switchLightMode} alt={lightSwitchState}/>);
+    return (<input className='lightSwitch' type='image' src={Iconsrc} onClick={switchLightMode} alt={lightSwitchState} value={name} key={key}/>);
 }
 function switchLightMode(event)
 {
