@@ -1,0 +1,14 @@
+.WebsiteTitle {
+    text-decoration: none;
+    color: var(--main-textColor);
+    color-scheme: var(--main-scheme);
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0%;
+}
+.WebsiteTitle:hover {
+    filter: invert(0.5);
+}
+.terminalIcon:hover {
+    filter: invert(0.5);
+}

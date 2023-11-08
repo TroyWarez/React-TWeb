@@ -8,7 +8,7 @@
     margin-left: 120px;
 }
 .lightSwitch:hover {
-    background-color: var(--main-bg-hovercolor)
+    background-color: var(--main-bg-hovercolor);
 }
 .lightSwitch:active {
     transform: scale(.97);

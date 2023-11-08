@@ -6,9 +6,9 @@
   -moz-osx-font-smoothing: grayscale;
   --main-bg-color: #131313;
   --main-bg-hovercolor: #393939;
+  --main-hovertextColor: #d3d3d3;
   --main-scheme: dark;
   --main-textColor: #ffffff;
-
 }
 
 body {
@@ -29,6 +29,7 @@ body {
     --main-bg-color: #ffffff;
     --main-bg-textcolor: #000000;
     --main-bg-hovercolor: #e2e2e2;
+    --main-hovertextColor: #c5c5c5;
     --main-textColor: #131313;
   }
 }
