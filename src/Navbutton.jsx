@@ -7,6 +7,7 @@ function Navbutton(name, key)
 function NavButtonOnClick(event)
 {
     let ArticleContent = '';
+    let ArticleTitleContent = '';
     switch (event.target.defaultValue)
     {
         case 'BetterMediaKeys':
@@ -16,6 +17,7 @@ function NavButtonOnClick(event)
                     window.history.pushState('BetterMediaKeys', '', '/BetterMediaKeys');
                 }
                 window.document.title = 'TWeb | BetterMediaKeys';
+                ArticleTitleContent = 'BetterMediaKeys';
                 ArticleContent = BetterMediaKeysDescription;
                 break;
             }
@@ -26,6 +28,7 @@ function NavButtonOnClick(event)
                     window.history.pushState('GenericInput', '', '/GenericInput');
                 }
                 window.document.title = 'TWeb | GenericInput';
+                ArticleTitleContent = 'GenericInput';
                 ArticleContent = GenericInputDescription;
                 break;
             }
@@ -36,6 +39,7 @@ function NavButtonOnClick(event)
                     window.history.pushState('TPONG', '', '/TPONG');
                 }
                 window.document.title = 'TWeb | TPONG';
+                ArticleTitleContent = 'TPONG';
                 ArticleContent = TPONGDesciption;
                 break;
             }
@@ -43,50 +47,58 @@ function NavButtonOnClick(event)
                 {
                     window.document.title = 'TWeb | Dev';
                     ArticleContent = '';
+                    ArticleTitleContent = '';
                     break;
                 }
     }
     
-    setArticle(ArticleContent);
+    setArticle(ArticleContent, ArticleTitleContent);
 }
 window.onpopstate = function(e){
     let ArticleContent = '';
+    let ArticleTitleContent = '';
     switch (e.state)
     {
         case 'BetterMediaKeys':
             {
                 window.document.title = 'TWeb | BetterMediaKeys';
                 ArticleContent = BetterMediaKeysDescription;
+                ArticleTitleContent = 'BetterMediaKeys';
                 break;        
             }
         case 'GenericInput':
             {
                 window.document.title = 'TWeb | GenericInput';
                 ArticleContent = GenericInputDescription;
+                ArticleTitleContent = 'GenericInput';
                 break;        
             }
         case 'TPONG':
             {
                 window.document.title = 'TWeb | TPONG';
                 ArticleContent = TPONGDesciption;
+                ArticleTitleContent = 'TPONG';
                 break;        
             }
         default:
             {
                 window.document.title = 'TWeb | Dev';
                 ArticleContent = '';
+                ArticleTitleContent = '';
                 break;
             }
     }
     
-    setArticle(ArticleContent);
+    setArticle(ArticleContent, ArticleTitleContent);
 };
-function setArticle(ArticleContent)
+function setArticle(ArticleContent, ArticleTitleContent)
 {
     let Article = document.getElementsByClassName('Article')[0];
-    if( typeof Article  !== undefined)
+    let ArticleTitle = document.getElementsByClassName('ArticleTitle')[0];
+    if( (typeof Article  !== undefined) && (typeof ArticleTitle !== undefined) )
     {
         Article.innerHTML = ArticleContent;
+        ArticleTitle.innerHTML = ArticleTitleContent;
     }
 
 }
