@@ -20,6 +20,7 @@ body {
   background-color: var(--main-bg-color);
   color-scheme: var(--main-scheme);
   color: var(--main-textColor);
+  text-align: center;
 }
 
 

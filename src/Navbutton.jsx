@@ -1,5 +1,5 @@
 import './Navbutton.css';
-import React from 'react';
+import  { BetterMediaKeysDescription, GenericInputDescription, TPONGDesciption } from './Articles.js'
 function Navbutton(name, key)
 {
     return ( <input className='Navbutton' type='button' onClick={NavButtonOnClick} value={name} key={key}></input>);
@@ -13,6 +13,11 @@ function NavButtonOnClick(event)
                 if(window.location.pathname !== '/BetterMediaKeys')
                 {
                     window.history.pushState('BetterMediaKeys', '', '/BetterMediaKeys');
+                    let Article = document.getElementsByClassName('Article')[0];
+                    if( Article )
+                    {
+                        Article.innerHTML = BetterMediaKeysDescription;
+                    }
                 }
                 break;
             }
@@ -21,6 +26,11 @@ function NavButtonOnClick(event)
                 if(window.location.pathname !== '/GenericInput')
                 {
                     window.history.pushState('GenericInput', '', '/GenericInput');
+                    let Article = document.getElementsByClassName('Article')[0];
+                    if( Article )
+                    {
+                        Article.innerHTML = GenericInputDescription;
+                    }
                 }
                 break;
             }
@@ -29,6 +39,11 @@ function NavButtonOnClick(event)
                 if(window.location.pathname !== '/TPONG')
                 {
                     window.history.pushState('TPONG', '', '/TPONG');
+                    let Article = document.getElementsByClassName('Article')[0];
+                    if( Article )
+                    {
+                        Article.innerHTML = TPONGDesciption;
+                    }
                 }
                 break;
             }
