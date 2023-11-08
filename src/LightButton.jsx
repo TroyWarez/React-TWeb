@@ -5,8 +5,6 @@ function LightButton(name, key)
 {
     let Iconsrc = null;
     let lightSwitchState = null;
-    let debug = getComputedStyle(document.body).getPropertyValue('--main-bg-color');
-    let s = 2;
     switch (getComputedStyle(document.body).getPropertyValue('--main-bg-color'))
     {
         case '#131313':
