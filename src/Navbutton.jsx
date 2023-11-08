@@ -14,9 +14,9 @@ function NavButtonOnClick(event)
                 if(window.location.pathname !== '/BetterMediaKeys')
                 {
                     window.history.pushState('BetterMediaKeys', '', '/BetterMediaKeys');
-                    window.document.title = 'TWeb | BetterMediaKeys';
-                    ArticleContent = BetterMediaKeysDescription;
                 }
+                window.document.title = 'TWeb | BetterMediaKeys';
+                ArticleContent = BetterMediaKeysDescription;
                 break;
             }
         case 'GenericInput':
@@ -24,9 +24,9 @@ function NavButtonOnClick(event)
                 if(window.location.pathname !== '/GenericInput')
                 {
                     window.history.pushState('GenericInput', '', '/GenericInput');
-                    window.document.title = 'TWeb | GenericInput';
-                    ArticleContent = GenericInputDescription;
                 }
+                window.document.title = 'TWeb | GenericInput';
+                ArticleContent = GenericInputDescription;
                 break;
             }
         case 'TPONG':
@@ -34,11 +34,17 @@ function NavButtonOnClick(event)
                 if(window.location.pathname !== '/TPONG')
                 {
                     window.history.pushState('TPONG', '', '/TPONG');
-                    window.document.title = 'TWeb | TPONG';
-                    ArticleContent = TPONGDesciption;
                 }
+                window.document.title = 'TWeb | TPONG';
+                ArticleContent = TPONGDesciption;
                 break;
             }
+            default:
+                {
+                    window.document.title = 'TWeb | Dev';
+                    ArticleContent = '';
+                    break;
+                }
     }
     
     setArticle(ArticleContent);
