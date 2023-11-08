@@ -84,7 +84,7 @@ window.onpopstate = function(e){
 function setArticle(ArticleContent)
 {
     let Article = document.getElementsByClassName('Article')[0];
-    if( Article )
+    if( typeof Article  !== undefined)
     {
         Article.innerHTML = ArticleContent;
     }
