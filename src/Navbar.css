@@ -13,4 +13,5 @@
     align-content: center;
     flex-wrap: nowrap;
     margin-left: 12px;
+    overflow: hidden;
 }
