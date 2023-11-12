@@ -9,7 +9,7 @@
     min-height: 24px;
     justify-content: space-evenly;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
     align-content: center;
     flex-wrap: nowrap;
     margin-left: 12px;

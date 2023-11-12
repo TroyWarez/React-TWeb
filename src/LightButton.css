@@ -1,12 +1,8 @@
 .lightSwitch {
     display: flex;
-    box-sizing:border-box;
-    flex-direction: row-reverse;
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    margin-left: 120px;
     overflow: hidden;
+    padding: 10px;
 }
 .lightSwitch:hover {
     background-color: var(--main-bg-hovercolor);

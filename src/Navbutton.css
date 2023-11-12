@@ -10,6 +10,7 @@
     min-width: 24px;
     margin: 5px;
     overflow: hidden;
+    padding: 12px;
 }
 .Navbutton:hover {
     background-color: var(--main-bg-hovercolor)
