@@ -1,5 +1,12 @@
-.Article{
+.Article {
     text-align: justify;
+    display: flexbox;
+    margin-left: 25%;
+    margin-right: 25%;
+    text-align: center;
+}
+.ArticleTitle {
+    text-align: center;
     display: flexbox;
     margin-left: 25%;
     margin-right: 25%;

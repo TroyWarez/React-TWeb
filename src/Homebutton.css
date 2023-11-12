@@ -2,9 +2,9 @@
     text-decoration: none;
     color: var(--main-textColor);
     color-scheme: var(--main-scheme);
-    font-size: 16px;
     font-weight: bold;
-    padding: 0%;
+    font-size: 24px;
+    font-family: "Lucida Console", "Courier New", monospace;
 }
 .WebsiteTitle:hover {
     filter: invert(0.5);
