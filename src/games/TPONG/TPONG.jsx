@@ -1,21 +1,19 @@
-import './App.css';
-import "bootstrap/dist/css/bootstrap.min.css"
 import paddleHitSound from './sounds/paddleHit.m4a'
 import paddleServeSound from './sounds/paddleServe.m4a'
 import tableHitSound from './sounds/tableHit.m4a'
 import ScoreBeepSound from './sounds/score.m4a'
-let canvas = document.getElementById("gameBoard");
+let canvas = document.getElementById('gameBoard');
 let CursorLock = undefined;
 let ControllerSlots = new Array();
 
 let ScalingFactorX = 1;
 let ScalingFactorY = 1;
-const canvasMarginLeft = "auto";
-const canvasMarginRight = "auto";
-const canvasStyleDisplay = "block";
-const canvasStyleWidth = "800px";
+const canvasMarginLeft = 'auto';
+const canvasMarginRight = 'auto';
+const canvasStyleDisplay = 'block';
+const canvasStyleWidth = '800px';
 
-const ctx = canvas.getContext("2d");
+const ctx = canvas.getContext('2d');
 let previousTimeStamp = null;
 
 let LeaderBoardTime = null;
@@ -64,14 +62,14 @@ let CPUPaddle = { 'x' : 0, 'y' : 0 };
 let PlayerScore = 1;
 let CPUScore = 1;
 
-let gameFlags = { "StartGame" : false, "IdleMode": true, "DrawBall" : false, "Debug" : true, "AudioPlayable" : false, } //booleans
+let gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : true, 'AudioPlayable' : false, } //booleans
 
 //Debug element array
 let gameElements = [PlayerPaddle, CPUPaddle, Ball];
-let SelectedElement = {"gameElement" : null, "Index" : 0 };
+let SelectedElement = {'gameElement' : null, 'Index' : 0 };
 let BallSpawnDelay = 0;
 
-let lastKey = "";
+let lastKey = '';
 let lastController = null;
 const GameboardBoundary = 30;
 
@@ -79,7 +77,7 @@ let paddleHit = new Audio(paddleHitSound);
 let paddleServe = new Audio(paddleServeSound);
 let tableHit = new Audio(tableHitSound);
 let ScoreBeep = new Audio(ScoreBeepSound);
-function App() {
+function GameStart(gameSetup) {
   if (gameFlags.Debug)
   {
     gameFlags.StartGame = true;
@@ -92,8 +90,8 @@ function App() {
     SelectedElement = gameElements[0]; //Defaults to first element.
     LeaderBoardTime = Date.now();
   }
+  window.requestAnimationFrame(Draw);
 }
-window.requestAnimationFrame(Draw);
 
 function Draw(timeStamp)
 {
@@ -290,8 +288,8 @@ function Draw(timeStamp)
 
   if (gameFlags.Debug)
   {
-  //console.log("Width:" + ctx.canvas.width);
-  //console.log("Height:" + ctx.canvas.height);
+  //console.log('Width:' + ctx.canvas.width);
+  //console.log('Height:' + ctx.canvas.height);
   }
   //Game Logic
   if( BallSpawnDelay < Date.now()  && BallSpawnDelay !== 0){
@@ -306,7 +304,7 @@ function Draw(timeStamp)
       if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
       {
         firstController = Gamepads[firstController.index];
-        firstController.vibrationActuator.playEffect("dual-rumble", {
+        firstController.vibrationActuator.playEffect('dual-rumble', {
           startDelay: 0,
           duration: 1000,
           weakMagnitude: 1.0,
@@ -327,7 +325,7 @@ function Draw(timeStamp)
       if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
       {
         firstController = Gamepads[firstController.index];
-        firstController.vibrationActuator.playEffect("dual-rumble", {
+        firstController.vibrationActuator.playEffect('dual-rumble', {
           startDelay: 0,
           duration: 1000,
           weakMagnitude: 1.0,
@@ -363,7 +361,7 @@ function Draw(timeStamp)
     }
     else if ((Ball.x + Ball.radius) >= CPUPaddle.x  && (Ball.x + Ball.radius) <= (CPUPaddle.x + PaddleWidth ) &&  Ball.y >= CPUPaddle.y &&  (Ball.y + Ball.radius)  <= (CPUPaddle.y + PaddleHeight))
     {
-      console.log("CPU Paddle Hit");
+      console.log('CPU Paddle Hit');
       if(gameFlags.AudioPlayable === true){
         if((Math.floor(Math.random() * 2) === 0))
         {
@@ -381,7 +379,7 @@ function Draw(timeStamp)
     }
     else if ((Ball.x - Ball.radius)  >= PlayerPaddle.x  && (Ball.x - Ball.radius)  <= (PlayerPaddle.x + PaddleWidth ) &&  Ball.y >= PlayerPaddle.y &&  (Ball.y - Ball.radius)   <= (PlayerPaddle.y + PaddleHeight))
     {
-      console.log("Player Paddle Hit");
+      console.log('Player Paddle Hit');
       if(gameFlags.AudioPlayable === true){
         if((Math.floor(Math.random() * 2) === 0))
         {
@@ -395,7 +393,7 @@ function Draw(timeStamp)
       if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
       {
         firstController = Gamepads[firstController.index];
-        firstController.vibrationActuator.playEffect("dual-rumble", {
+        firstController.vibrationActuator.playEffect('dual-rumble', {
           startDelay: 0,
           duration: 50,
           weakMagnitude: 0.75,
@@ -487,7 +485,7 @@ function Draw(timeStamp)
 document.addEventListener('keyup', (event)  => {
   if(event.key === lastKey)
   {
-    lastKey = "";
+    lastKey = '';
   }
 }, true);
 document.addEventListener('keydown', (event) => {
@@ -582,7 +580,7 @@ function GamepadHandler(event)
   {
     case 'gamepadconnected':
       {
-      console.log("Gamepad connected");
+      console.log('Gamepad connected');
       if(event.gamepad.mapping !== '')
       {
         ControllerSlots[event.gamepad.index] = event.gamepad;
@@ -592,7 +590,7 @@ function GamepadHandler(event)
       case 'gamepaddisconnected':
       {
       delete ControllerSlots[event.gamepad.index];
-      console.log("Gamepad disconnected");
+      console.log('Gamepad disconnected');
       break;
       }
   }
@@ -631,7 +629,7 @@ function FullScreenHandler() {
       document.mozFullScreen || 
       document.webkitIsFullScreen) {
       if(gameFlags.Debug){
-        console.log("Entered Full Screen");
+        console.log('Entered Full Screen');
       }
     PlayerPaddle = { 'x' : PaddleHeight, 'y' : ((gameBoardHeight / 2) - PaddleHeight) };
     CPUPaddle = { 'x' : 0, 'y' : 0 };
@@ -640,13 +638,13 @@ function FullScreenHandler() {
     Ball = { 'x' : 0, 'y' : 0, 'radius' : BallRad, 'velocityY' : BallMovSpeed, 'velocityX' : BallMovSpeed, 'divisor' : 2};
     canvas.style.paddingLeft = 0;
     canvas.style.paddingRight = 0;
-    canvas.style.marginLeft = "";
-    canvas.style.marginRight = "";
-    canvas.style.display = "";
-    canvas.style.width = "";
+    canvas.style.marginLeft = '';
+    canvas.style.marginRight = '';
+    canvas.style.display = '';
+    canvas.style.width = '';
   } else {
     if(gameFlags.Debug){
-    console.log("Exited Full Screen");
+    console.log('Exited Full Screen');
     }
     gameBoardWidth = DefaultWidth;
     gameBoardHeight = DefaultHeight;
@@ -661,21 +659,21 @@ function FullScreenHandler() {
     canvas.style.width = canvasStyleWidth;
   }
 }
-document.addEventListener("click", () => {
+document.addEventListener('click', () => {
   gameFlags.AudioPlayable = true;
   /* the audio is now playable; play it if permissions allow */
   if(gameFlags.Debug){
-  console.log("The audio is now playable. ");
+  console.log('The audio is now playable. ');
 }
 });
-document.addEventListener("fullscreenchange", FullScreenHandler);
+document.addEventListener('fullscreenchange', FullScreenHandler);
 document.addEventListener('pointerlockchange', () => {
   if(document.pointerLockElement === canvas) {
-    document.addEventListener("mousemove", MouseHandler, false);
+    document.addEventListener('mousemove', MouseHandler, false);
   }
   else if (CursorLock){
-    document.removeEventListener("mousemove", MouseHandler, false);
+    document.removeEventListener('mousemove', MouseHandler, false);
     CursorLock = undefined;
   }
 }, true);
-export default App;
+export default GameStart;

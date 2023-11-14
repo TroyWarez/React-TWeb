@@ -1,6 +1,7 @@
 import LightButton from './LightButton'
 import Navbutton from './Navbutton'
 import Homebutton from './Homebutton';
+//import GameStart from '/games/TPONG/TPONG'
 import './Navbar.css';
 function Navbar() {
   const NavData = [
@@ -11,9 +12,12 @@ function Navbar() {
     new LightButton('Lightswitch', '4')
   ]; 
     return (
+      <>
        <nav className='Navbar'>
        {NavData}
        </nav>
+       <canvas id="gameBoard"></canvas>
+       </>
     )
   }
   

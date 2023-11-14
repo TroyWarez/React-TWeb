@@ -22,7 +22,9 @@ body {
   color: var(--main-textColor);
 }
 
-
+#gameBoard {
+  visibility: collapse;
+}
 @media (prefers-color-scheme: light) {
   :root {
     --main-bg-color: #ffffff;
