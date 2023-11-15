@@ -12,12 +12,9 @@ function Navbar() {
     new LightButton('Lightswitch', '4')
   ]; 
     return (
-      <>
        <nav className='Navbar'>
        {NavData}
        </nav>
-       <canvas id="gameBoard"></canvas>
-       </>
     )
   }
   

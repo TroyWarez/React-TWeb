@@ -2,7 +2,7 @@ import paddleHitSound from './sounds/paddleHit.m4a'
 import paddleServeSound from './sounds/paddleServe.m4a'
 import tableHitSound from './sounds/tableHit.m4a'
 import ScoreBeepSound from './sounds/score.m4a'
-let canvas = document.getElementById('gameBoard');
+let canvas = null;
 let CursorLock = undefined;
 let ControllerSlots = new Array();
 
@@ -13,7 +13,7 @@ const canvasMarginRight = 'auto';
 const canvasStyleDisplay = 'block';
 const canvasStyleWidth = '800px';
 
-const ctx = canvas.getContext('2d');
+const ctx = null;
 let previousTimeStamp = null;
 
 let LeaderBoardTime = null;
@@ -90,7 +90,13 @@ function GameStart(gameSetup) {
     SelectedElement = gameElements[0]; //Defaults to first element.
     LeaderBoardTime = Date.now();
   }
+  if(canvas === null)
+  {
+    canvas = <canvas className='gameBoard' id='gameBoard'></canvas>;
+  }
+  ctx = canvas.getContext('2d');
   window.requestAnimationFrame(Draw);
+  return ({canvas});
 }
 
 function Draw(timeStamp)
