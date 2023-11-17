@@ -1,11 +1,14 @@
-import paddleHitSound from './sounds/paddleHit.m4a'
-import paddleServeSound from './sounds/paddleServe.m4a'
-import tableHitSound from './sounds/tableHit.m4a'
-import ScoreBeepSound from './sounds/score.m4a'
-let canvas = null;
+let paddleHitSound = 'sounds/TPONG/paddleHit.m4a'
+let paddleServeSound = 'sounds/TPONG/paddleServe.m4a'
+let tableHitSound = 'sounds/TPONG/tableHit.m4a'
+let ScoreBeepSound = 'sounds/TPONG/score.m4a'
+
+let canvas = document.createElement('canvas');
+canvas.id = 'mainGameboad';
+let ctx = canvas.getContext('2d');
+
 let CursorLock = undefined;
 let ControllerSlots = new Array();
-
 let ScalingFactorX = 1;
 let ScalingFactorY = 1;
 const canvasMarginLeft = 'auto';
@@ -13,7 +16,6 @@ const canvasMarginRight = 'auto';
 const canvasStyleDisplay = 'block';
 const canvasStyleWidth = '800px';
 
-const ctx = null;
 let previousTimeStamp = null;
 
 let LeaderBoardTime = null;
@@ -77,6 +79,14 @@ let paddleHit = new Audio(paddleHitSound);
 let paddleServe = new Audio(paddleServeSound);
 let tableHit = new Audio(tableHitSound);
 let ScoreBeep = new Audio(ScoreBeepSound);
+
+class GameHandler {
+  constructor(gameSetup, bDebug) {
+    this.height = height;
+    this.width = width;
+  }
+}
+
 function GameStart(gameSetup) {
   if (gameFlags.Debug)
   {
@@ -87,16 +97,11 @@ function GameStart(gameSetup) {
     CPUScore = 0;
     Ball.x = (gameBoardWidth / 2);
     Ball.y = Math.floor(Math.random() * gameBoardHeight);
-    SelectedElement = gameElements[0]; //Defaults to first element.
     LeaderBoardTime = Date.now();
   }
-  if(canvas === null)
-  {
-    canvas = <canvas className='gameBoard' id='gameBoard'></canvas>;
-  }
-  ctx = canvas.getContext('2d');
   window.requestAnimationFrame(Draw);
-  return ({canvas});
+  canvas.className = 'Article';
+  return canvas;
 }
 
 function Draw(timeStamp)
@@ -467,11 +472,11 @@ function Draw(timeStamp)
     }
     else if (((CPUPaddle.y + PaddleHeight) + CPUMovSpeed) <= (gameBoardHeight / 2))
     {
-      CPUPaddle.y += CPUMovSpeed * deltaTime;
+      CPUPaddle.y += CPUMovSpeed;
     }
     else if(((CPUPaddle.y - PaddleHeight) - CPUMovSpeed) >= (gameBoardHeight / 2))
     {
-      CPUPaddle.y -= CPUMovSpeed * deltaTime;
+      CPUPaddle.y -= CPUMovSpeed;
     }
     ctx.roundRect(CPUPaddle.x, CPUPaddle.y, PaddleWidth, PaddleHeight, PaddleRad);
     ctx.fill();
@@ -669,7 +674,7 @@ document.addEventListener('click', () => {
   gameFlags.AudioPlayable = true;
   /* the audio is now playable; play it if permissions allow */
   if(gameFlags.Debug){
-  console.log('The audio is now playable. ');
+  //console.log('The audio is now playable. ');
 }
 });
 document.addEventListener('fullscreenchange', FullScreenHandler);

@@ -97,8 +97,11 @@ function setArticle(ArticleContent, ArticleTitleContent)
     let ArticleTitle = document.getElementsByClassName('ArticleTitle')[0];
     if( (typeof Article  !== undefined) && (typeof ArticleTitle !== undefined) )
     {
-        Article.innerHTML = ArticleContent;
         ArticleTitle.innerHTML = ArticleTitleContent;
+        let newArticle = document.createElement('p');
+        newArticle.className = 'Article';
+        newArticle.textContent = ArticleContent;
+        Article.replaceWith(newArticle);
     }
 
 }
