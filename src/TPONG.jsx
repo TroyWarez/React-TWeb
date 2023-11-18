@@ -464,8 +464,7 @@ class GameHandler {
       this.canvas.style.width = this.canvasStyleWidth;
     }
   }
-  getCanvas()
-  {
+  getCanvas(){
     return this.canvas;
   }
 
@@ -528,7 +527,25 @@ class GameHandler {
 
     this.LeaderBoardTime = null;
 
-    this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+    this.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false } //booleans
+
+    if (typeof(Storage) !== "undefined") {
+      this.gameFlags.localStorage = true;
+      this.selectedPalette = localStorage.getItem('savedPalette');
+      if(this.selectedPalette === null)
+      {
+           localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : this.Black,  SpriteColor : this.DimGray }));
+           this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+      }
+      else
+      {
+        this.selectedPalette = JSON.parse(this.selectedPalette);
+      }
+   }
+   else {
+      this.gameFlags.localStorage = false;
+      this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+   }
 
     this.BallMovSpeed = 0.45;
     this.CPUMovSpeed = 0.45;
@@ -554,8 +571,6 @@ class GameHandler {
 
     this.PlayerScore = 1;
     this.CPUScore = 1;
-
-    this.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, } //booleans
 
     //Debug element array
     this.gameElements = [this.PlayerPaddle, this.CPUPaddle, this.Ball];
@@ -604,27 +619,27 @@ class GameHandler {
         case '1': //Red
         {
           this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'RedPalette');
-            break;
+          break;
         }
         case '2': //Green
         {
           this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'GreenPalette');
-            break;
+          break;
         }
         case '3': // Blue
         {
           this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BluePalette');
-            break;
+          break;
         } 
         case '4': // Purple
         {
           this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'PurplePalette');
-            break;
+          break;
         }
         case '5': // Black
         {
           this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
-            break;
+          break;
         }
         case 'Enter':
         {
@@ -676,6 +691,11 @@ class GameHandler {
         default:
           return
       }
+
+      if(this.gameFlags.localStorage === true)
+      {
+        localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
+      }
     }
     this.lastKey = event.key;
     }, true);
@@ -684,7 +704,6 @@ class GameHandler {
     {
       this.gameFlags.StartGame = true;
       this.gameFlags.DrawBall = false;
-      this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'GreenPalette');
       this.PlayerScore = 0;
       this.CPUScore = 0;
       this.Ball.x = (this.gameBoardWidth / 2);
