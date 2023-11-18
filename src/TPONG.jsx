@@ -106,9 +106,9 @@ class GameHandler {
       {
         if(this.gameFlags.StartGame === true)
         {
-          if ((this.PlayerPaddle.y - (PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
+          if ((this.PlayerPaddle.y - (this.PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
           {
-            this.PlayerPaddle.y -= (PlayerMovSpeedFull * deltaTime);
+            this.PlayerPaddle.y -= (this.PlayerMovSpeedFull * deltaTime);
           }
           else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
           {
@@ -148,9 +148,9 @@ class GameHandler {
       {
         if(this.gameFlags.StartGame === true)
         {
-          if ((this.PlayerPaddle.y + (PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
+          if ((this.PlayerPaddle.y + (this.PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
           {
-            this.PlayerPaddle.y += (PlayerMovSpeedFull * deltaTime);
+            this.PlayerPaddle.y += (this.PlayerMovSpeedFull * deltaTime);
           }
           else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
           {
@@ -396,13 +396,13 @@ class GameHandler {
         console.log('Gamepad connected');
         if(event.gamepad.mapping !== '')
         {
-          ControllerSlots[event.gamepad.index] = event.gamepad;
+          this.ControllerSlots[event.gamepad.index] = event.gamepad;
         }
         break;
         }
         case 'gamepaddisconnected':
         {
-        delete ControllerSlots[event.gamepad.index];
+        delete this.ControllerSlots[event.gamepad.index];
         console.log('Gamepad disconnected');
         break;
         }
