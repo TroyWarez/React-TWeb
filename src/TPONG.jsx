@@ -28,6 +28,10 @@ class GameHandler {
         if(PattleIndex !== -1 && (PattleIndex - 1) >= 0)
         {
           this.selectedPalette = this.ColorPalettes[(PattleIndex - 1)];
+          if(this.gameFlags.localStorage === true)
+          {
+            localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
+          }
         }
       }
       else if (firstController.buttons[5].value === 1 && this.lastController !== null && this.lastController.buttons[5].value !== 1) {
@@ -35,6 +39,10 @@ class GameHandler {
         if(PattleIndex !== -1 && (PattleIndex + 1) < this.ColorPalettes.length)
         {
           this.selectedPalette = this.ColorPalettes[(PattleIndex + 1)];
+          if(this.gameFlags.localStorage === true)
+          {
+            localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
+          }
         }
       }
       else if (firstController.buttons[8].value === 1 && this.lastController !== null && this.lastController.buttons[8].value !== 1) {
