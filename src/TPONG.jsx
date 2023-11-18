@@ -6,7 +6,7 @@ class GameHandler {
     this.ctx.canvas.height = this.gameBoardHeight;
     this.CPUPaddle.x = (this.gameBoardWidth - this.PaddleHeight);
     this.ScalingFactorX = (this.gameBoardWidth / this.DefaultWidth);
-    this.ScalingFactorY = (this.gameBoardWidth / this.DefaultWidth);
+    this.ScalingFactorY = (this.gameBoardHeight / this.DefaultHeight);
     this.BallMovSpeed = (0.45 * this.ScalingFactorX);
     this.CPUMovSpeed = (0.45 * this.ScalingFactorY);
     
@@ -439,7 +439,7 @@ class GameHandler {
       this.CPUPaddle = { 'x' : 0, 'y' : 0 };
       this.gameBoardWidth = window.screen.width;
       this.gameBoardHeight = window.screen.height;
-      this.Ball = { 'x' : 0, 'y' : 0, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
+      this.Ball = { 'x' : 10, 'y' : 10, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
       this.canvas.style.paddingLeft = 0;
       this.canvas.style.paddingRight = 0;
       this.canvas.style.marginLeft = '';
@@ -450,11 +450,12 @@ class GameHandler {
       if(this.gameFlags.Debug){
       console.log('Exited Full Screen');
       }
+      this.BallMovSpeed = 0.45;
       this.gameBoardWidth = this.DefaultWidth;
       this.gameBoardHeight = this.DefaultHeight;
       this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight) };
       this.CPUPaddle = { 'x' : 0, 'y' : 0 };
-      this.Ball = { 'x' : ((this.gameBoardWidth / 2) - this.PaddleHeight), 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight), 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
+      this.Ball = { 'x' : (this.gameBoardWidth / 2), 'y' : Math.floor(Math.random() * this.gameBoardHeight), 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
       this.canvas.style.paddingLeft = 0;
       this.canvas.style.paddingRight = 0;
       this.canvas.style.marginLeft = this.canvasMarginLeft;
@@ -682,13 +683,14 @@ class GameHandler {
     if (bDebug === true)
     {
       this.gameFlags.StartGame = true;
-      this.gameFlags.DrawBall = true;
+      this.gameFlags.DrawBall = false;
       this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'GreenPalette');
       this.PlayerScore = 0;
       this.CPUScore = 0;
       this.Ball.x = (this.gameBoardWidth / 2);
       this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
       this.LeaderBoardTime = Date.now();
+      this.BallSpawnDelay = Date.now() + 4000;
     }
 
     window.requestAnimationFrame(this.Draw.bind(this));
