@@ -1,5 +1,6 @@
 import './Navbutton.css';
 import  { BetterMediaKeysDescription, GenericInputDescription, TPONGDesciption } from './Articles.js'
+import {EndGame} from './TPONG';
 function Navbutton(name, key)
 {
     return ( <input className='Navbutton' type='button' onClick={NavButtonOnClick} value={name} key={key}></input>);
@@ -94,9 +95,18 @@ window.onpopstate = function(e){
 function setArticle(ArticleContent, ArticleTitleContent)
 {
     let Article = document.getElementsByClassName('Article')[0];
-    let ArticleTitle = document.getElementsByClassName('ArticleTitle')[0];
-    if( (typeof Article  !== undefined) && (typeof ArticleTitle !== undefined) )
+    if(typeof Article  === 'undefined')
     {
+        Article = document.getElementById('mainGameboard');
+    }
+    let ArticleTitle = document.getElementsByClassName('ArticleTitle')[0];
+    if( (typeof Article !== 'undefined') && (Article !== null) && (typeof ArticleTitle !== 'undefined') )
+    {
+        let TPONG = document.getElementById('mainGameboard');
+        if(TPONG !== null)
+        {
+            EndGame();
+        }
         ArticleTitle.innerHTML = ArticleTitleContent;
         let newArticle = document.createElement('p');
         newArticle.className = 'Article';

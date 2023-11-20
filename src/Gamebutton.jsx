@@ -1,5 +1,5 @@
 import './Gamebutton.css';
-import GameStart from './TPONG';
+import { GameStart, EndGame } from './TPONG';
 function Gamebutton(name, key)
 {
     return ( <input className='Navbutton' type='button' onClick={GamebuttonOnClick} value={name} key={key}></input>);
@@ -10,12 +10,17 @@ function GamebuttonOnClick(event)
     {
         case 'TPONG':
             {
-                let Article = document.getElementsByClassName('Article')[0];
-                let ArticleTitle = document.getElementsByClassName('ArticleTitle')[0];
-                if( (typeof Article  !== undefined) && (typeof ArticleTitle !== undefined) )
+                let gameBoardElement = document.getElementById('mainGameboard');
+                if(gameBoardElement === null)
                 {
-                    ArticleTitle.innerHTML = 'A fun ping pong game.';
-                    Article.replaceWith(GameStart()); 
+                    EndGame();
+                }
+                let ArticleTitle = document.getElementsByClassName('ArticleTitle')[0];
+                let Article = document.getElementsByClassName('Article')[0];
+                if( (typeof Article  !== 'undefined') && (typeof ArticleTitle !== 'undefined') )
+                {
+                    ArticleTitle.innerHTML = 'TPONG';
+                    Article.replaceWith(GameStart(0, true).props.child); 
                 }
                 break;
             }

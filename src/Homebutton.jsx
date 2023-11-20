@@ -1,6 +1,6 @@
 import terminalDarkIcon from '/terminal_dark.svg'
 import terminalLightIcon from '/terminal_light.svg'
-import { getLightState, addLightImgElement } from './LightButton'
+import { getLightState, addLightImgElement } from './LightHandler'
 import './Homebutton.css'
 function Homebutton(name, key)
 {

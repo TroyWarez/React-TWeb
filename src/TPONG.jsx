@@ -1,7 +1,237 @@
+import React from 'react';
+
+let __TPONGHandler = null;
+class Container extends React.Component {
+  render() {
+    return <div ref={ ref => ref.appendChild(this.props.child) }></div>;
+  }
+}
 class GameHandler {
+  constructor(props, gameSetup, bDebug) {
+    this.props = props;
+    this.paddleHitSound = 'sounds/TPONG/paddleHit.m4a'
+    this.paddleServeSound = 'sounds/TPONG/paddleServe.m4a'
+    this.tableHitSound = 'sounds/TPONG/tableHit.m4a'
+    this.ScoreBeepSound = 'sounds/TPONG/score.m4a'
+    this.PaddleHeight = 100;
+    this.PaddleWidth = 10;
+    this.PaddleRad = 20;
+    this.DefaultWidth = 800;
+    this.DefaultHeight = 600;
+
+
+    this.Red = '#7F0000';
+    this.Green = '#007F00';
+    this.Blue = '#00007F';
+    this.Purple = '#814ED2';
+    this.Black = '#00000';
+
+    this.DimGray = '#767676';
+    this.White = '#FFFFFF';
+
+    this.canvasMarginLeft = 'auto';
+    this.canvasMarginRight = 'auto';
+    this.canvasStyleDisplay = 'block';
+    this.canvasStyleWidth = '800px';
+    this.canvas = document.createElement('canvas');
+    this.canvas.id = 'mainGameboard';
+    this.canvas.className = 'Article';
+    this.frameId = null;
+    this.canvas.width = this.DefaultWidth;
+    this.canvas.height = this.DefaultHeight;
+    this.ColorPalettes = [{PaletteName : 'RedPalette', BackgroundColor : this.Red,  SpriteColor : this.White}, { PaletteName : 'GreenPalette', BackgroundColor : this.Green,  SpriteColor : this.White}, { PaletteName : 'BluePalette', BackgroundColor : this.Blue,  SpriteColor : this.White }, { PaletteName : 'PurplePalette', BackgroundColor : this.Purple,  SpriteColor : this.White}, { PaletteName : 'BlackPalette', BackgroundColor : this.Black,  SpriteColor : this.DimGray }];
+
+    this.BallRad = 10;
+
+    this.ctx = this.canvas.getContext('2d');
+
+    this.ControllerSlots = new Array();
+    this.ScalingFactorX = 1;
+    this.ScalingFactorY = 1;
+
+    this.previousTimeStamp = null;
+
+    this.LeaderBoardTime = null;
+
+    this.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false } //booleans
+
+    if (typeof(Storage) !== 'undefined') {
+      this.gameFlags.localStorage = true;
+      this.selectedPalette = localStorage.getItem('savedPalette');
+      if(this.selectedPalette === null)
+      {
+           localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : this.Black,  SpriteColor : this.DimGray }));
+           this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+      }
+      else
+      {
+        this.selectedPalette = JSON.parse(this.selectedPalette);
+      }
+   }
+   else {
+      this.gameFlags.localStorage = false;
+      this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+   }
+
+    this.BallMovSpeed = 0.45;
+    this.CPUMovSpeed = 0.45;
+
+    this.PlayerMovSpeedFull = 0.35;
+    this.PlayerMovSpeedHalf = 0.175;
+    this.PlayerMovSpeedQuater = 0.0875;
+    this.BackgroundColor = '#00000';
+    this.SpriteColor = '#767676';
+    this.gameBoardWidth = this.DefaultWidth;
+    this.gameBoardHeight = this.DefaultHeight;
+
+    this.canvas.style.paddingLeft = 0;
+    this.canvas.style.paddingRight = 0;
+    this.canvas.style.marginLeft = this.canvasMarginLeft;
+    this.canvas.style.marginRight = this.canvasMarginRight;
+    this.canvas.style.display = this.canvasStyleDisplay;
+    this.canvas.style.width = this.canvasStyleWidth;
+
+    this.Ball = { 'x' : 0, 'y' : 0, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
+    this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.DefaultHeight / 2) - this.PaddleHeight) };
+    this.CPUPaddle = { 'x' : 0, 'y' : 0 };
+
+    this.PlayerScore = 1;
+    this.CPUScore = 1;
+
+    //Debug element array
+    this.gameElements = [this.PlayerPaddle, this.CPUPaddle, this.Ball];
+    this.SelectedElement = {'gameElement' : null, 'Index' : 0 };
+    this.BallSpawnDelay = 0;
+
+    this.lastKey = '';
+    this.lastController = null;
+    this.GameboardBoundary = 30;
+
+    this.paddleHit = new Audio(this.paddleHitSound);
+    this.paddleServe = new Audio(this.paddleServeSound);
+    this.tableHit = new Audio(this.tableHitSound);
+    this.ScoreBeep = new Audio(this.ScoreBeepSound);
+
+    this.GamepadHandler = this.GamepadHandler.bind(this);
+    this.MouseHandler = this.MouseHandler.bind(this);
+
+    document.addEventListener('click', () => {
+      this.gameFlags.AudioPlayable = true;
+      /* the audio is now playable; play it if permissions allow */
+      if(this.gameFlags.Debug){
+      //console.log('The audio is now playable. ');
+    }
+    });
+    document.addEventListener('fullscreenchange', this.FullScreenHandler.bind(this));
+    document.addEventListener('pointerlockchange', () => {
+      if(document.pointerLockElement === this.canvas) {
+        document.addEventListener('mousemove', this.MouseHandler, false);
+      }
+      else {
+        document.removeEventListener('mousemove', this.MouseHandler, false);
+      }
+    }, true);
+
+    this.canvas.addEventListener('click', async () => {
+      if (!this.canvas.pointerLockElement)
+      {
+        try{
+        await this.canvas.requestPointerLock({
+          unadjustedMovement: true,
+        });
+      }
+      catch(e)
+      {
+        console.log(e);
+      }
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if(this.gameFlags.Debug === 1)
+      {
+        console.log(event.key);
+      }
+      if(event.repeat === false)
+      {
+      switch(event.key) {
+        case '1': //Red
+        {
+          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'RedPalette');
+          break;
+        }
+        case '2': //Green
+        {
+          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'GreenPalette');
+          break;
+        }
+        case '3': // Blue
+        {
+          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BluePalette');
+          break;
+        } 
+        case '4': // Purple
+        {
+          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'PurplePalette');
+          break;
+        }
+        case '5': // Black
+        {
+          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+          break;
+        }
+        case 'Enter':
+        {
+          this.gameFlags.StartGame = true;
+          this.gameFlags.DrawBall = true;
+          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'GreenPalette');
+          this.PlayerScore = 0;
+          this.CPUScore = 0;
+          this.Ball.x = (this.gameBoardWidth / 2);
+          this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
+          this.LeaderBoardTime = Date.now();
+          break;
+        }
+        case 'F11':
+          {
+            event.preventDefault();
+            if(this.lastKey !== event.key)
+            {
+              if(document.fullScreen || 
+                document.mozFullScreen || 
+                document.webkitIsFullScreen) {
+                window.document.exitFullscreen().catch((err) => {
+                    console.log(err);
+                });
+            } else {
+                window.document.documentElement.requestFullscreen().catch((err) => {
+                    console.log(err);
+                });
+            }
+            }
+            break;
+          }
+        default:
+          return
+      }
+
+      if(this.gameFlags.localStorage === true)
+      {
+        localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
+      }
+    }
+    this.lastKey = event.key;
+    }, true);
+  }
   Draw(timeStamp)
   {
     let deltaTime = timeStamp - this.previousTimeStamp;
+    if(deltaTime >= 500){
+    this.previousTimeStamp = timeStamp;
+    if(this.frameId !== null)
+    {
+      this.frameId = window.requestAnimationFrame(this.Draw.bind(this));
+    }
+  }
     this.ctx.canvas.width  = this.gameBoardWidth;
     this.ctx.canvas.height = this.gameBoardHeight;
     this.CPUPaddle.x = (this.gameBoardWidth - this.PaddleHeight);
@@ -19,7 +249,6 @@ class GameHandler {
       : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [0])
       
     let firstController = this.ControllerSlots.find(x => typeof x !== 'undefined');
-    //
     if( firstController !== null && typeof firstController !== 'undefined' && 'buttons' in firstController && 'connected' in firstController && firstController.connected === true)
     {
       firstController = Gamepads[firstController.index];
@@ -366,7 +595,7 @@ class GameHandler {
         }
         else if ((this.CPUPaddle.y + (this.CPUMovSpeed * deltaTime)) >= this.gameBoardHeight)
         {
-          this.CPUPaddle.y = (this.gameBoardHeight - this.PaddleHeight);
+          this.CPUPaddle.y = ((this.gameBoardHeight / 2) - this.PaddleHeight);
         }
       }
       else if (this.CPUPaddle.y > this.gameBoardHeight)
@@ -393,7 +622,10 @@ class GameHandler {
       }
     }
     this.previousTimeStamp = timeStamp;
-    window.requestAnimationFrame(this.Draw.bind(this));
+    if(this.frameId !== null)
+    {
+      this.frameId = window.requestAnimationFrame(this.Draw.bind(this));
+    }
   }
   GamepadHandler(event)
   {
@@ -433,7 +665,10 @@ class GameHandler {
         this.PlayerPaddle.y = (this.gameBoardHeight / 2);
       }
     }
-    window.requestAnimationFrame(this.MouseHandler);
+    if(this.frameId !== null)
+    {
+    this.frameId = window.requestAnimationFrame(this.MouseHandler);
+    }
   }
 
   FullScreenHandler() {
@@ -473,14 +708,10 @@ class GameHandler {
     }
   }
   getCanvas(){
-    return this.canvas;
+    return <Container child={ this.canvas }/>;
   }
-
+  
   CanvasOnclick() {
-    if(this.CursorLock === undefined)
-    {
-      this.CursorLock = this.canvas.requestPointerLock();
-    }
     window.addEventListener('gamepadconnected', this.GamepadHandler, false);
     window.addEventListener('gamepaddisconnected', this.GamepadHandler, false);
     document.addEventListener('keyup', (event)  => {
@@ -490,247 +721,55 @@ class GameHandler {
       }
     }, true);
   }
-  constructor(gameSetup, bDebug) {
-
-    this.paddleHitSound = 'sounds/TPONG/paddleHit.m4a'
-    this.paddleServeSound = 'sounds/TPONG/paddleServe.m4a'
-    this.tableHitSound = 'sounds/TPONG/tableHit.m4a'
-    this.ScoreBeepSound = 'sounds/TPONG/score.m4a'
-    this.PaddleHeight = 100;
-    this.PaddleWidth = 10;
-    this.PaddleRad = 20;
-    this.DefaultWidth = 800;
-    this.DefaultHeight = 600;
-
-
-    this.Red = '#7F0000';
-    this.Green = '#007F00';
-    this.Blue = '#00007F';
-    this.Purple = '#814ED2';
-    this.Black = '#00000';
-
-    this.DimGray = '#767676';
-    this.White = '#FFFFFF';
-
-    this.canvasMarginLeft = 'auto';
-    this.canvasMarginRight = 'auto';
-    this.canvasStyleDisplay = 'block';
-    this.canvasStyleWidth = '800px';
-
-    this.canvas = document.createElement('canvas');
-    this.canvas.id = 'mainGameboad';
-
-    this.ColorPalettes = [{PaletteName : 'RedPalette', BackgroundColor : this.Red,  SpriteColor : this.White}, { PaletteName : 'GreenPalette', BackgroundColor : this.Green,  SpriteColor : this.White}, { PaletteName : 'BluePalette', BackgroundColor : this.Blue,  SpriteColor : this.White }, { PaletteName : 'PurplePalette', BackgroundColor : this.Purple,  SpriteColor : this.White}, { PaletteName : 'BlackPalette', BackgroundColor : this.Black,  SpriteColor : this.DimGray }];
-
-    this.BallRad = 10;
-
-    this.ctx = this.canvas.getContext('2d');
-
-    this.CursorLock = undefined;
-    this.ControllerSlots = new Array();
-    this.ScalingFactorX = 1;
-    this.ScalingFactorY = 1;
-
-    this.previousTimeStamp = null;
-
-    this.LeaderBoardTime = null;
-
-    this.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false } //booleans
-
-    if (typeof(Storage) !== "undefined") {
-      this.gameFlags.localStorage = true;
-      this.selectedPalette = localStorage.getItem('savedPalette');
-      if(this.selectedPalette === null)
-      {
-           localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : this.Black,  SpriteColor : this.DimGray }));
-           this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
-      }
-      else
-      {
-        this.selectedPalette = JSON.parse(this.selectedPalette);
-      }
-   }
-   else {
-      this.gameFlags.localStorage = false;
-      this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
-   }
-
-    this.BallMovSpeed = 0.45;
-    this.CPUMovSpeed = 0.45;
-
-    this.PlayerMovSpeedFull = 0.35;
-    this.PlayerMovSpeedHalf = 0.175;
-    this.PlayerMovSpeedQuater = 0.0875;
-    this.BackgroundColor = '#00000';
-    this.SpriteColor = '#767676';
-    this.gameBoardWidth = this.DefaultWidth;
-    this.gameBoardHeight = this.DefaultHeight;
-
-    this.canvas.style.paddingLeft = 0;
-    this.canvas.style.paddingRight = 0;
-    this.canvas.style.marginLeft = this.canvasMarginLeft;
-    this.canvas.style.marginRight = this.canvasMarginRight;
-    this.canvas.style.display = this.canvasStyleDisplay;
-    this.canvas.style.width = this.canvasStyleWidth;
-
+  StartGame()
+  {
+    this.gameFlags.StartGame = true;
+    this.PlayerScore = 0;
+    this.CPUScore = 0;
+    this.Ball.x = (this.gameBoardWidth / 2);
+    this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
+    this.LeaderBoardTime = Date.now();
+    this.BallSpawnDelay = Date.now() + 4000;
+    this.PlayerScore = 0;
+    this.CPUScore = 0;
+    if(this.gameFlags.Debug)
+    {
+      this.gameFlags.DrawBall = true;
+      this.BallSpawnDelay = 0;
+    }
+    if(this.frameId === null)
+    {
+    this.frameId = window.requestAnimationFrame(this.Draw.bind(this));
+    }
+  }
+  PauseGame()
+  {
     this.Ball = { 'x' : 0, 'y' : 0, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
     this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.DefaultHeight / 2) - this.PaddleHeight) };
     this.CPUPaddle = { 'x' : 0, 'y' : 0 };
-
-    this.PlayerScore = 1;
-    this.CPUScore = 1;
-
-    //Debug element array
-    this.gameElements = [this.PlayerPaddle, this.CPUPaddle, this.Ball];
-    this.SelectedElement = {'gameElement' : null, 'Index' : 0 };
-    this.BallSpawnDelay = 0;
-
-    this.lastKey = '';
-    this.lastController = null;
-    this.GameboardBoundary = 30;
-
-    this.paddleHit = new Audio(this.paddleHitSound);
-    this.paddleServe = new Audio(this.paddleServeSound);
-    this.tableHit = new Audio(this.tableHitSound);
-    this.ScoreBeep = new Audio(this.ScoreBeepSound);
-
-    this.GamepadHandler = this.GamepadHandler.bind(this);
-    this.MouseHandler = this.MouseHandler.bind(this);
-
-    document.addEventListener('click', () => {
-      this.gameFlags.AudioPlayable = true;
-      /* the audio is now playable; play it if permissions allow */
-      if(this.gameFlags.Debug){
-      //console.log('The audio is now playable. ');
-    }
-    });
-    document.addEventListener('fullscreenchange', this.FullScreenHandler.bind(this));
-    document.addEventListener('pointerlockchange', () => {
-      if(document.pointerLockElement === this.canvas) {
-        document.addEventListener('mousemove', this.MouseHandler, false);
-      }
-      else if (this.CursorLock){
-        document.removeEventListener('mousemove', this.MouseHandler, false);
-        this.CursorLock = undefined;
-      }
-    }, true);
-
-    this.canvas.onclick = this.CanvasOnclick.bind(this);
-    document.addEventListener('keydown', (event) => {
-      if(this.gameFlags.Debug === 1)
-      {
-        console.log(event.key);
-      }
-      if(event.repeat === false)
-      {
-      switch(event.key) {
-        case '1': //Red
-        {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'RedPalette');
-          break;
-        }
-        case '2': //Green
-        {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'GreenPalette');
-          break;
-        }
-        case '3': // Blue
-        {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BluePalette');
-          break;
-        } 
-        case '4': // Purple
-        {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'PurplePalette');
-          break;
-        }
-        case '5': // Black
-        {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
-          break;
-        }
-        case 'Enter':
-        {
-          this.gameFlags.StartGame = true;
-          this.gameFlags.DrawBall = true;
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'GreenPalette');
-          this.PlayerScore = 0;
-          this.CPUScore = 0;
-          this.Ball.x = (this.gameBoardWidth / 2);
-          this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
-          this.LeaderBoardTime = Date.now();
-          break;
-        }
-        case '-':
-          {
-            if(this.gameFlags.Debug)
-            {
-    
-            }
-            break;
-          }
-        case '=':
-            {
-              if(this.gameFlags.Debug)
-              {
-                
-              }
-              break;
-            }
-        case 'F11':
-          {
-            event.preventDefault();
-            if(this.lastKey !== event.key)
-            {
-              if(document.fullScreen || 
-                document.mozFullScreen || 
-                document.webkitIsFullScreen) {
-                window.document.exitFullscreen().catch((err) => {
-                    console.log(err);
-                });
-            } else {
-                window.document.documentElement.requestFullscreen().catch((err) => {
-                    console.log(err);
-                });
-            }
-            }
-            break;
-          }
-        default:
-          return
-      }
-
-      if(this.gameFlags.localStorage === true)
-      {
-        localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
-      }
-    }
-    this.lastKey = event.key;
-    }, true);
-
-    if (bDebug === true)
+    if(this.frameId)
     {
-      this.gameFlags.StartGame = true;
-      this.gameFlags.DrawBall = false;
-      this.PlayerScore = 0;
-      this.CPUScore = 0;
-      this.Ball.x = (this.gameBoardWidth / 2);
-      this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
-      this.LeaderBoardTime = Date.now();
-      this.BallSpawnDelay = Date.now() + 4000;
+      window.cancelAnimationFrame(this.frameId);
+      this.frameId = null;
     }
-
-    window.requestAnimationFrame(this.Draw.bind(this));
   }
 }
-let __TPONGHandler = null;
-
-function GameStart(gameSetup, bDebug) {
+export function GameStart(gameSetup, bDebug) {
   if(__TPONGHandler === null)
   {
-    __TPONGHandler = new GameHandler(0, true);
+    __TPONGHandler = new GameHandler(null, gameSetup, bDebug);
+  }
+  if(__TPONGHandler !== null)
+  {
+  __TPONGHandler.StartGame();
   }
   return __TPONGHandler.getCanvas();
 }
 
-export default GameStart;
+export function EndGame() {
+  if(__TPONGHandler !== null)
+  {
+      __TPONGHandler.PauseGame();
+  }
+  return __TPONGHandler;
+}

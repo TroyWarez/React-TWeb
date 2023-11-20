@@ -1,42 +1,39 @@
-import React, { useState } from 'react';
+import { GameStart } from './TPONG';
 import './Article.css';
-let currentArticle = '';
-import  { BetterMediaKeysDescription, GenericInputDescription, TPONGDesciption } from './Articles.js'
+import  { BetterMediaKeysDescription, GenericInputDescription } from './Articles.js'
 function Article() {
     let title = '';
+    let ArticleContent = <p className='Article'></p>;
     switch(window.location.pathname)
     {
         case '/BetterMediaKeys':
             {
                 title = 'BetterMediaKeys';
-                currentArticle = BetterMediaKeysDescription;
+                ArticleContent = <p className='Article'>{BetterMediaKeysDescription}</p>;
                 break;
             }
         case '/GenericInput':
             {
                 title = 'GenericInput';
-                currentArticle = GenericInputDescription;
+                ArticleContent = <p className='Article'>{GenericInputDescription}</p>;
                 break;
             }
         case '/TPONG':
             {
                 title = 'TPONG';
-                currentArticle = TPONGDesciption;
+                ArticleContent = GameStart(0, true);
                 break;
             }
         default:
             {
                 title = '';
-                currentArticle = '';
                 break;
             }
     }
     return (
         <article>
         <h2 className='ArticleTitle'>{title}</h2>
-       <p className='Article'>
-       {currentArticle}
-       </p>
+        {ArticleContent}
        </article>
     )
 }
