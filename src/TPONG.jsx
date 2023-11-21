@@ -6,6 +6,9 @@ class Container extends React.Component {
     return <div ref={ ref => ref.appendChild(this.props.child) }></div>;
   }
 }
+Container.propTypes = {
+  child: Container,
+};
 class GameHandler {
   constructor(props, gameSetup, bDebug) {
     this.props = props;
