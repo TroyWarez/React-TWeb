@@ -1,5 +1,5 @@
 import React from 'react';
-
+import propTypes from 'prop-types';
 let __TPONGHandler = null;
 class Container extends React.Component {
   render() {
@@ -7,7 +7,7 @@ class Container extends React.Component {
   }
 }
 Container.propTypes = {
-  child: Container,
+  child: propTypes.object
 };
 class GameHandler {
   constructor(props, gameSetup, bDebug) {
