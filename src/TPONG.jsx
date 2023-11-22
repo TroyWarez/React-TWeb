@@ -494,7 +494,7 @@ class GameHandler {
         }
         this.Ball.velocityY = this.Ball.velocityY * -1;
         this.Ball.velocityX = this.Ball.velocityX * 1;
-        this.Ball.y = this.Ball.y - 1;
+        this.Ball.y -= 3;
       }
       else if ((this.Ball.y - this.Ball.radius) <= 0)
       {
@@ -503,7 +503,7 @@ class GameHandler {
         }
         this.Ball.velocityY = this.Ball.velocityY * -1;
         this.Ball.velocityX = this.Ball.velocityX * 1;
-        this.Ball.y = this.Ball.y + 1;
+        this.Ball.y += 3;
       }
       else if ((this.Ball.x + this.Ball.radius) >= this.CPUPaddle.x  && (this.Ball.x + this.Ball.radius) <= (this.CPUPaddle.x + this.PaddleWidth ) &&  this.Ball.y >= this.CPUPaddle.y &&  (this.Ball.y + this.Ball.radius)  <= (this.CPUPaddle.y + this.PaddleHeight))
       {
@@ -519,7 +519,7 @@ class GameHandler {
           }
         }
         this.Ball.divisor = Math.floor(Math.random() * 12);
-        this.Ball.x = this.Ball.x - 1;
+        this.Ball.x -= 1; 
         this.Ball.velocityY = this.Ball.velocityY * 1;
         this.Ball.velocityX = this.Ball.velocityX * -1;
       }
@@ -547,7 +547,7 @@ class GameHandler {
           });
         }
         this.Ball.divisor = Math.floor(Math.random() * 12);
-        this.Ball.x = this.Ball.x + 1;
+        this.Ball.x += 1; 
         this.Ball.velocityY = this.Ball.velocityY * 1;
         this.Ball.velocityX = this.Ball.velocityX * -1;
       }
@@ -607,11 +607,11 @@ class GameHandler {
       }
       else if (((this.CPUPaddle.y + this.PaddleHeight) + this.CPUMovSpeed) <= (this.gameBoardHeight / 2))
       {
-        this.CPUPaddle.y += this.CPUMovSpeed;
+        this.CPUPaddle.y += (this.CPUMovSpeed * deltaTime);
       }
       else if(((this.CPUPaddle.y - this.PaddleHeight) - this.CPUMovSpeed) >= (this.gameBoardHeight / 2))
       {
-        this.CPUPaddle.y -= this.CPUMovSpeed;
+        this.CPUPaddle.y -= (this.CPUMovSpeed * deltaTime);
       }
       this.ctx.roundRect(this.CPUPaddle.x, this.CPUPaddle.y, this.PaddleWidth, this.PaddleHeight, this.PaddleRad);
       this.ctx.fill();

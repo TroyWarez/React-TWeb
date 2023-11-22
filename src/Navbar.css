@@ -1,8 +1,6 @@
 .Navbar {
     display: flex;
-    outline: none;
     box-sizing: border-box;
-    padding: 4px;
     color: var(--main-bg-color);
     color-scheme: var(--main-scheme);
     min-width: 24px;
@@ -10,8 +8,7 @@
     justify-content: space-evenly;
     flex-direction: row;
     align-items: center;
-    align-content: center;
+    align-content: left;
     flex-wrap: nowrap;
-    margin-left: 12px;
     overflow: hidden;
 }
