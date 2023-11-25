@@ -37,4 +37,4 @@ function Article() {
        </article>
     )
 }
-  export default Article
+export default Article

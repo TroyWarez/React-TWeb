@@ -19,6 +19,11 @@ function GamebuttonOnClick(event)
                 let Article = document.getElementsByClassName('Article')[0];
                 if( (typeof Article  !== 'undefined') && (typeof ArticleTitle !== 'undefined') )
                 {
+                    if(window.location.pathname !== '/TPONG')
+                    {
+                        window.history.pushState('TPONG', '', '/TPONG');
+                    }
+                    window.document.title = 'TWeb | TPONG';
                     ArticleTitle.innerHTML = 'TPONG';
                     Article.replaceWith(GameStart(0, true).props.child); 
                 }
