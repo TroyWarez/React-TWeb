@@ -3,7 +3,7 @@ import { GameStart, EndGame } from './TPONG';
 import { setManifestAndIcons } from './manifestSet'
 function Gamebutton(name, key)
 {
-    return ( <input className='Navbutton' type='button' onClick={GamebuttonOnClick} value={name} key={key}></input>);
+    return ( <a href={name}  onClick={(e) => { e.preventDefault();}}><input className='Navbutton' type='button' onClick={GamebuttonOnClick} value={name} key={key}></input></a>);
 }
 function GamebuttonOnClick(event)
 {

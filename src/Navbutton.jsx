@@ -3,7 +3,7 @@ import { setArticle } from './ArticleSetter.js';
 import  { BetterMediaKeysDescription, GenericInputDescription, TPONGDesciption } from './Articles.js'
 function Navbutton(name, key)
 {
-    return ( <input className='Navbutton' type='button' onClick={NavButtonOnClick} value={name} key={key}></input>);
+    return ( <a href={name}  onClick={(e) => { e.preventDefault();}}><input className='Navbutton' type='button' onClick={NavButtonOnClick} value={name} key={key}></input></a>);
 }
 function NavButtonOnClick(event)
 {
