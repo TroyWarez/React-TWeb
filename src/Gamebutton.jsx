@@ -1,5 +1,6 @@
 import './Gamebutton.css';
 import { GameStart, EndGame } from './TPONG';
+import { setManifestAndIcons } from './manifestSet'
 function Gamebutton(name, key)
 {
     return ( <input className='Navbutton' type='button' onClick={GamebuttonOnClick} value={name} key={key}></input>);
@@ -22,6 +23,8 @@ function GamebuttonOnClick(event)
                     if(window.location.pathname !== '/TPONG')
                     {
                         window.history.pushState('TPONG', '', '/TPONG');
+                        window.document.title = 'TWeb | TPONG';
+                        setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/icons/TPONG/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/icons/TPONG/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/icons/TPONG/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/icons/TPONG/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/icons/TPONG/safari-pinned-tab.svg?v=2'}}, {'manifest-apple-touch-icon-logo192' : {'href' : window.location.origin + '/icons/TPONG/logo192.png?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/TPONG-manifest.json?v=2'} }));
                     }
                     window.document.title = 'TWeb | TPONG';
                     ArticleTitle.innerHTML = 'TPONG';

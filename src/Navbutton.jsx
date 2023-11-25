@@ -33,17 +33,6 @@ function NavButtonOnClick(event)
                 ArticleContent = GenericInputDescription;
                 break;
             }
-        case 'TPONG':
-            {
-                if(window.location.pathname !== '/TPONG')
-                {
-                    window.history.pushState('TPONG', '', '/TPONG');
-                }
-                window.document.title = 'TWeb | TPONG';
-                ArticleTitleContent = 'TPONG';
-                ArticleContent = TPONGDesciption;
-                break;
-            }
             default:
                 {
                     window.document.title = 'TWeb | Dev';
