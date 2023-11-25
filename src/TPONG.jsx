@@ -30,6 +30,7 @@ class GameHandler {
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'mainGameboard';
     this.canvas.className = 'Article';
+    this.canvas.onclick = this.CanvasOnclick;
     this.frameId = null;
     this.canvas.width = this.DefaultWidth;
     this.canvas.height = this.DefaultHeight;
@@ -214,6 +215,14 @@ class GameHandler {
       }
     }
     this.lastKey = event.key;
+    }, true);
+    window.addEventListener('gamepadconnected', this.GamepadHandler, false);
+    window.addEventListener('gamepaddisconnected', this.GamepadHandler, false);
+    document.addEventListener('keyup', (event)  => {
+      if(event.key === this.lastKey)
+      {
+        this.lastKey = '';
+      }
     }, true);
   }
   Draw(timeStamp)
@@ -705,16 +714,6 @@ class GameHandler {
     return <Container child={ this.canvas }/>;
   }
   
-  CanvasOnclick() {
-    window.addEventListener('gamepadconnected', this.GamepadHandler, false);
-    window.addEventListener('gamepaddisconnected', this.GamepadHandler, false);
-    document.addEventListener('keyup', (event)  => {
-      if(event.key === this.lastKey)
-      {
-        this.lastKey = '';
-      }
-    }, true);
-  }
   StartGame()
   {
     this.gameFlags.StartGame = true;
