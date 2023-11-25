@@ -1,14 +1,5 @@
-import React from 'react';
-import propTypes from 'prop-types';
+import { Container } from './Container';
 let __TPONGHandler = null;
-class Container extends React.Component {
-  render() {
-    return <div ref={ ref => ref.appendChild(this.props.child) }></div>;
-  }
-}
-Container.propTypes = {
-  child: propTypes.object
-};
 class GameHandler {
   constructor(props, gameSetup, bDebug) {
     this.props = props;
@@ -494,7 +485,7 @@ class GameHandler {
         }
         this.Ball.velocityY = this.Ball.velocityY * -1;
         this.Ball.velocityX = this.Ball.velocityX * 1;
-        this.Ball.y -= 3;
+        this.Ball.y -= this.PaddleWidth;
       }
       else if ((this.Ball.y - this.Ball.radius) <= 0)
       {
@@ -503,7 +494,7 @@ class GameHandler {
         }
         this.Ball.velocityY = this.Ball.velocityY * -1;
         this.Ball.velocityX = this.Ball.velocityX * 1;
-        this.Ball.y += 3;
+        this.Ball.y += this.PaddleWidth;
       }
       else if ((this.Ball.x + this.Ball.radius) >= this.CPUPaddle.x  && (this.Ball.x + this.Ball.radius) <= (this.CPUPaddle.x + this.PaddleWidth ) &&  this.Ball.y >= this.CPUPaddle.y &&  (this.Ball.y + this.Ball.radius)  <= (this.CPUPaddle.y + this.PaddleHeight))
       {
@@ -519,11 +510,11 @@ class GameHandler {
           }
         }
         this.Ball.divisor = Math.floor(Math.random() * 12);
-        this.Ball.x -= 1; 
+        this.Ball.x -= this.PaddleWidth;
         this.Ball.velocityY = this.Ball.velocityY * 1;
         this.Ball.velocityX = this.Ball.velocityX * -1;
       }
-      else if ((this.Ball.x - this.Ball.radius)  >= this.PlayerPaddle.x  && (this.Ball.x - this.Ball.radius)  <= (this.PlayerPaddle.x + this.PaddleWidth ) &&  this.Ball.y >= this.PlayerPaddle.y &&  (this.Ball.y - this.Ball.radius)   <= (this.PlayerPaddle.y + this.PaddleHeight))
+      else if ((this.Ball.x - this.Ball.radius)  >= this.PlayerPaddle.x  && (this.Ball.x - this.Ball.radius)  <= (this.PlayerPaddle.x + this.PaddleWidth ) &&  (this.Ball.y - this.Ball.radius)  >= this.PlayerPaddle.y &&  (this.Ball.y - this.Ball.radius)   <= (this.PlayerPaddle.y + this.PaddleHeight))
       {
         console.log('Player Paddle Hit');
         if(this.gameFlags.AudioPlayable === true){
@@ -547,7 +538,7 @@ class GameHandler {
           });
         }
         this.Ball.divisor = Math.floor(Math.random() * 12);
-        this.Ball.x += 1; 
+        this.Ball.x += this.PaddleWidth;
         this.Ball.velocityY = this.Ball.velocityY * 1;
         this.Ball.velocityX = this.Ball.velocityX * -1;
       }
