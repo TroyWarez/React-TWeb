@@ -1,4 +1,4 @@
-import {EndGame} from './TPONG';
+import {EndGame, GameStart} from './TPONG';
 export function setArticle(ArticleContent, ArticleTitleContent)
 {
     let Article = document.getElementsByClassName('Article')[0];
@@ -7,17 +7,26 @@ export function setArticle(ArticleContent, ArticleTitleContent)
         Article = document.getElementById('mainGameboard');
     }
     let ArticleTitle = document.getElementsByClassName('ArticleTitle')[0];
-    if( (typeof Article !== 'undefined') && (Article !== null) && (typeof ArticleTitle !== 'undefined') )
+    if( (typeof Article !== 'undefined') && (Article !== null) && (typeof ArticleTitle !== 'undefined'))
     {
         let TPONG = document.getElementById('mainGameboard');
+        let newArticle = null;
         if(TPONG !== null)
         {
             EndGame();
         }
-        ArticleTitle.innerHTML = ArticleTitleContent;
-        let newArticle = document.createElement('p');
-        newArticle.className = 'Article';
-        newArticle.textContent = ArticleContent;
+        if(ArticleContent instanceof HTMLCanvasElement)
+        {
+            ArticleTitle.innerHTML = ArticleTitleContent;
+            newArticle = GameStart(0, true).props.child;
+        }
+        else
+        {
+            ArticleTitle.innerHTML = ArticleTitleContent;
+            newArticle = document.createElement('p');
+            newArticle.className = 'Article';
+            newArticle.textContent = ArticleContent;
+        }
         Article.replaceWith(newArticle);
     }
 
