@@ -1,7 +1,7 @@
 import './Navbutton.css';
 import { setArticle } from './ArticleSetter.js';
 import { setManifestAndIcons } from './manifestSet'
-import  { BetterMediaKeysDescription, GenericInputDescription} from './Articles.js'
+import  { SiteDescription, BetterMediaKeysDescription, GenericInputDescription} from './Articles.js'
 import { GameStart } from './TPONG';
 function Navbutton(name, key)
 {
@@ -41,7 +41,7 @@ function NavButtonOnClick(event)
             default:
                 {
                     window.document.title = 'TWeb | Dev';
-                    ArticleContent = '';
+                    ArticleContent = SiteDescription;
                     ArticleTitleContent = '';
                     break;
                 }

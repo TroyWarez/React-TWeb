@@ -1,9 +1,10 @@
 .Footer {
     text-align: justify;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     width: 100%;
     text-align: center;
     font-size: .75rem;
     line-height: 1rem;
+    z-index: -1;
 }

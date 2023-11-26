@@ -8,11 +8,9 @@
     font-weight: bold;
     min-height: 24px;
     min-width: 24px;
-    margin: 5px;
     overflow: hidden;
     padding: 12px;
     text-decoration: none;
-    line-height: 1rem;
 }
 .Navbutton:hover {
     background-color: var(--main-bg-hovercolor)

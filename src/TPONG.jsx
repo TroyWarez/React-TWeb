@@ -12,8 +12,7 @@ class GameHandler {
     this.PaddleRad = 20;
     this.DefaultWidth = 800;
     this.DefaultHeight = 600;
-
-
+    this.DefaultSpeed = 0.85;
     this.Red = '#7F0000';
     this.Green = '#007F00';
     this.Blue = '#00007F';
@@ -246,12 +245,12 @@ class GameHandler {
     this.CPUPaddle.x = (this.gameBoardWidth - this.PaddleHeight);
     this.ScalingFactorX = (this.gameBoardWidth / this.DefaultWidth);
     this.ScalingFactorY = (this.gameBoardHeight / this.DefaultHeight);
-    this.BallMovSpeed = (0.45 * this.ScalingFactorX);
-    this.CPUMovSpeed = (0.45 * this.ScalingFactorY);
+    this.BallMovSpeed = (this.DefaultSpeed * this.ScalingFactorX);
+    this.CPUMovSpeed = ((this.DefaultSpeed / 4) * this.ScalingFactorY);
     
-    this.PlayerMovSpeedFull = (0.45 * this.ScalingFactorY);
-    this.PlayerMovSpeedHalf = (0.45 * this.ScalingFactorY);
-    this.PlayerMovSpeedQuater = (0.45 * this.ScalingFactorY);
+    this.PlayerMovSpeedFull = (this.DefaultSpeed * this.ScalingFactorY);
+    this.PlayerMovSpeedHalf = (this.DefaultSpeed * this.ScalingFactorY);
+    this.PlayerMovSpeedQuater = (this.DefaultSpeed * this.ScalingFactorY);
 
     let Gamepads = navigator.getGamepads 
       ? navigator.getGamepads() 
