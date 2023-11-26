@@ -30,8 +30,9 @@ function Homebutton(name, key)
         e.preventDefault();
         if(window.location.pathname !== '/')
         {
-            window.history.pushState(window.location.origin, '', window.location.origin);
+            window.history.pushState(window.location.origin, '', '/');
         }
+        window.document.title = 'TWeb | Dev';
         setArticle('', '');// Add something here.
       }}className='WebsiteTitle' key={key}><h1><img src={terminalIconSrc} className='terminalIcon' alt='Terminal Icon' value={name}></img>{name}</h1></a>);
 }

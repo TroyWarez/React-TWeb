@@ -1,15 +1,16 @@
 import './Navbutton.css';
 import { setArticle } from './ArticleSetter.js';
-import  { BetterMediaKeysDescription, GenericInputDescription, TPONGDesciption } from './Articles.js'
+import  { BetterMediaKeysDescription, GenericInputDescription} from './Articles.js'
 function Navbutton(name, key)
 {
-    return ( <a href={name}  onClick={(e) => { e.preventDefault();}}><input className='Navbutton' type='button' onClick={NavButtonOnClick} value={name} key={key}></input></a>);
+    return (<a className='Navbutton' type='button' onClick={NavButtonOnClick} value={name} href={name} key={key}>{name}</a>);
 }
 function NavButtonOnClick(event)
 {
     let ArticleContent = '';
     let ArticleTitleContent = '';
-    switch (event.target.defaultValue)
+    event.preventDefault();
+    switch (event.target.text)
     {
         case 'BetterMediaKeys':
             {
@@ -61,13 +62,6 @@ window.onpopstate = function(e){
                 window.document.title = 'TWeb | GenericInput';
                 ArticleContent = GenericInputDescription;
                 ArticleTitleContent = 'GenericInput';
-                break;        
-            }
-        case 'TPONG':
-            {
-                window.document.title = 'TWeb | TPONG';
-                ArticleContent = TPONGDesciption;
-                ArticleTitleContent = 'TPONG';
                 break;        
             }
         default:

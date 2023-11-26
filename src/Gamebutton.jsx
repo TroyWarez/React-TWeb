@@ -1,13 +1,13 @@
-import './Gamebutton.css';
 import { GameStart, EndGame } from './TPONG';
 import { setManifestAndIcons } from './manifestSet'
 function Gamebutton(name, key)
 {
-    return ( <a href={name}  onClick={(e) => { e.preventDefault();}}><input className='Navbutton' type='button' onClick={GamebuttonOnClick} value={name} key={key}></input></a>);
+    return (<a href={name} className='Navbutton' type='button' onClick={GamebuttonOnClick} value={name} key={key}>{name}</a>);
 }
 function GamebuttonOnClick(event)
 {
-    switch (event.target.defaultValue)
+    event.preventDefault();
+    switch (event.target.text)
     {
         case 'TPONG':
             {
