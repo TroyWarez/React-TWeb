@@ -12,6 +12,7 @@
     overflow: hidden;
     padding: 12px;
     text-decoration: none;
+    line-height: 1rem;
 }
 .Navbutton:hover {
     background-color: var(--main-bg-hovercolor)

@@ -1,10 +1,13 @@
 import Navbar from './Navbar'
 import Article from './Article'
+import Footer from './Footer'
 function App() {
+  
   return (
     <>
-    <Navbar></Navbar>
-    <Article></Article>
+    <Navbar/>
+    <Article/>
+    <Footer>Made with TroyWare</Footer>
     </>
   )
 }
