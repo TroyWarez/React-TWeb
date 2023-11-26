@@ -61,7 +61,9 @@ class LightModeHandler
             default:
             {
                 this.lightSwitchState = 'dark';
+                if (import.meta.env.DEV){
                 console.warn('Warning: \'--main-bg-color\' unknown css color data: ' + getComputedStyle(document.body).getPropertyValue('--main-bg-color'));
+                }
                 break;
             }
         }

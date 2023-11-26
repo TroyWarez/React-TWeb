@@ -113,8 +113,8 @@ class GameHandler {
     document.addEventListener('click', () => {
       this.gameFlags.AudioPlayable = true;
       /* the audio is now playable; play it if permissions allow */
-      if(this.gameFlags.Debug){
-      //console.log('The audio is now playable. ');
+      if (import.meta.env.DEV){
+      console.log('The audio is now playable. ');
     }
     });
     document.addEventListener('fullscreenchange', this.FullScreenHandler.bind(this));
@@ -137,7 +137,9 @@ class GameHandler {
       }
       catch(e)
       {
+        if (import.meta.env.DEV){
         console.log(e);
+        }
       }
       }
     });
@@ -195,11 +197,15 @@ class GameHandler {
                 document.mozFullScreen || 
                 document.webkitIsFullScreen) {
                 window.document.exitFullscreen().catch((err) => {
+                  if (import.meta.env.DEV){
                     console.log(err);
+                  }
                 });
             } else {
                 window.document.documentElement.requestFullscreen().catch((err) => {
+                  if (import.meta.env.DEV){
                     console.log(err);
+                  }
                 });
             }
             }
@@ -284,11 +290,15 @@ class GameHandler {
           document.mozFullScreen || 
           document.webkitIsFullScreen) {
           window.document.exitFullscreen().catch((err) => {
+            if (import.meta.env.DEV){
               console.log(err);
+            }
           });
       } else {
           window.document.documentElement.requestFullscreen().catch((err) => {
+            if (import.meta.env.DEV){
               console.log(err);
+            }
           });
       }
     }
@@ -432,10 +442,9 @@ class GameHandler {
     this.BackgroundColor = this.selectedPalette.BackgroundColor;
     this.SpriteColor = this.selectedPalette.SpriteColor;
 
-    if (this.gameFlags.Debug)
-    {
-    //console.log('Width:' + ctx.canvas.width);
-    //console.log('Height:' + ctx.canvas.height);
+    if (import.meta.env.DEV){
+    //console.log('Width:' + this.ctx.canvas.width);
+    //console.log('Height:' + this.ctx.canvas.height);
     }
     //Game Logic
     if( this.BallSpawnDelay < Date.now()  && this.BallSpawnDelay !== 0){
@@ -507,7 +516,9 @@ class GameHandler {
       }
       else if ((this.Ball.x + this.Ball.radius) >= this.CPUPaddle.x  && (this.Ball.x + this.Ball.radius) <= (this.CPUPaddle.x + this.PaddleWidth ) &&  this.Ball.y >= this.CPUPaddle.y &&  (this.Ball.y + this.Ball.radius)  <= (this.CPUPaddle.y + this.PaddleHeight))
       {
+        if (import.meta.env.DEV){
         console.log('CPU Paddle Hit');
+        }
         if(this.gameFlags.AudioPlayable === true){
           if((Math.floor(Math.random() * 2) === 0))
           {
@@ -525,7 +536,9 @@ class GameHandler {
       }
       else if ((this.Ball.x - this.Ball.radius)  >= this.PlayerPaddle.x  && (this.Ball.x - this.Ball.radius)  <= (this.PlayerPaddle.x + this.PaddleWidth ) &&  (this.Ball.y - this.Ball.radius)  >= this.PlayerPaddle.y &&  (this.Ball.y - this.Ball.radius)   <= (this.PlayerPaddle.y + this.PaddleHeight))
       {
+        if (import.meta.env.DEV){
         console.log('Player Paddle Hit');
+        }
         if(this.gameFlags.AudioPlayable === true){
           if((Math.floor(Math.random() * 2) === 0))
           {
@@ -636,7 +649,9 @@ class GameHandler {
     {
       case 'gamepadconnected':
         {
+          if (import.meta.env.DEV){
         console.log('Gamepad connected');
+          }
         if(event.gamepad.mapping !== '')
         {
           this.ControllerSlots[event.gamepad.index] = event.gamepad;
@@ -646,7 +661,9 @@ class GameHandler {
         case 'gamepaddisconnected':
         {
         delete this.ControllerSlots[event.gamepad.index];
+        if (import.meta.env.DEV){
         console.log('Gamepad disconnected');
+        }
         break;
         }
     }
@@ -678,7 +695,7 @@ class GameHandler {
     if (document.fullScreen || 
         document.mozFullScreen || 
         document.webkitIsFullScreen) {
-        if(this.gameFlags.Debug){
+        if (import.meta.env.DEV){
           console.log('Entered Full Screen');
         }
       this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight) };
@@ -693,7 +710,7 @@ class GameHandler {
       this.canvas.style.display = '';
       this.canvas.style.width = '';
     } else {
-      if(this.gameFlags.Debug){
+      if (import.meta.env.DEV){
       console.log('Exited Full Screen');
       }
       this.BallMovSpeed = 0.45;
