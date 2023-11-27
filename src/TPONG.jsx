@@ -707,6 +707,7 @@ class GameHandler {
   }
 
   FullScreenHandler() {
+    if(this.gameFlags.StartGame){
     if (document.fullScreen || 
         document.mozFullScreen || 
         document.webkitIsFullScreen) {
@@ -756,6 +757,7 @@ class GameHandler {
       document.body.style.setProperty('--main-display-block', 'block');
     }
   }
+  }
   getCanvas(){
     return <Container child={ this.canvas }/>;
   }
@@ -768,9 +770,10 @@ class GameHandler {
     this.Ball.x = (this.gameBoardWidth / 2);
     this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
     this.LeaderBoardTime = Date.now();
-    this.BallSpawnDelay = Date.now() + 4000;
+    this.BallSpawnDelay = Date.now() + 8000;
     this.PlayerScore = 0;
     this.CPUScore = 0;
+    this.CPUPaddle = { 'x' : 0, 'y' : 0 };
     if(this.gameFlags.Debug)
     {
       this.gameFlags.DrawBall = true;
@@ -780,9 +783,14 @@ class GameHandler {
     {
     this.frameId = window.requestAnimationFrame(this.Draw.bind(this));
     }
+    if(window.innerWidth == screen.width && window.innerHeight == screen.height) {
+      this.FullScreenHandler.bind(this);
+      this.FullScreenHandler();
+    }
   }
   PauseGame()
   {
+    this.gameFlags.StartGame = false;
     this.Ball = { 'x' : 0, 'y' : 0, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
     this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.DefaultHeight / 2) - this.PaddleHeight) };
     this.CPUPaddle = { 'x' : 0, 'y' : 0 };
