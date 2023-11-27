@@ -3,6 +3,8 @@
     border-radius: 50%;
     overflow: hidden;
     padding: 10px;
+    visibility:var(--main-visibility);
+    display:var(--main-display-flex);
 }
 .lightSwitch:hover {
     background-color: var(--main-bg-hovercolor);

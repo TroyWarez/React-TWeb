@@ -6,6 +6,8 @@
     font-size: 24px;
     font-family: "Lucida Console", "Courier New", monospace;
     position: relative;
+    visibility:var(--main-visibility);
+    display:var(--main-display-flex);
 }
 .WebsiteTitle:hover {
     filter: invert(0.5);

@@ -327,9 +327,9 @@ class GameHandler {
       if (firstController.buttons[12].value === 1) {// Up
         if(this.gameFlags.StartGame === true)
         {
-          if ((this.PlayerPaddle.y - (this.CPUMovSpeed * deltaTime)) >= this.GameboardBoundary)
+          if ((this.PlayerPaddle.y - (this.PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
           {
-            this.PlayerPaddle.y -= (this.CPUMovSpeed * deltaTime);
+            this.PlayerPaddle.y -= (this.PlayerMovSpeedFull * deltaTime);
           }
           else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
           {
@@ -340,9 +340,9 @@ class GameHandler {
       else if (firstController.buttons[13].value === 1) {// Down
         if(this.gameFlags.StartGame === true)
         {
-          if ((this.PlayerPaddle.y + (this.CPUMovSpeed * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
+          if ((this.PlayerPaddle.y + (this.PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
           {
-            this.PlayerPaddle.y += (this.CPUMovSpeed * deltaTime);
+            this.PlayerPaddle.y += (this.PlayerMovSpeedFull * deltaTime);
           }
           else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
           {
@@ -471,7 +471,9 @@ class GameHandler {
         this.gameFlags.DrawBall = false;
         if(this.gameFlags.AudioPlayable === true)
         {
+          if (!import.meta.env.DEV){
           this.ScoreBeep.play();
+          }
         }
       }
       else if ((this.Ball.x - this.Ball.radius) > (this.gameBoardWidth))//Player Scored
@@ -492,13 +494,17 @@ class GameHandler {
         this.gameFlags.DrawBall = false;
         if(this.gameFlags.AudioPlayable === true)
         {
+          if (!import.meta.env.DEV){
           this.ScoreBeep.play();
+          }
         }
       }
       else if ((this.Ball.y + this.Ball.radius) >= (this.gameBoardHeight))
       {
         if(this.gameFlags.AudioPlayable === true){
+          if (!import.meta.env.DEV){
         this.tableHit.play();
+          }
         }
         this.Ball.velocityY = this.Ball.velocityY * -1;
         this.Ball.velocityX = this.Ball.velocityX * 1;
@@ -507,7 +513,9 @@ class GameHandler {
       else if ((this.Ball.y - this.Ball.radius) <= 0)
       {
         if(this.gameFlags.AudioPlayable === true){
+          if (!import.meta.env.DEV){
         this.tableHit.play();
+          }
         }
         this.Ball.velocityY = this.Ball.velocityY * -1;
         this.Ball.velocityX = this.Ball.velocityX * 1;
@@ -521,11 +529,15 @@ class GameHandler {
         if(this.gameFlags.AudioPlayable === true){
           if((Math.floor(Math.random() * 2) === 0))
           {
+            if (!import.meta.env.DEV){
             this.paddleServe.play();
+            }
           }
           else
           {
+            if (!import.meta.env.DEV){
             this.paddleHit.play();
+            }
           }
         }
         this.Ball.divisor = Math.floor(Math.random() * 12);
@@ -541,11 +553,15 @@ class GameHandler {
         if(this.gameFlags.AudioPlayable === true){
           if((Math.floor(Math.random() * 2) === 0))
           {
+            if (!import.meta.env.DEV){
             this.paddleServe.play();
+            }
           }
           else
           {
+            if (!import.meta.env.DEV){
             this.paddleHit.play();
+            }
           }
         }
         if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
@@ -704,10 +720,19 @@ class GameHandler {
       this.Ball = { 'x' : 10, 'y' : 10, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
       this.canvas.style.paddingLeft = 0;
       this.canvas.style.paddingRight = 0;
-      this.canvas.style.marginLeft = '';
-      this.canvas.style.marginRight = '';
-      this.canvas.style.display = '';
+      this.canvas.style.marginLeft = '0%';
+      this.canvas.style.marginRight = '0%';
       this.canvas.style.width = '';
+      this.canvas.style.height = '';
+      this.canvas.style.display = '';
+      this.canvas.style.position = 'fixed';
+      document.body.style.setProperty('--main-visibility', 'hidden');
+      document.body.style.setProperty('--main-display-flex', 'none');
+      document.body.style.setProperty('--main-display-flexbox', 'none');
+      document.body.style.setProperty('--main-display-block', 'none');
+      this.canvas.style.display = this.canvasStyleDisplay;
+      document.body.style.width = window.screen.height;
+      document.body.style.height = window.screen.width;
     } else {
       if (import.meta.env.DEV){
       console.log('Exited Full Screen');
@@ -724,6 +749,11 @@ class GameHandler {
       this.canvas.style.marginRight = this.canvasMarginRight;
       this.canvas.style.display = this.canvasStyleDisplay;
       this.canvas.style.width = this.canvasStyleWidth;
+      this.canvas.style.position = '';
+      document.body.style.setProperty('--main-visibility', 'visible');
+      document.body.style.setProperty('--main-display-flex', 'flex');
+      document.body.style.setProperty('--main-display-flexbox', 'flexbox');
+      document.body.style.setProperty('--main-display-block', 'block');
     }
   }
   getCanvas(){

@@ -1,13 +1,14 @@
 .Article {
     text-align: justify;
-    display: flexbox;
+    display: var(--main-display-block);
     margin-left: 25%;
     margin-right: 25%;
     text-align: center;
 }
 .ArticleTitle {
     text-align: center;
-    display: flexbox;
+    display: var(--main-display-block);
     margin-left: 25%;
     margin-right: 25%;
+    visibility:var(--main-visibility);
 }

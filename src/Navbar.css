@@ -11,4 +11,6 @@
     align-content: left;
     flex-wrap: nowrap;
     overflow: hidden;
+    visibility:var(--main-visibility);
+    display:var(--main-display-flex);
 }

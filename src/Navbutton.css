@@ -11,6 +11,8 @@
     overflow: hidden;
     padding: 12px;
     text-decoration: none;
+    visibility:var(--main-visibility);
+    display:var(--main-display-flex);
 }
 .Navbutton:hover {
     background-color: var(--main-bg-hovercolor)

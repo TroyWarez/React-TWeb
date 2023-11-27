@@ -7,4 +7,6 @@
     font-size: .75rem;
     line-height: 1rem;
     z-index: -1;
+    visibility:var(--main-visibility);
+    display:var(--main-display-flexbox);
 }
