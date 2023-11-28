@@ -29,7 +29,7 @@ class GameHandler {
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'mainGameboard';
     this.canvas.className = 'Article';
-    this.canvas.onclick = this.CanvasOnclick;
+    this.canvas.tabIndex = '1';
     this.frameId = null;
     this.canvas.width = this.DefaultWidth;
     this.canvas.height = this.DefaultHeight;
@@ -142,7 +142,8 @@ class GameHandler {
       }
       }
     });
-    document.addEventListener('keydown', (event) => {
+    window.addEventListener('keydown', (event) => {
+      this.lastKey = event.key;
       if(this.gameFlags.Debug === 1)
       {
         console.log(event.key);
@@ -219,11 +220,10 @@ class GameHandler {
         localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
       }
     }
-    this.lastKey = event.key;
     }, true);
     window.addEventListener('gamepadconnected', this.GamepadHandler, false);
     window.addEventListener('gamepaddisconnected', this.GamepadHandler, false);
-    document.addEventListener('keyup', (event)  => {
+    window.addEventListener('keyup', (event)  => {
       if(event.key === this.lastKey)
       {
         this.lastKey = '';
@@ -324,7 +324,7 @@ class GameHandler {
           this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
         }
       }
-      if (firstController.buttons[12].value === 1) {// Up
+      if (firstController.buttons[12].value === 1 || this.lastKey === 'ArrowUp') {// Up
         if(this.gameFlags.StartGame === true)
         {
           if ((this.PlayerPaddle.y - (this.PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
@@ -337,7 +337,7 @@ class GameHandler {
           }
         }
       }
-      else if (firstController.buttons[13].value === 1) {// Down
+      else if (firstController.buttons[13].value === 1 || this.lastKey === 'ArrowDown') {// Down
         if(this.gameFlags.StartGame === true)
         {
           if ((this.PlayerPaddle.y + (this.PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
@@ -438,6 +438,33 @@ class GameHandler {
       this.lastController = firstController;
     }
 
+    if (this.lastKey === 'ArrowUp' || this.lastKey === 'KeyW') {// Up keyboard
+      if(this.gameFlags.StartGame === true)
+      {
+        if ((this.PlayerPaddle.y - (this.PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
+        {
+          this.PlayerPaddle.y -= (this.PlayerMovSpeedFull * deltaTime);
+        }
+        else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
+        {
+          this.PlayerPaddle.y = (this.gameBoardHeight / 2);
+        }
+      }
+    }
+    else if (this.lastKey === 'ArrowDown' || this.lastKey === 'KeyW') {// Down keyboard
+      if(this.gameFlags.StartGame === true)
+      {
+        if ((this.PlayerPaddle.y + (this.PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
+        {
+          this.PlayerPaddle.y += (this.PlayerMovSpeedFull * deltaTime);
+        }
+        else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
+        {
+          this.PlayerPaddle.y = (this.gameBoardHeight / 2);
+        }
+      }
+    }
+    
     this.BackgroundColor = this.selectedPalette.BackgroundColor;
     this.SpriteColor = this.selectedPalette.SpriteColor;
 
