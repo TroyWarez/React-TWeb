@@ -142,6 +142,12 @@ class GameHandler {
       }
       }
     });
+    window.addEventListener('keyup', (event)  => {
+      if(event.key === this.lastKey)
+      {
+        this.lastKey = '';
+      }
+    }, true);
     window.addEventListener('keydown', (event) => {
       this.lastKey = event.key;
       if(this.gameFlags.Debug === 1)
@@ -223,12 +229,6 @@ class GameHandler {
     }, true);
     window.addEventListener('gamepadconnected', this.GamepadHandler, false);
     window.addEventListener('gamepaddisconnected', this.GamepadHandler, false);
-    window.addEventListener('keyup', (event)  => {
-      if(event.key === this.lastKey)
-      {
-        this.lastKey = '';
-      }
-    }, true);
   }
   Draw(timeStamp)
   {
