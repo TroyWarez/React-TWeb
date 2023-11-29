@@ -324,7 +324,7 @@ class GameHandler {
           this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
         }
       }
-      if (firstController.buttons[12].value === 1 || this.lastKey === 'ArrowUp') {// Up
+      if (firstController.buttons[12].value === 1 && this.lastKey === '') {// Up
         if(this.gameFlags.StartGame === true)
         {
           if ((this.PlayerPaddle.y - (this.PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
@@ -337,7 +337,7 @@ class GameHandler {
           }
         }
       }
-      else if (firstController.buttons[13].value === 1 || this.lastKey === 'ArrowDown') {// Down
+      else if (firstController.buttons[13].value === 1 && this.lastKey === '') {// Down
         if(this.gameFlags.StartGame === true)
         {
           if ((this.PlayerPaddle.y + (this.PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
