@@ -751,6 +751,7 @@ class GameHandler {
       this.canvas.style.display = '';
       this.canvas.style.position = 'fixed';
       document.body.style.setProperty('--main-visibility', 'hidden');
+      document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
       document.body.style.setProperty('--main-display-flex', 'none');
       document.body.style.setProperty('--main-display-flexbox', 'none');
       document.body.style.setProperty('--main-display-block', 'none');
@@ -775,6 +776,7 @@ class GameHandler {
       this.canvas.style.width = this.canvasStyleWidth;
       this.canvas.style.position = '';
       document.body.style.setProperty('--main-visibility', 'visible');
+      document.body.style.setProperty('--main-gameControl-visibility', 'visible');
       document.body.style.setProperty('--main-display-flex', 'flex');
       document.body.style.setProperty('--main-display-flexbox', 'flexbox');
       document.body.style.setProperty('--main-display-block', 'block');
@@ -832,14 +834,17 @@ class GameHandler {
     <tr>
     <td>Up</td>
     <td>Down</td>
+    <td>Select Color Palette</td>
     </tr>
     <tr>
     <td><img src={keyBoardIcon_W_Key_Path} className='keyBoardIcon_W_Key'/></td>
     <td><img src={keyBoardIcon_S_Key_Path} className='keyBoardIcon_S_Key'/></td>
+    <td><img src='\icons\TPONG\XboxSeriesX_LB.png'/></td>
     </tr>
     <tr>
     <td><img src={keyBoardIcon_Up_Key_Path} className='keyBoardIcon_Up_Key'/></td>
     <td><img src={keyBoardIcon_Down_Key_Path} className='keyBoardIcon_Down_Key'/></td>
+    <td><img src='\icons\TPONG\XboxSeriesX_RB.png'/></td>
     </tr>
     <tr>
     <td><img src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>

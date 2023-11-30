@@ -28,12 +28,13 @@ function GamebuttonOnClick(event)
                     }
                     window.document.title = 'TWeb | TPONG';
                     ArticleTitle.innerHTML = 'TPONG';
+                    document.body.style.setProperty('--main-gameControl-visibility', 'visible');
                     if (import.meta.env.DEV){
-                        Article.replaceWith(GameStart(0, true)); 
+                        Article.replaceWith(GameStart(0, true).props.children[1].props.child); 
                     }
                     else
                     {
-                        Article.replaceWith(GameStart(0, true)); 
+                        Article.replaceWith(GameStart(0, true).props.children[1].props.child); 
                     }
                 }
                 break;

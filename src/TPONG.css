@@ -1,8 +1,9 @@
 .gameControls {
-    display:grid;
+    display: var(--main-display-block);
     justify-content: start;
     text-align: center;
     height: 0px;
     width: 100px;
     margin-left: 5%;
+    visibility:var(--main-gameControl-visibility);
 }
