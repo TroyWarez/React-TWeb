@@ -791,11 +791,23 @@ class GameHandler {
     let keyBoardIcon_S_Key_Path = '';
     let keyBoardIcon_Up_Key_Path = '';
     let keyBoardIcon_Down_Key_Path = '';
+    let keyBoardIcon_Enter_Key_Path = '';
+    let keyBoardIcon_F11_Key_Path = '';
+    let keyBoardIcon_1_Key_Path = '';
+    let keyBoardIcon_5_Key_Path = '';
+    let MouseIcon_Path = '';
 
     addLightImgElement('keyBoardIcon_W_Key', '/icons/TPONG/W_Key_Dark.png', '/icons/TPONG/W_Key_Light.png');
     addLightImgElement('keyBoardIcon_S_Key','/icons/TPONG/S_Key_Dark.png',  '/icons/TPONG/S_Key_Light.png');
     addLightImgElement('keyBoardIcon_Up_Key', '/icons/TPONG/Arrow_Up_Key_Dark.png', '/icons/TPONG/Arrow_Up_Key_Light.png');
     addLightImgElement('keyBoardIcon_Down_Key', '/icons/TPONG/Arrow_Down_Key_Dark.png', '/icons/TPONG/Arrow_Down_Key_Light.png');
+    addLightImgElement('MouseIcon_1', '/icons/TPONG/Mouse_Simple_Key_Dark.png', '/icons/TPONG/Mouse_Simple_Key_Light.png');
+    addLightImgElement('MouseIcon_2', '/icons/TPONG/Mouse_Simple_Key_Dark.png', '/icons/TPONG/Mouse_Simple_Key_Light.png');
+    addLightImgElement('keyBoardIcon_Enter_Key', '/icons/TPONG/Enter_Key_Dark.png', '/icons/TPONG/Enter_Key_Light.png');
+    addLightImgElement('keyBoardIcon_F11_Key','/icons/TPONG/F11_Key_Dark.png',  '/icons/TPONG/F11_Key_Light.png');
+
+    addLightImgElement('keyBoardIcon_1_Key','/icons/TPONG/1_Key_Dark.png',  '/icons/TPONG/1_Key_Light.png');
+    addLightImgElement('keyBoardIcon_5_Key','/icons/TPONG/5_Key_Dark.png',  '/icons/TPONG/5_Key_Light.png');
     switch (getLightState())
     {
         case 'dark':
@@ -804,6 +816,11 @@ class GameHandler {
           keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Light.png';
           keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Light.png';
           keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Light.png';
+          MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Light.png';
+          keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Light.png';
+          keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Light.png';
+          keyBoardIcon_1_Key_Path = '/icons/TPONG/1_Key_Dark.png';
+          keyBoardIcon_5_Key_Path = '/icons/TPONG/5_Key_Dark.png';
           break;
         }
         case 'light':
@@ -812,6 +829,11 @@ class GameHandler {
           keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
           keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
           keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
+          MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
+          keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
+          keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
+          keyBoardIcon_1_Key_Path = '/icons/TPONG/1_Key_Light.png';
+          keyBoardIcon_5_Key_Path = '/icons/TPONG/5_Key_Light.png';
           break;
         }
         default:
@@ -820,6 +842,11 @@ class GameHandler {
           keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
           keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
           keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
+          MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
+          keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
+          keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
+          keyBoardIcon_1_Key_Path = '/icons/TPONG/1_Key_Dark.png';
+          keyBoardIcon_5_Key_Path = '/icons/TPONG/5_Key_Dark.png';
           break;
         }
     }
@@ -828,34 +855,47 @@ class GameHandler {
     <table className='gameControls'>
   <thead>
     <tr>
-      <th colSpan="2"><p>To Operate the Player&apos;s Paddle:</p></th>
+      <th colSpan="10"><p>TPONG Controls:</p><br></br></th>
     </tr>
   </thead>
   <tbody>
   <tr>
     </tr>
     <tr>
-    <td>Up</td>
-    <td>Down</td>
-    <td>Select Color Palette</td>
+    <td><b>Up</b></td>
+    <td><b>Down</b></td>
+    <td><b>Change Color Palette</b></td>
+    <td><b>Fullscreen</b></td>
+    <td><b>Pause Game</b></td>
+    </tr>
+    <tr>
+    <td><img src={MouseIcon_Path} className='MouseIcon_1'/></td>
+    <td><img src={MouseIcon_Path} className='MouseIcon_2'/></td>
+    <td><img src='\icons\TPONG\XboxSeriesX_LB.png'/></td>
+    <td><img src='\icons\TPONG\XboxSeriesX_Menu.png'/></td>
+    <td><img src='\icons\TPONG\XboxSeriesX_View.png'/></td>
     </tr>
     <tr>
     <td><img src={keyBoardIcon_W_Key_Path} className='keyBoardIcon_W_Key'/></td>
     <td><img src={keyBoardIcon_S_Key_Path} className='keyBoardIcon_S_Key'/></td>
-    <td><img src='\icons\TPONG\XboxSeriesX_LB.png'/></td>
+    <td><img src='\icons\TPONG\XboxSeriesX_RB.png'/></td>
+    <td><img src={keyBoardIcon_F11_Key_Path} className='keyBoardIcon_F11_Key'/></td>
+    <td><img src={keyBoardIcon_Enter_Key_Path} className='keyBoardIcon_Enter_Key'/></td>
     </tr>
     <tr>
     <td><img src={keyBoardIcon_Up_Key_Path} className='keyBoardIcon_Up_Key'/></td>
     <td><img src={keyBoardIcon_Down_Key_Path} className='keyBoardIcon_Down_Key'/></td>
-    <td><img src='\icons\TPONG\XboxSeriesX_RB.png'/></td>
+    <td><img src={keyBoardIcon_1_Key_Path} className='keyBoardIcon_1_Key'/></td>
     </tr>
     <tr>
     <td><img src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
     <td><img src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
+    <td><b>...</b></td>
     </tr>
     <tr>
     <td><img src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
     <td><img src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+    <td><img src={keyBoardIcon_5_Key_Path} className='keyBoardIcon_5_Key'/></td>
     </tr>
   </tbody>
   </table>
