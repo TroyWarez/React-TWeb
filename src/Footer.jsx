@@ -27,7 +27,7 @@ function Footer(props){
     addLightImgElement('githubIcon', gitHubDarkIcon, gitHubLightIcon);
 
     let currentDate = new Date;
-    return (<footer className='Footer'><a href="https://www.github.com/TroyWarez"><img className='githubIcon' src={gitHubIconSrc} width='48' height='48' alt='GitHub'/></a><p>{props.children}</p> <a></a><p>Copyleft © {currentDate.getFullYear()}</p></footer>);
+    return (<footer className='Footer'><a href="https://www.github.com/TroyWarez"><img className='githubIcon' src={gitHubIconSrc} width='48' height='48' alt='GitHub'/></a><p>{props.children}</p> <a></a><p>Copyleft © {new Date().getFullYear()}</p></footer>);
 }
 Footer.propTypes = {
     children: propTypes.string
