@@ -734,10 +734,11 @@ class GameHandler {
         document.webkitIsFullScreen) {
 
       this.BallSpawnDelay = Date.now() + 4000;
-      this.gameFlags.DrawBall = false;
         if (import.meta.env.DEV){
           console.log('Entered Full Screen');
+          this.BallSpawnDelay = Date.now();
         }
+      this.gameFlags.DrawBall = false;
       this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight) };
       this.gameBoardWidth = window.screen.width;
       this.gameBoardHeight = window.screen.height;
@@ -762,6 +763,7 @@ class GameHandler {
       this.BallSpawnDelay = Date.now() + 4000;
       if (import.meta.env.DEV){
       console.log('Exited Full Screen');
+      this.BallSpawnDelay = Date.now();
       }
       this.gameFlags.DrawBall = false;
       this.BallMovSpeed = 0.45;
