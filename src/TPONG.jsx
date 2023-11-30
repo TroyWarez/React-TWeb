@@ -12,7 +12,8 @@ class GameHandler {
     this.PaddleRad = 20;
     this.DefaultWidth = 800;
     this.DefaultHeight = 600;
-    this.DefaultSpeed = 0.85;
+    this.DefaultSpeed = 0.45;
+    this.DefaultCPUSpeed = 0.9;
     this.Red = '#7F0000';
     this.Green = '#007F00';
     this.Blue = '#00007F';
@@ -67,12 +68,12 @@ class GameHandler {
       this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
    }
 
-    this.BallMovSpeed = 0.45;
-    this.CPUMovSpeed = 0.45;
+    this.BallMovSpeed = this.DefaultSpeed;
+    this.CPUMovSpeed = this.DefaultCPUSpeed;
 
-    this.PlayerMovSpeedFull = 0.35;
-    this.PlayerMovSpeedHalf = 0.175;
-    this.PlayerMovSpeedQuater = 0.0875;
+    this.PlayerMovSpeedFull = this.DefaultSpeed;
+    this.PlayerMovSpeedHalf = (this.DefaultSpeed / 2);
+    this.PlayerMovSpeedQuater = (this.DefaultSpeed / 4);
     this.BackgroundColor = '#00000';
     this.SpriteColor = '#767676';
     this.gameBoardWidth = this.DefaultWidth;
@@ -246,7 +247,7 @@ class GameHandler {
     this.ScalingFactorX = (this.gameBoardWidth / this.DefaultWidth);
     this.ScalingFactorY = (this.gameBoardHeight / this.DefaultHeight);
     this.BallMovSpeed = (this.DefaultSpeed * this.ScalingFactorX);
-    this.CPUMovSpeed = ((this.DefaultSpeed / 4) * this.ScalingFactorY);
+    this.CPUMovSpeed = ((this.DefaultCPUSpeed / 4) * this.ScalingFactorY);
     
     this.PlayerMovSpeedFull = (this.DefaultSpeed * this.ScalingFactorY);
     this.PlayerMovSpeedHalf = (this.DefaultSpeed * this.ScalingFactorY);
@@ -786,7 +787,12 @@ class GameHandler {
   }
   }
   getCanvas(){
-    return <Container child={ this.canvas }/>;
+    return (
+    <>
+    <Container child={ this.canvas }/>
+    <img src='W_Key_Dark.png'/>
+    </>
+    );
   }
   
   StartGame()
@@ -796,6 +802,8 @@ class GameHandler {
     this.CPUScore = 0;
     this.Ball.x = (this.gameBoardWidth / 2);
     this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
+    this.BallMovSpeed = this.DefaultSpeed;
+    this.CPUMovSpeed = this.DefaultSpeed;
     this.LeaderBoardTime = Date.now();
     this.BallSpawnDelay = Date.now() + 8000;
     this.PlayerScore = 0;

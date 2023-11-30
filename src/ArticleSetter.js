@@ -18,7 +18,13 @@ export function setArticle(ArticleContent, ArticleTitleContent)
         if(ArticleContent instanceof HTMLCanvasElement)
         {
             ArticleTitle.innerHTML = ArticleTitleContent;
-            newArticle = GameStart(0, true).props.child;
+            if (import.meta.env.DEV){
+                Article.replaceWith(GameStart(0, true).props.children[0].props.child); 
+            }
+            else
+            {
+                Article.replaceWith(GameStart(0, true).props.children[0].props.child); 
+            }
         }
         else
         {
