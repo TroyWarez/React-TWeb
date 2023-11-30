@@ -1,4 +1,6 @@
 import { Container } from './Container';
+import './TPONG.css';
+import { getLightState, addLightImgElement } from './LightHandler'
 let __TPONGHandler = null;
 class GameHandler {
   constructor(props, gameSetup, bDebug) {
@@ -185,14 +187,7 @@ class GameHandler {
         }
         case 'Enter':
         {
-          this.gameFlags.StartGame = true;
-          this.gameFlags.DrawBall = true;
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'GreenPalette');
-          this.PlayerScore = 0;
-          this.CPUScore = 0;
-          this.Ball.x = (this.gameBoardWidth / 2);
-          this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
-          this.LeaderBoardTime = Date.now();
+          this.StartGame();
           break;
         }
         case 'F11':
@@ -439,7 +434,7 @@ class GameHandler {
       this.lastController = firstController;
     }
 
-    if (this.lastKey === 'ArrowUp' || this.lastKey === 'KeyW') {// Up keyboard
+    if (this.lastKey === 'ArrowUp' || this.lastKey === 'w') {// Up keyboard
       if(this.gameFlags.StartGame === true)
       {
         if ((this.PlayerPaddle.y - (this.PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
@@ -452,7 +447,7 @@ class GameHandler {
         }
       }
     }
-    else if (this.lastKey === 'ArrowDown' || this.lastKey === 'KeyW') {// Down keyboard
+    else if (this.lastKey === 'ArrowDown' || this.lastKey === 's') {// Down keyboard
       if(this.gameFlags.StartGame === true)
       {
         if ((this.PlayerPaddle.y + (this.PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
@@ -787,10 +782,76 @@ class GameHandler {
   }
   }
   getCanvas(){
+    let keyBoardIcon_W_Key_Path = '';
+    let keyBoardIcon_S_Key_Path = '';
+    let keyBoardIcon_Up_Key_Path = '';
+    let keyBoardIcon_Down_Key_Path = '';
+
+    addLightImgElement('keyBoardIcon_W_Key', '/icons/TPONG/W_Key_Dark.png', '/icons/TPONG/W_Key_Light.png');
+    addLightImgElement('keyBoardIcon_S_Key','/icons/TPONG/S_Key_Dark.png',  '/icons/TPONG/S_Key_Light.png');
+    addLightImgElement('keyBoardIcon_Up_Key', '/icons/TPONG/Arrow_Up_Key_Dark.png', '/icons/TPONG/Arrow_Up_Key_Light.png');
+    addLightImgElement('keyBoardIcon_Down_Key', '/icons/TPONG/Arrow_Down_Key_Dark.png', '/icons/TPONG/Arrow_Down_Key_Light.png');
+    switch (getLightState())
+    {
+        case 'dark':
+        {
+          keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Light.png';
+          keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Light.png';
+          keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Light.png';
+          keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Light.png';
+          break;
+        }
+        case 'light':
+        {
+          keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
+          keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
+          keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
+          keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
+          break;
+        }
+        default:
+        {
+          keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
+          keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
+          keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
+          keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
+          break;
+        }
+    }
     return (
     <>
-    <Container child={ this.canvas }/>
-    <img src='W_Key_Dark.png'/>
+    <table className='gameControls'>
+  <thead>
+    <tr>
+      <th colSpan="2"><p>To Operate the Player&apos;s Paddle:</p></th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+    </tr>
+    <tr>
+    <td>Up</td>
+    <td>Down</td>
+    </tr>
+    <tr>
+    <td><img src={keyBoardIcon_W_Key_Path} className='keyBoardIcon_W_Key'/></td>
+    <td><img src={keyBoardIcon_S_Key_Path} className='keyBoardIcon_S_Key'/></td>
+    </tr>
+    <tr>
+    <td><img src={keyBoardIcon_Up_Key_Path} className='keyBoardIcon_Up_Key'/></td>
+    <td><img src={keyBoardIcon_Down_Key_Path} className='keyBoardIcon_Down_Key'/></td>
+    </tr>
+    <tr>
+    <td><img src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
+    <td><img src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
+    </tr>
+    <tr>
+    <td><img src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+    <td><img src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+    </tr>
+  </tbody>
+  </table>
+  <Container child={ this.canvas }/>
     </>
     );
   }
@@ -808,7 +869,7 @@ class GameHandler {
     this.BallSpawnDelay = Date.now() + 8000;
     this.PlayerScore = 0;
     this.CPUScore = 0;
-    this.CPUPaddle = { 'x' : 0, 'y' : 0 };
+    this.CPUPaddle = { 'x' : 0, 'y' : (this.gameBoardWidth / 2) };
     if(this.gameFlags.Debug)
     {
       this.gameFlags.DrawBall = true;

@@ -29,11 +29,11 @@ function GamebuttonOnClick(event)
                     window.document.title = 'TWeb | TPONG';
                     ArticleTitle.innerHTML = 'TPONG';
                     if (import.meta.env.DEV){
-                        Article.replaceWith(GameStart(0, true).props.children[0].props.child); 
+                        Article.replaceWith(GameStart(0, true)); 
                     }
                     else
                     {
-                        Article.replaceWith(GameStart(0, true).props.children[0].props.child); 
+                        Article.replaceWith(GameStart(0, true)); 
                     }
                 }
                 break;

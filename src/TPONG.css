@@ -1,0 +1,8 @@
+.gameControls {
+    display:grid;
+    justify-content: start;
+    text-align: center;
+    height: 0px;
+    width: 100px;
+    margin-left: 5%;
+}
