@@ -119,7 +119,6 @@ class GameHandler {
       console.log('The audio is now playable. ');
     }
     });
-    document.addEventListener('fullscreenchange', this.FullScreenHandler.bind(this));
     document.addEventListener('pointerlockchange', () => {
       if(document.pointerLockElement === this.canvas) {
         document.addEventListener('mousemove', this.MouseHandler, false);
@@ -128,7 +127,7 @@ class GameHandler {
         document.removeEventListener('mousemove', this.MouseHandler, false);
       }
     }, true);
-
+    document.addEventListener('fullscreenchange', this.FullScreenHandler.bind(this));
     this.canvas.addEventListener('click', async () => {
       if (!this.canvas.pointerLockElement)
       {
@@ -187,14 +186,21 @@ class GameHandler {
         }
         case 'Enter':
         {
-          this.StartGame();
+          if(this.gameFlags.StartGame === true)
+          {
+            this.gameFlags.StartGame = false;
+            this.BallMovSpeed = 0;
+          }
+          else
+          {
+            this.BallMovSpeed = this.DefaultSpeed;
+            this.StartGame();
+          }
           break;
         }
         case 'F11':
           {
             event.preventDefault();
-            if(this.lastKey !== event.key)
-            {
               if(document.fullScreen || 
                 document.mozFullScreen || 
                 document.webkitIsFullScreen) {
@@ -212,7 +218,6 @@ class GameHandler {
             }
             }
             break;
-          }
         default:
           return
       }
@@ -298,26 +303,16 @@ class GameHandler {
       }
     }
       }
-      else if (firstController.buttons[9].value === 1 && this.lastController !== null && this.lastController.buttons[9].value !== 1) {
+      else if (firstController.buttons[9].value === 1 && this.lastController !== null && this.lastController.buttons[9].value !== 1) { // Start
         if(this.gameFlags.StartGame === true)
         {
           this.gameFlags.StartGame = false;
-          this.gameFlags.DrawBall = false;
-          this.PlayerScore = 0;
-          this.CPUScore = 0;
-          this.Ball.x = 0;
-          this.Ball.y = 0;
-          this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight) };
-          this.CPUPaddle = { 'x' : 0, 'y' : 0 };
+          this.BallMovSpeed = 0;
         }
         else
         {
-          this.gameFlags.StartGame = true;
-          this.gameFlags.DrawBall = true;
-          this.PlayerScore = 0;
-          this.CPUScore = 0;
-          this.Ball.x = (this.gameBoardWidth / 2);
-          this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
+          this.BallMovSpeed = this.DefaultSpeed;
+          this.StartGame();
         }
       }
       if (firstController.buttons[12].value === 1 && this.lastKey === '') {// Up
@@ -604,8 +599,11 @@ class GameHandler {
       }
 
       //y up and down x left to right
-    this.Ball.x += this.Ball.velocityX * deltaTime;
-    this.Ball.y += (this.Ball.velocityY / 2) * deltaTime;
+      if(this.gameFlags.StartGame)
+      {
+        this.Ball.x += this.Ball.velocityX * deltaTime;
+        this.Ball.y += (this.Ball.velocityY / 2) * deltaTime;
+      }
     //this.Ball.x = 100;
     //this.Ball.y = 354;
   }
@@ -734,11 +732,13 @@ class GameHandler {
     if (document.fullScreen || 
         document.mozFullScreen || 
         document.webkitIsFullScreen) {
+
+      this.BallSpawnDelay = Date.now() + 4000;
+      this.gameFlags.DrawBall = false;
         if (import.meta.env.DEV){
           console.log('Entered Full Screen');
         }
       this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight) };
-      this.CPUPaddle = { 'x' : 0, 'y' : 0 };
       this.gameBoardWidth = window.screen.width;
       this.gameBoardHeight = window.screen.height;
       this.Ball = { 'x' : 10, 'y' : 10, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
@@ -759,14 +759,15 @@ class GameHandler {
       document.body.style.width = window.screen.height;
       document.body.style.height = window.screen.width;
     } else {
+      this.BallSpawnDelay = Date.now() + 4000;
       if (import.meta.env.DEV){
       console.log('Exited Full Screen');
       }
+      this.gameFlags.DrawBall = false;
       this.BallMovSpeed = 0.45;
       this.gameBoardWidth = this.DefaultWidth;
       this.gameBoardHeight = this.DefaultHeight;
       this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight) };
-      this.CPUPaddle = { 'x' : 0, 'y' : 0 };
       this.Ball = { 'x' : (this.gameBoardWidth / 2), 'y' : Math.floor(Math.random() * this.gameBoardHeight), 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
       this.canvas.style.paddingLeft = 0;
       this.canvas.style.paddingRight = 0;
@@ -874,7 +875,6 @@ class GameHandler {
     this.BallSpawnDelay = Date.now() + 8000;
     this.PlayerScore = 0;
     this.CPUScore = 0;
-    this.CPUPaddle = { 'x' : 0, 'y' : (this.gameBoardWidth / 2) };
     if(this.gameFlags.Debug)
     {
       this.gameFlags.DrawBall = true;
@@ -886,15 +886,12 @@ class GameHandler {
     }
     if(window.innerWidth == screen.width && window.innerHeight == screen.height) {
       this.FullScreenHandler.bind(this);
-      this.FullScreenHandler();
     }
   }
   PauseGame()
   {
     this.gameFlags.StartGame = false;
     this.Ball = { 'x' : 0, 'y' : 0, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
-    this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.DefaultHeight / 2) - this.PaddleHeight) };
-    this.CPUPaddle = { 'x' : 0, 'y' : 0 };
     if(this.frameId)
     {
       window.cancelAnimationFrame(this.frameId);
