@@ -9,6 +9,7 @@ function Article() {
     {
         case '/BetterMediaKeys':
             {
+                window.history.pushState('BetterMediaKeys', '', '/BetterMediaKeys');
                 window.document.title = 'TWeb | BetterMediaKeys';
                 title = 'BetterMediaKeys';
                 ArticleContent = <p className='Article'>{BetterMediaKeysDescription}</p>;
@@ -17,6 +18,7 @@ function Article() {
             }
         case '/GenericInput':
             {
+                window.history.pushState('GenericInput', '', '/GenericInput');
                 window.document.title = 'TWeb | GenericInput';
                 title = 'GenericInput';
                 ArticleContent = <p className='Article'>{GenericInputDescription}</p>;
@@ -25,6 +27,7 @@ function Article() {
             }
         case '/TPONG':
             {
+                window.history.pushState('TPONG', '', '/TPONG');
                 window.document.title = 'TWeb | TPONG';
                 title = 'TPONG';
                 if (import.meta.env.DEV){
@@ -32,7 +35,7 @@ function Article() {
                 }
                 else
                 {
-                    ArticleContent = GameStart(0, true);
+                    ArticleContent = GameStart(0, false);
                 }
                 setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/icons/TPONG/favicon.ico?v=2?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/icons/TPONG/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/icons/TPONG/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/icons/TPONG/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/icons/TPONG/safari-pinned-tab.svg?v=2'}}, {'manifest-apple-touch-icon-logo192' : {'href' : window.location.origin + '/icons/TPONG/logo192.png?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/TPONG-manifest.json?v=2'} }));
                 break;

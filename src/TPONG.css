@@ -1,14 +1,19 @@
 .gameControls {
-    display: inline-block;
+    display: var(--main-gameControl-display);
     justify-content: start;
     text-align: center;
     visibility:var(--main-gameControl-visibility);
     float:left;
+    margin-left: 2%;
+    margin-right: 8%;
 }
 
 .gameControlsGamepad {
+    display: var(--main-gameControl-display);
     justify-content: start;
     text-align: center;
     visibility:var(--main-gameControl-visibility);
     position:  relative;
+    margin-left: 2%;
+    margin-right: 8%;
 }

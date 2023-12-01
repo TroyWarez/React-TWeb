@@ -1,15 +1,15 @@
 .Article {
     text-align: justify;
     display: var(--main-display-block);
-    margin-left: 5%;
-    margin-right: 5%;
+    margin-left: 25%;
+    margin-right: 25%;
     text-align: center;
     border: 0px;
 }
 .ArticleTitle {
     text-align: center;
     display: var(--main-display-block);
-    margin-left: 30%;
-    margin-right: 30%;
-    visibility:var(--main-visibility);
+    margin-left: 25%;
+    margin-right: 25%;
+    visibility: var(--main-visibility);
 }

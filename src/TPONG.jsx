@@ -15,7 +15,7 @@ class GameHandler {
     this.DefaultWidth = 800;
     this.DefaultHeight = 600;
     this.DefaultSpeed = 0.45;
-    this.DefaultCPUSpeed = 0.9;
+    this.DefaultCPUSpeed = 0.90;
     this.Red = '#7F0000';
     this.Green = '#007F00';
     this.Blue = '#00007F';
@@ -25,9 +25,9 @@ class GameHandler {
     this.DimGray = '#767676';
     this.White = '#FFFFFF';
 
-    this.canvasMarginLeft = '5%';
+    this.canvasMarginLeft = 'auto';
     this.canvasMarginRight = 'auto';
-    this.canvasStyleDisplay = 'block';
+    this.canvasStyleDisplay = 'inline-block';
     this.canvasStyleWidth = '800px';
     this.canvas = document.createElement('canvas');
     this.canvas.id = 'mainGameboard';
@@ -62,7 +62,15 @@ class GameHandler {
       }
       else
       {
-        this.selectedPalette = JSON.parse(this.selectedPalette);
+        if(typeof this.selectedPalette === 'undefined')
+        {
+          localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : this.Black,  SpriteColor : this.DimGray }));
+          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+        }
+        else
+        {
+          this.selectedPalette = JSON.parse(this.selectedPalette);
+        }
       }
    }
    else {
@@ -159,9 +167,22 @@ class GameHandler {
       if(event.repeat === false)
       {
       switch(event.key) {
-        case '1': //Red
+        case 'c': //Red
         {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'RedPalette');
+        let PattleIndex = this.ColorPalettes.findIndex(x => x.PaletteName === this.selectedPalette.PaletteName);
+        if((PattleIndex + 1) < this.ColorPalettes.length)
+          {
+            this.selectedPalette = this.ColorPalettes[(PattleIndex + 1)];
+          }
+          else
+          {
+            this.selectedPalette = this.ColorPalettes[0];
+          }
+
+          if(this.gameFlags.localStorage === true)
+          {
+            localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
+          }
           break;
         }
         case '2': //Green
@@ -246,7 +267,7 @@ class GameHandler {
     this.CPUPaddle.x = (this.gameBoardWidth - this.PaddleHeight);
     this.ScalingFactorX = (this.gameBoardWidth / this.DefaultWidth);
     this.ScalingFactorY = (this.gameBoardHeight / this.DefaultHeight);
-    this.BallMovSpeed = (this.DefaultSpeed * this.ScalingFactorX);
+    this.BallMovSpeed = (this.DefaultSpeed * (this.ScalingFactorX * 1.3));
     this.CPUMovSpeed = ((this.DefaultCPUSpeed / 4) * this.ScalingFactorY);
     
     this.PlayerMovSpeedFull = (this.DefaultSpeed * this.ScalingFactorY);
@@ -263,25 +284,35 @@ class GameHandler {
       firstController = Gamepads[firstController.index];
       if (firstController.buttons[4].value === 1 && this.lastController !== null && this.lastController.buttons[4].value !== 1) {
         let PattleIndex = this.ColorPalettes.findIndex(x => x.PaletteName === this.selectedPalette.PaletteName);
-        if(PattleIndex !== -1 && (PattleIndex - 1) >= 0)
-        {
-          this.selectedPalette = this.ColorPalettes[(PattleIndex - 1)];
+        if((PattleIndex + 1) < this.ColorPalettes.length)
+          {
+            this.selectedPalette = this.ColorPalettes[(PattleIndex + 1)];
+          }
+          else
+          {
+            this.selectedPalette = this.ColorPalettes[0];
+          }
+
           if(this.gameFlags.localStorage === true)
           {
             localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
           }
-        }
       }
       else if (firstController.buttons[5].value === 1 && this.lastController !== null && this.lastController.buttons[5].value !== 1) {
         let PattleIndex = this.ColorPalettes.findIndex(x => x.PaletteName === this.selectedPalette.PaletteName);
-        if(PattleIndex !== -1 && (PattleIndex + 1) < this.ColorPalettes.length)
-        {
-          this.selectedPalette = this.ColorPalettes[(PattleIndex + 1)];
+        if((PattleIndex + 1) < this.ColorPalettes.length)
+          {
+            this.selectedPalette = this.ColorPalettes[(PattleIndex + 1)];
+          }
+          else
+          {
+            this.selectedPalette = this.ColorPalettes[0];
+          }
+
           if(this.gameFlags.localStorage === true)
           {
             localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
           }
-        }
       }
       else if (firstController.buttons[8].value === 1 && this.lastController !== null && this.lastController.buttons[8].value !== 1) {
         if(this.gameFlags.StartGame === true)
@@ -637,15 +668,15 @@ class GameHandler {
 
       if (this.gameFlags.DrawBall === true)
       {
-        if ((this.CPUPaddle.y + (this.CPUMovSpeed * deltaTime)) <= (this.Ball.y - (this.PaddleHeight / 2)) && ((this.CPUPaddle.y + this.PaddleHeight) + this.CPUMovSpeed) <= (this.gameBoardHeight - this.GameboardBoundary) )
+        if ((this.CPUPaddle.y + (this.CPUMovSpeed * deltaTime)) <= (this.Ball.y - (this.PaddleHeight / 2)) && ((this.CPUPaddle.y + this.PaddleHeight) + this.CPUMovSpeed) <= (this.gameBoardHeight - this.GameboardBoundary)  && (this.Ball.x >= (this.gameBoardWidth / 3)))
         {
           this.CPUPaddle.y += this.CPUMovSpeed * deltaTime;
         }
-        else if ((this.CPUPaddle.y - (this.CPUMovSpeed * deltaTime)) >= this.GameboardBoundary)
+        else if ((this.CPUPaddle.y - (this.CPUMovSpeed * deltaTime)) >= this.GameboardBoundary && (this.Ball.x >= (this.gameBoardWidth / 3)))
         {
           this.CPUPaddle.y -= this.CPUMovSpeed * deltaTime;
         }
-        else if ((this.CPUPaddle.y + (this.CPUMovSpeed * deltaTime)) >= this.gameBoardHeight)
+        else if ((this.CPUPaddle.y + (this.CPUMovSpeed * deltaTime)) >= this.gameBoardHeight && (this.Ball.x >= (this.gameBoardWidth / 2)))
         {
           this.CPUPaddle.y = ((this.gameBoardHeight / 2) - this.PaddleHeight);
         }
@@ -745,15 +776,14 @@ class GameHandler {
       this.Ball = { 'x' : 10, 'y' : 10, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
       this.canvas.style.paddingLeft = 0;
       this.canvas.style.paddingRight = 0;
-      this.canvas.style.marginLeft = '0%';
-      this.canvas.style.marginRight = '0%';
+      this.canvas.style.marginLeft = 'auto';
+      this.canvas.style.marginRight = 'auto';
       this.canvas.style.width = '';
       this.canvas.style.height = '';
       this.canvas.style.display = '';
-      this.canvas.style.position = 'fixed';
-      this.canvas.style.float = 'right';
       document.body.style.setProperty('--main-visibility', 'hidden');
       document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
+      document.body.style.setProperty('--main-gameControl-display', 'none');
       document.body.style.setProperty('--main-display-flex', 'none');
       document.body.style.setProperty('--main-display-flexbox', 'none');
       document.body.style.setProperty('--main-display-block', 'none');
@@ -772,44 +802,34 @@ class GameHandler {
       this.gameBoardHeight = this.DefaultHeight;
       this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight) };
       this.Ball = { 'x' : (this.gameBoardWidth / 2), 'y' : Math.floor(Math.random() * this.gameBoardHeight), 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
-      this.canvas.style.paddingLeft = 0;
-      this.canvas.style.paddingRight = 0;
-      this.canvas.style.marginLeft = this.canvasMarginLeft;
-      this.canvas.style.marginRight = this.canvasMarginRight;
-      this.canvas.style.display = this.canvasStyleDisplay;
-      this.canvas.style.width = this.canvasStyleWidth;
-      this.canvas.style.position = '';
-      this.canvas.style.float = 'right';
       document.body.style.setProperty('--main-visibility', 'visible');
       document.body.style.setProperty('--main-gameControl-visibility', 'visible');
+      document.body.style.setProperty('--main-gameControl-display', 'block');
       document.body.style.setProperty('--main-display-flex', 'flex');
       document.body.style.setProperty('--main-display-flexbox', 'flexbox');
       document.body.style.setProperty('--main-display-block', 'block');
     }
   }
   }
-  getCanvas(){
+  getGameComponent(){
     let keyBoardIcon_W_Key_Path = '';
     let keyBoardIcon_S_Key_Path = '';
     let keyBoardIcon_Up_Key_Path = '';
     let keyBoardIcon_Down_Key_Path = '';
     let keyBoardIcon_Enter_Key_Path = '';
     let keyBoardIcon_F11_Key_Path = '';
-    let keyBoardIcon_1_Key_Path = '';
-    let keyBoardIcon_5_Key_Path = '';
+    let keyBoardIcon_C_Key_Path = '';
     let MouseIcon_Path = '';
 
     addLightImgElement('keyBoardIcon_W_Key', '/icons/TPONG/W_Key_Dark.png', '/icons/TPONG/W_Key_Light.png');
     addLightImgElement('keyBoardIcon_S_Key','/icons/TPONG/S_Key_Dark.png',  '/icons/TPONG/S_Key_Light.png');
     addLightImgElement('keyBoardIcon_Up_Key', '/icons/TPONG/Arrow_Up_Key_Dark.png', '/icons/TPONG/Arrow_Up_Key_Light.png');
     addLightImgElement('keyBoardIcon_Down_Key', '/icons/TPONG/Arrow_Down_Key_Dark.png', '/icons/TPONG/Arrow_Down_Key_Light.png');
-    addLightImgElement('MouseIcon_1', '/icons/TPONG/Mouse_Simple_Key_Dark.png', '/icons/TPONG/Mouse_Simple_Key_Light.png');
-    addLightImgElement('MouseIcon_2', '/icons/TPONG/Mouse_Simple_Key_Dark.png', '/icons/TPONG/Mouse_Simple_Key_Light.png');
+    addLightImgElement('MouseIcon', '/icons/TPONG/Mouse_Simple_Key_Dark.png', '/icons/TPONG/Mouse_Simple_Key_Light.png');
     addLightImgElement('keyBoardIcon_Enter_Key', '/icons/TPONG/Enter_Key_Dark.png', '/icons/TPONG/Enter_Key_Light.png');
     addLightImgElement('keyBoardIcon_F11_Key','/icons/TPONG/F11_Key_Dark.png',  '/icons/TPONG/F11_Key_Light.png');
+    addLightImgElement('keyBoardIcon_C_Key','/icons/TPONG/C_Key_Dark.png',  '/icons/TPONG/C_Key_Light.png');
 
-    addLightImgElement('keyBoardIcon_1_Key','/icons/TPONG/1_Key_Dark.png',  '/icons/TPONG/1_Key_Light.png');
-    addLightImgElement('keyBoardIcon_5_Key','/icons/TPONG/5_Key_Dark.png',  '/icons/TPONG/5_Key_Light.png');
     switch (getLightState())
     {
         case 'dark':
@@ -821,8 +841,7 @@ class GameHandler {
           MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Light.png';
           keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Light.png';
           keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Light.png';
-          keyBoardIcon_1_Key_Path = '/icons/TPONG/1_Key_Light.png';
-          keyBoardIcon_5_Key_Path = '/icons/TPONG/5_Key_Light.png';
+          keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Light.png';
           break;
         }
         case 'light':
@@ -834,8 +853,7 @@ class GameHandler {
           MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
           keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
           keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
-          keyBoardIcon_1_Key_Path = '/icons/TPONG/1_Key_Dark.png';
-          keyBoardIcon_5_Key_Path = '/icons/TPONG/5_Key_Dark.png';
+          keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
           break;
         }
         default:
@@ -847,8 +865,7 @@ class GameHandler {
           MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
           keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
           keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
-          keyBoardIcon_1_Key_Path = '/icons/TPONG/1_Key_Dark.png';
-          keyBoardIcon_5_Key_Path = '/icons/TPONG/5_Key_Dark.png';
+          keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
           break;
         }
     }
@@ -857,7 +874,7 @@ class GameHandler {
     <table className='gameControls'>
   <thead>
     <tr>
-      <th colSpan='5'><b>TPONG Keyboard & Mouse Controls:</b><br></br></th>
+      <th colSpan='5'><b>Keyboard & Mouse Controls:</b><br></br></th>
     </tr>
   </thead>
   <tbody>
@@ -866,31 +883,29 @@ class GameHandler {
     <tr>
     <td><b>Up</b></td>
     <td><b>Down</b></td>
-    <td><b>Change Color Palette</b></td>
+    <td><b>Cycle Colors</b></td>
     <td><b>Fullscreen</b></td>
-    <td><b>Pause Game</b></td>
+    <td><b>Pause</b></td>
     </tr>
     <tr>
-    <td><img src={MouseIcon_Path} className='MouseIcon_1'/></td>
-    <td><img src={MouseIcon_Path} className='MouseIcon_2'/></td>
-    <td><img src={keyBoardIcon_1_Key_Path} className='keyBoardIcon_1_Key'/></td>
-    <td><img src={keyBoardIcon_F11_Key_Path} className='keyBoardIcon_F11_Key'/></td>
-    <td><img src={keyBoardIcon_Enter_Key_Path} className='keyBoardIcon_Enter_Key'/></td>
+    <td><img width='50px' height='50px' src={MouseIcon_Path} className='MouseIcon'/></td>
+    <td><img width='50px' height='50px' src={MouseIcon_Path} className='MouseIcon'/></td>
+    <td><img width='50px' height='50px' src={keyBoardIcon_C_Key_Path} id='keyBoardIcon_C_Key'/></td>
+    <td><img width='50px' height='50px' src={keyBoardIcon_F11_Key_Path} id='keyBoardIcon_F11_Key'/></td>
+    <td><img width='50px' height='50px' src={keyBoardIcon_Enter_Key_Path} id='keyBoardIcon_Enter_Key'/></td>
     </tr>
     <tr>
-    <td><img src={keyBoardIcon_W_Key_Path} className='keyBoardIcon_W_Key'/></td>
-    <td><img src={keyBoardIcon_S_Key_Path} className='keyBoardIcon_S_Key'/></td>
-    <td><b>...</b></td>
+    <td><img width='50px' height='50px' src={keyBoardIcon_W_Key_Path} id='keyBoardIcon_W_Key'/></td>
+    <td><img width='50px' height='50px' src={keyBoardIcon_S_Key_Path} id='keyBoardIcon_S_Key'/></td>
     </tr>
     <tr>
-    <td><img src={keyBoardIcon_Up_Key_Path} className='keyBoardIcon_Up_Key'/></td>
-    <td><img src={keyBoardIcon_Down_Key_Path} className='keyBoardIcon_Down_Key'/></td>
-    <td><img src={keyBoardIcon_5_Key_Path} className='keyBoardIcon_5_Key'/></td>
+    <td><img width='50px' height='50px' src={keyBoardIcon_Up_Key_Path} id='keyBoardIcon_Up_Key'/></td>
+    <td><img width='50px' height='50px' src={keyBoardIcon_Down_Key_Path} id='keyBoardIcon_Down_Key'/></td>
     </tr>
   </tbody>
   <thead>
     <tr>
-      <th colSpan='5'><b>TPONG Gamepad Controls:</b><br></br></th>
+      <th colSpan='5'><b>Gamepad Controls:</b><br></br></th>
     </tr>
   </thead>
   <tbody>
@@ -899,21 +914,20 @@ class GameHandler {
     <tr>
     <td><b>Up</b></td>
     <td><b>Down</b></td>
-    <td><b>Change Color Palette</b></td>
+    <td><b>Cycle Colors</b></td>
     <td><b>Fullscreen</b></td>
-    <td><b>Pause Game</b></td>
+    <td><b>Pause</b></td>
     </tr>
     <tr>
-    <td><img src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
-    <td><img src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
-    <td><img src='\icons\TPONG\XboxSeriesX_RB.png'/></td>
-    <td><img src='\icons\TPONG\XboxSeriesX_View.png'/></td>
-    <td><img src='\icons\TPONG\XboxSeriesX_Menu.png'/></td>
+    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
+    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
+    <td><img src='\icons\TPONG\XboxSeriesX_RB_LB.png'/></td>
+    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_View.png'/></td>
+    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Menu.png'/></td>
     </tr>
     <tr>
-    <td><img src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
-    <td><img src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
-    <td><img src='\icons\TPONG\XboxSeriesX_LB.png'/></td>
+    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
     </tr>
   </tbody>
   </table>
@@ -935,6 +949,7 @@ class GameHandler {
     this.BallSpawnDelay = Date.now() + 8000;
     this.PlayerScore = 0;
     this.CPUScore = 0;
+    document.body.style.setProperty('--main-gameControl-display', 'block');
     if(this.gameFlags.Debug)
     {
       this.gameFlags.DrawBall = true;
@@ -955,6 +970,7 @@ class GameHandler {
     if(this.frameId)
     {
       window.cancelAnimationFrame(this.frameId);
+      document.body.style.setProperty('--main-gameControl-display', 'none');
       this.frameId = null;
     }
   }
@@ -968,7 +984,7 @@ export function GameStart(gameSetup, bDebug) {
   {
   __TPONGHandler.StartGame();
   }
-  return __TPONGHandler.getCanvas();
+  return __TPONGHandler.getGameComponent();
 }
 
 export function EndGame() {

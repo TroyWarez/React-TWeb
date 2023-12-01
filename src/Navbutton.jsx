@@ -11,7 +11,7 @@ function NavButtonOnClick(event)
 {
     let ArticleContent = '';
     let ArticleTitleContent = '';
-    event.preventDefault();
+    event.preventDefault();//This prevents reloading the page.
     switch (event.target.text)
     {
         case 'BetterMediaKeys':
@@ -46,7 +46,6 @@ function NavButtonOnClick(event)
                     break;
                 }
     }
-    
     setArticle(ArticleContent, ArticleTitleContent);
 }
 window.onpopstate = function(e){
@@ -72,13 +71,14 @@ window.onpopstate = function(e){
             }
         case 'TPONG':
                 {
+                    document.body.style.setProperty('--main-gameControl-display', 'block');
                     window.document.title = 'TWeb | TPONG';
                     if (import.meta.env.DEV){
-                        ArticleContent = GameStart(0, true).props.children[1].props.child
+                        ArticleContent = GameStart(0, true).props.children[1].props.child;
                     }
                     else
                     {
-                        ArticleContent = GameStart(0, true).props.children[1].props.child
+                        ArticleContent = GameStart(0, false).props.children[1].props.child;
                     }
                     ArticleTitleContent = 'TPONG';
                     setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/icons/TPONG/favicon.ico?v=2?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/icons/TPONG/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/icons/TPONG/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/icons/TPONG/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/icons/TPONG/safari-pinned-tab.svg?v=2'}}, {'manifest-apple-touch-icon-logo192' : {'href' : window.location.origin + '/icons/TPONG/logo192.png?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/TPONG-manifest.json?v=2'} }));
@@ -87,12 +87,11 @@ window.onpopstate = function(e){
         default:
             {
                 window.document.title = 'TWeb | Dev';
-                ArticleContent = '';
-                ArticleTitleContent = '';
+                ArticleContent = SiteDescription;
+                ArticleTitleContent = 'About';
                 break;
             }
     }
-    
     setArticle(ArticleContent, ArticleTitleContent);
 };
 export default Navbutton;

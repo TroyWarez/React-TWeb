@@ -14,6 +14,7 @@
   --main-display-flex: flex;
   --main-display-flexbox: flexbox;
   --main-display-block: block;
+  --main-gameControl-display: block;
 }
 
 body {

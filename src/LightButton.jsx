@@ -103,10 +103,20 @@ class LightModeHandler
                   localStorage.setItem('lightSwitchState', 'light');
               }
             this.UpdateList.forEach((ImgElementData) => {
-                let ImgElement = document.getElementsByClassName(ImgElementData.className)[0];
-                if(typeof ImgElement !== 'undefined')
+                let ImgElements = document.getElementsByClassName(ImgElementData.ElementName);
+                if(typeof ImgElements[0] !== 'undefined')
                 {
-                    ImgElement.src = ImgElementData.LightSvgPath;
+                    Array.from(ImgElements).forEach((lightElement) => {
+                        lightElement.src = ImgElementData.LightSvgPath;
+                    });
+                }
+                else
+                {
+                    let ImgElement = document.getElementById(ImgElementData.ElementName);
+                    if(ImgElement !== null)
+                    {
+                        ImgElement.src = ImgElementData.LightSvgPath;
+                    }
                 }
               });
               targetElement.alt = 'Light';
@@ -121,11 +131,21 @@ class LightModeHandler
               document.body.style.setProperty('--main-bg-color', DarkShade);
               document.body.style.setProperty('--main-bg-hovercolor', DarkHoverShade);
               document.body.style.setProperty('--main-bg-hovertextColor', LightTextHoverShade);
-            this.UpdateList.forEach((ImgElementData) => {
-                let ImgElement = document.getElementsByClassName(ImgElementData.className)[0];
-                if(typeof ImgElement !== 'undefined')
+              this.UpdateList.forEach((ImgElementData) => {
+                let ImgElements = document.getElementsByClassName(ImgElementData.ElementName);
+                if(typeof ImgElements[0] !== 'undefined')
                 {
-                    ImgElement.src = ImgElementData.DarkSvgPath;
+                    Array.from(ImgElements).forEach((lightElement) => {
+                        lightElement.src = ImgElementData.DarkSvgPath;
+                    });
+                }
+                else
+                {
+                    let ImgElement = document.getElementById(ImgElementData.ElementName);
+                    if(ImgElement !== null)
+                    {
+                        ImgElement.src = ImgElementData.DarkSvgPath;
+                    }
                 }
               });
               if(this.blocalStorage === true)
@@ -141,15 +161,14 @@ class LightModeHandler
             }
     }   
     }
-    addLightImgElement(className, LightSvgPath, DarkSvgPath)
+    addLightImgElement(ElementName, LightSvgPath, DarkSvgPath)// Fix me
     {
-        let ImgElementData = {className : className, LightSvgPath : LightSvgPath, DarkSvgPath : DarkSvgPath,};
-        if(typeof className !== 'undefined' && className !== '' && (this.UpdateList.some(item => (item.className === className) && (item.LightSvgPath === LightSvgPath) && (item.DarkSvgPath === DarkSvgPath)) === false))
+        let ImgElementData = {ElementName : ElementName, LightSvgPath : LightSvgPath, DarkSvgPath : DarkSvgPath,};
+        if(typeof ElementName !== 'undefined' && ElementName !== '' && (this.UpdateList.some(item => (item.ElementName === ElementName) && (item.LightSvgPath === LightSvgPath) && (item.DarkSvgPath === DarkSvgPath)) === false))
         {
             this.UpdateList.push(ImgElementData);
-            return this.UpdateList.length;
         }
-        return null;
+        return this.UpdateList.length;
     }
 }
 export let __LightButton = null;
