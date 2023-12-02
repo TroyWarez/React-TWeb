@@ -30,12 +30,14 @@ function GamebuttonOnClick(event)
                     ArticleTitle.innerHTML = 'TPONG';
                     document.body.style.setProperty('--main-gameControl-visibility', 'visible');
                     document.body.style.setProperty('--main-gameControl-display', 'block');
+                    let test = GameStart(0, true).props.children[0];
+                    console.log(test);
                     if (import.meta.env.DEV){
-                        Article.replaceWith(GameStart(0, true).props.children[1].props.child); 
+                        Article.replaceWith(...GameStart(0, true)); 
                     }
                     else
                     {
-                        Article.replaceWith(GameStart(0, true).props.children[1].props.child); 
+                        Article.replaceWith(GameStart(0, true).props.children[0]); 
                     }
                 }
                 break;

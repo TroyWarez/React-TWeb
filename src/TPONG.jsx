@@ -930,8 +930,8 @@ class GameHandler {
     <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
     </tr>
   </tbody>
-  </table>
-  <Container child={ this.canvas }/>
+    </table>
+    <Container child={ this.canvas }/>
     </>
     );
   }
