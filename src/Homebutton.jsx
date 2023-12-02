@@ -42,7 +42,7 @@ function Homebutton(props)
         window.document.title = 'TWeb | Dev';
         ArticleContent.ContentState.ContentTitle = 'About';
         ArticleContent.ContentState.Content = <p className='Article'>{SiteDescription}</p>;
-        ArticleContent.setContent(ArticleContent.Content);// Add something good here.
+        ArticleContent.setContent({Content: ArticleContent.Content, ContentTitle: ArticleContent.ContentState.ContentTitle, 'theme': ArticleContent.ContentState.theme, 'UpdateImgLightArray': ArticleContent.ContentState.UpdateImgLightArray});
       }} className='WebsiteTitle'><h1><img src={terminalIconSrc} className='terminalIcon' alt='Terminal Icon' ></img>{props.name}</h1></a>);
 }
 export default Homebutton;

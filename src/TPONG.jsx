@@ -820,16 +820,16 @@ class GameHandler {
     let keyBoardIcon_C_Key_Path = '';
     let MouseIcon_Path = '';
     
-    addLightImgElement('keyBoardIcon_W_Key', '/icons/TPONG/W_Key_Dark.png', '/icons/TPONG/W_Key_Light.png');
-    addLightImgElement('keyBoardIcon_S_Key','/icons/TPONG/S_Key_Dark.png',  '/icons/TPONG/S_Key_Light.png');
-    addLightImgElement('keyBoardIcon_Up_Key', '/icons/TPONG/Arrow_Up_Key_Dark.png', '/icons/TPONG/Arrow_Up_Key_Light.png');
-    addLightImgElement('keyBoardIcon_Down_Key', '/icons/TPONG/Arrow_Down_Key_Dark.png', '/icons/TPONG/Arrow_Down_Key_Light.png');
-    addLightImgElement('MouseIcon', '/icons/TPONG/Mouse_Simple_Key_Dark.png', '/icons/TPONG/Mouse_Simple_Key_Light.png');
-    addLightImgElement('keyBoardIcon_Enter_Key', '/icons/TPONG/Enter_Key_Dark.png', '/icons/TPONG/Enter_Key_Light.png');
-    addLightImgElement('keyBoardIcon_F11_Key','/icons/TPONG/F11_Key_Dark.png',  '/icons/TPONG/F11_Key_Light.png');
-    addLightImgElement('keyBoardIcon_C_Key','/icons/TPONG/C_Key_Dark.png',  '/icons/TPONG/C_Key_Light.png');
+    //addLightImgElement('keyBoardIcon_W_Key', '/icons/TPONG/W_Key_Dark.png', '/icons/TPONG/W_Key_Light.png');
+    //addLightImgElement('keyBoardIcon_S_Key','/icons/TPONG/S_Key_Dark.png',  '/icons/TPONG/S_Key_Light.png');
+    //addLightImgElement('keyBoardIcon_Up_Key', '/icons/TPONG/Arrow_Up_Key_Dark.png', '/icons/TPONG/Arrow_Up_Key_Light.png');
+    //addLightImgElement('keyBoardIcon_Down_Key', '/icons/TPONG/Arrow_Down_Key_Dark.png', '/icons/TPONG/Arrow_Down_Key_Light.png');
+    //addLightImgElement('MouseIcon', '/icons/TPONG/Mouse_Simple_Key_Dark.png', '/icons/TPONG/Mouse_Simple_Key_Light.png');
+    //addLightImgElement('keyBoardIcon_Enter_Key', '/icons/TPONG/Enter_Key_Dark.png', '/icons/TPONG/Enter_Key_Light.png');
+    //addLightImgElement('keyBoardIcon_F11_Key','/icons/TPONG/F11_Key_Dark.png',  '/icons/TPONG/F11_Key_Light.png');
+    //addLightImgElement('keyBoardIcon_C_Key','/icons/TPONG/C_Key_Dark.png',  '/icons/TPONG/C_Key_Light.png');
 
-    switch (getLightState())
+    switch ('dark')
     {
         case 'dark':
         {

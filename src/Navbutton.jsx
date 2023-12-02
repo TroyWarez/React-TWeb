@@ -48,6 +48,7 @@ function Navbutton(props)
                         break;
                     }
             }
+            ArticleContent.setContent({Content: ArticleContent.Content, ContentTitle: ArticleContent.ContentState.ContentTitle, 'theme': ArticleContent.ContentState.theme, 'UpdateImgLightArray': ArticleContent.ContentState.UpdateImgLightArray});
         }} href={props.name} >{props.name}</a>);
 }
 
