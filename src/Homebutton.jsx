@@ -1,14 +1,19 @@
 import terminalDarkIcon from '/terminal_dark.svg'
 import terminalLightIcon from '/terminal_light.svg'
-import { getLightState, addLightImgElement } from './LightHandler'
-import { setArticle } from './ArticleSetter.js';
 import { setManifestAndIcons } from './manifestSet'
 import './Homebutton.css'
 import  { SiteDescription } from './Articles.js'
-function Homebutton(name, key)
+import { useContext} from 'react'
+import propTypes from 'prop-types';
+import { ContentContext } from './App'
+Homebutton.propTypes = {
+    name : propTypes.string
+};
+function Homebutton(props)
 {
+    const ArticleContent = useContext(ContentContext);
     let terminalIconSrc = '';
-    switch (getLightState())
+    switch (ArticleContent.ContentState.theme)
     {
         case 'dark':
         {
@@ -26,7 +31,7 @@ function Homebutton(name, key)
             break;
         }
     }
-    addLightImgElement('terminalIcon', terminalLightIcon, terminalDarkIcon);
+    ArticleContent.ContentState.UpdateImgLightArray.push({'ElementName' : 'terminalIcon', 'LightSvgPath' : terminalLightIcon, 'DarkSvgPath' : terminalDarkIcon});
     return (<a href={window.location.origin}   onClick={(e) => {
         e.preventDefault();
         if(window.location.pathname !== '/')
@@ -35,7 +40,9 @@ function Homebutton(name, key)
             setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/safari-pinned-tab.svg?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/main-manifest.json?v=2'} }));
         }
         window.document.title = 'TWeb | Dev';
-        setArticle(SiteDescription, 'About');// Add something good here.
-      }}className='WebsiteTitle' key={key}><h1><img src={terminalIconSrc} className='terminalIcon' alt='Terminal Icon' value={name}></img>{name}</h1></a>);
+        ArticleContent.ContentState.ContentTitle = 'About';
+        ArticleContent.ContentState.Content = <p className='Article'>{SiteDescription}</p>;
+        ArticleContent.setContent(ArticleContent.Content);// Add something good here.
+      }} className='WebsiteTitle'><h1><img src={terminalIconSrc} className='terminalIcon' alt='Terminal Icon' ></img>{props.name}</h1></a>);
 }
 export default Homebutton;

@@ -1,6 +1,6 @@
-import { setArticle } from './ArticleSetter.js';
 import { setManifestAndIcons } from './manifestSet'
 import  { SiteDescription, BetterMediaKeysDescription, GenericInputDescription} from './Articles.js'
+import { ContentContext } from './App'
 import { GameStart } from './TPONG';
 window.onpopstate = function(){
     let ArticleContent = '';
@@ -47,5 +47,4 @@ window.onpopstate = function(){
                 break;
             }
     }
-    setArticle(ArticleContent, ArticleTitleContent);
 };

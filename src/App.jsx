@@ -7,7 +7,7 @@ import { useState, createContext } from 'react';
 export const ContentContext = createContext();
 
 function App() {
-  const [ContentState = {'Content': '', 'ContentTitle': '' }, setContent] = useState();
+  const [ContentState = {Content: null, ContentTitle: null, 'theme': '', 'UpdateImgLightArray': new Array}, setContent] = useState();
 
   return (
     <ContentContext.Provider value={{ ContentState, setContent }}>

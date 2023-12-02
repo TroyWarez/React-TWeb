@@ -1,6 +1,5 @@
 import { Container } from './Container';
 import './TPONG.css';
-import { getLightState, addLightImgElement } from './LightHandler'
 let __TPONGHandler = null;
 class GameHandler {
   constructor(props, gameSetup, bDebug) {
@@ -820,7 +819,7 @@ class GameHandler {
     let keyBoardIcon_F11_Key_Path = '';
     let keyBoardIcon_C_Key_Path = '';
     let MouseIcon_Path = '';
-
+    
     addLightImgElement('keyBoardIcon_W_Key', '/icons/TPONG/W_Key_Dark.png', '/icons/TPONG/W_Key_Light.png');
     addLightImgElement('keyBoardIcon_S_Key','/icons/TPONG/S_Key_Dark.png',  '/icons/TPONG/S_Key_Light.png');
     addLightImgElement('keyBoardIcon_Up_Key', '/icons/TPONG/Arrow_Up_Key_Dark.png', '/icons/TPONG/Arrow_Up_Key_Light.png');
