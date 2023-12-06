@@ -285,7 +285,7 @@ export function TPONG(gameSetup, bDebug) {
     document.addEventListener('click', () => {
       gameState.gameFlags.AudioPlayable = true;
       /* the audio is now playable; play it if permissions allow */
-      if (import.meta.env.DEV){
+      if (import.meta.env.DEV && gameState.gameFlags.AudioPlayable === false){
       console.log('The audio is now playable. ');
     }
     });
@@ -315,17 +315,16 @@ export function TPONG(gameSetup, bDebug) {
       }
     });
     window.addEventListener('keyup', (event)  => {
-      if(event.key === gameState.lastKey)
+      if(event.key === gameState.lastKey && event.target.id === gameState.id)
       {
         gameState.lastKey = '';
       }
     }, true);
     window.addEventListener('keydown', (event) => {
-      gameState.lastKey = event.key;
-      if(gameState.gameFlags.Debug === 1)
+      if(event.target.id === gameState.id)
       {
-        console.log(event.key);
-      }
+      gameState.lastKey = event.key;
+      
       if(event.repeat === false)
       {
       switch(event.key) {
@@ -390,7 +389,8 @@ export function TPONG(gameSetup, bDebug) {
         localStorage.setItem('savedPalette', JSON.stringify(gameState.selectedPalette));
       }
     }
-    }, true);
+    }
+      }, true);
 
     gameState.ctx = gameState.getContext("2d");
 
@@ -991,6 +991,7 @@ export function TPONG(gameSetup, bDebug) {
   }
   return (
   <>
+  <input type='button' value={'Hide Game Controls'} className='gameControls'/>
   <table className='gameControls'>
 <thead>
   <tr>
