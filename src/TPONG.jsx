@@ -249,7 +249,10 @@ export function TPONG(gameSetup, bDebug) {
         document.body.style.setProperty('--main-display-flex', 'flex');
         document.body.style.setProperty('--main-display-flexbox', 'flexbox');
         document.body.style.setProperty('--main-display-block', 'block');
-        document.body.style.setProperty('--main-article-margin', '25%');
+
+        document.body.style.setProperty('--main-article-margin', '3%');
+        gameState.ctx.canvas.style.marginLeft = '7%';
+        gameState.ctx.canvas.style.marginRight = 'auto';
       }
     }
     }
@@ -1048,7 +1051,7 @@ export function TPONG(gameSetup, bDebug) {
   </tr>
 </tbody>
   </table>
-  <canvas width='800' ref={setGameState} onClick={ () => {
+  <canvas ref={setGameState} onClick={ () => {
     gameState.gameFlags.AudioPlayable = true;
   }}></canvas>
   </>
