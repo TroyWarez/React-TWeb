@@ -10,7 +10,7 @@ function LightButton()
 {
     let lightType = '';
     const LightContent = useContext(ContentContext);
-    const [lightState, setLightState] = useState({ 'blocalStorage' : (typeof(Storage) !== 'undefined') ? false : true, 'Iconsrc' : null, 'lightSwitchState': null});
+    const [lightState, setLightState] = useState({ 'blocalStorage' : (typeof(Storage) !== 'undefined') ? true : false, 'Iconsrc' : null, 'lightSwitchState': null});
     switch (getComputedStyle(document.body).getPropertyValue('--main-bg-color'))
     {
         case DarkShade:

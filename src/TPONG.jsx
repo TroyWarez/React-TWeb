@@ -1,145 +1,305 @@
-import { Container } from './Container';
 import './TPONG.css';
-let __TPONGHandler = null;
-class GameHandler {
-  constructor(props, gameSetup, bDebug) {
-    this.props = props;
-    this.paddleHitSound = 'sounds/TPONG/paddleHit.m4a'
-    this.paddleServeSound = 'sounds/TPONG/paddleServe.m4a'
-    this.tableHitSound = 'sounds/TPONG/tableHit.m4a'
-    this.ScoreBeepSound = 'sounds/TPONG/score.m4a'
-    this.PaddleHeight = 100;
-    this.PaddleWidth = 10;
-    this.PaddleRad = 20;
-    this.DefaultWidth = 800;
-    this.DefaultHeight = 600;
-    this.DefaultSpeed = 0.45;
-    this.DefaultCPUSpeed = 0.90;
-    this.Red = '#7F0000';
-    this.Green = '#007F00';
-    this.Blue = '#00007F';
-    this.Purple = '#814ED2';
-    this.Black = '#00000';
+import  { ContentContext } from './App'
+import { useState, useEffect, useContext } from 'react';
+export function TPONG(gameSetup, bDebug) {
+  const [gameState, setGameState] = useState({
+    paddleHitSound : 'sounds/TPONG/paddleHit.m4a',
+    paddleServeSound: 'sounds/TPONG/paddleServe.m4a',
+    tableHitSound: 'sounds/TPONG/tableHit.m4a',
+    ScoreBeepSound: 'sounds/TPONG/score.m4a',
+    PaddleHeight : 100,
+    PaddleWidth : 10,
+    PaddleRad : 20,
+    DefaultWidth : 800,
+    DefaultHeight : 600,
+    DefaultSpeed : 0.45,
+    DefaultCPUSpeed : 0.90,
+    Red : '#7F0000',
+    Green : '#007F00',
+    Blue : '#00007F',
+    Purple : '#814ED2',
+    Black : '#00000',
 
-    this.DimGray = '#767676';
-    this.White = '#FFFFFF';
+    DimGray : '#767676',
+    White : '#FFFFFF',
 
-    this.canvasMarginLeft = 'auto';
-    this.canvasMarginRight = 'auto';
-    this.canvasStyleDisplay = 'inline-block';
-    this.canvasStyleWidth = '800px';
-    this.canvas = document.createElement('canvas');
-    this.canvas.id = 'mainGameboard';
-    this.canvas.className = 'Article';
-    this.canvas.tabIndex = '1';
-    this.frameId = null;
-    this.canvas.width = this.DefaultWidth;
-    this.canvas.height = this.DefaultHeight;
-    this.ColorPalettes = [{PaletteName : 'RedPalette', BackgroundColor : this.Red,  SpriteColor : this.White}, { PaletteName : 'GreenPalette', BackgroundColor : this.Green,  SpriteColor : this.White}, { PaletteName : 'BluePalette', BackgroundColor : this.Blue,  SpriteColor : this.White }, { PaletteName : 'PurplePalette', BackgroundColor : this.Purple,  SpriteColor : this.White}, { PaletteName : 'BlackPalette', BackgroundColor : this.Black,  SpriteColor : this.DimGray }];
+    canvasMarginLeft : 'auto',
+    canvasMarginRight : 'auto',
+    canvasStyleDisplay : 'inline-block',
+    canvasStyleWidth : '800px',
+    canvas : null,
+    frameId : null,
+    ColorPalettes: [],
 
-    this.BallRad = 10;
+    BallRad : 10,
 
-    this.ctx = this.canvas.getContext('2d');
+    ctx : null,
 
-    this.ControllerSlots = new Array();
-    this.ScalingFactorX = 1;
-    this.ScalingFactorY = 1;
+    ControllerSlots : new Array(),
 
-    this.previousTimeStamp = null;
+    ScalingFactorX : 1,
+    ScalingFactorY : 1,
 
-    this.LeaderBoardTime = null;
+    previousTimeStamp : null,
 
-    this.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false } //booleans
+    LeaderBoardTime : null,
+
+    gameFlags : { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false },
+
+    selectedPalette : null,
+
+    BallMovSpeed : 0,
+    CPUMovSpeed : 0,
+
+    PlayerMovSpeedFull : 0,
+    PlayerMovSpeedHalf : 0,
+    PlayerMovSpeedQuater : 0,
+    BackgroundColor : '',
+    SpriteColor : '',
+    gameBoardWidth : 0,
+    gameBoardHeight : 0,
+
+    Ball : {},
+    PlayerPaddle : {},
+    CPUPaddle : { 'x' : 0, 'y' : 0 },
+
+    PlayerScore : 1,
+    CPUScore : 1,
+
+    BallSpawnDelay : 0,
+
+    lastKey : '',
+    lastController : null,
+    GameboardBoundary : 30,
+
+    paddleHit : null,
+    paddleServe : null,
+    tableHit : null,
+    ScoreBeep : null,
+
+  });
+
+  useEffect(() => {
+
+      if (typeof gameState.getContext !== "function") { 
+        return;
+    }
+    gameState.paddleHitSound = 'sounds/TPONG/paddleHit.m4a'
+    gameState.paddleServeSound = 'sounds/TPONG/paddleServe.m4a'
+    gameState.tableHitSound = 'sounds/TPONG/tableHit.m4a'
+    gameState.ScoreBeepSound = 'sounds/TPONG/score.m4a'
+    gameState.PaddleHeight = 100;
+    gameState.PaddleWidth = 10;
+    gameState.PaddleRad = 20;
+    gameState.DefaultWidth = 800;
+    gameState.DefaultHeight = 600;
+    gameState.DefaultSpeed = 0.45;
+    gameState.DefaultCPUSpeed = 0.90;
+    gameState.Red = '#7F0000';
+    gameState.Green = '#007F00';
+    gameState.Blue = '#00007F';
+    gameState.Purple = '#814ED2';
+    gameState.Black = '#00000';
+
+    gameState.DimGray = '#767676';
+    gameState.White = '#FFFFFF';
+
+    gameState.canvasMarginLeft = '7%';
+    gameState.canvasMarginRight = 'auto';
+    gameState.canvasStyleDisplay = 'inline-block';
+    gameState.canvasStyleWidth = '800px';
+
+    gameState.id = 'mainGameboard';
+    gameState.className = 'Article';
+    gameState.tabIndex = '1';
+    gameState.frameId = null;
+    gameState.width = gameState.DefaultWidth;
+    gameState.height = gameState.DefaultHeight;
+    gameState.ColorPalettes = [{PaletteName : 'RedPalette', BackgroundColor : gameState.Red,  SpriteColor : gameState.White}, { PaletteName : 'GreenPalette', BackgroundColor : gameState.Green,  SpriteColor : gameState.White}, { PaletteName : 'BluePalette', BackgroundColor : gameState.Blue,  SpriteColor : gameState.White }, { PaletteName : 'PurplePalette', BackgroundColor : gameState.Purple,  SpriteColor : gameState.White}, { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }];
+
+    gameState.BallRad = 10;
+
+    gameState.ctx = gameState.getContext('2d');
+
+    gameState.ControllerSlots = new Array();
+    gameState.ScalingFactorX = 1;
+    gameState.ScalingFactorY = 1;
+
+    gameState.previousTimeStamp = null;
+
+    gameState.LeaderBoardTime = null;
+
+    gameState.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false } //booleans
 
     if (typeof(Storage) !== 'undefined') {
-      this.gameFlags.localStorage = true;
-      this.selectedPalette = localStorage.getItem('savedPalette');
-      if(this.selectedPalette === null)
+      gameState.gameFlags.localStorage = true;
+      gameState.selectedPalette = localStorage.getItem('savedPalette');
+      if(gameState.selectedPalette === null)
       {
-           localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : this.Black,  SpriteColor : this.DimGray }));
-           this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+           localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }));
+           gameState.selectedPalette = gameState.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
       }
       else
       {
-        if(typeof this.selectedPalette === 'undefined')
+        if(typeof gameState.selectedPalette === 'undefined')
         {
-          localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : this.Black,  SpriteColor : this.DimGray }));
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+          localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }));
+          gameState.selectedPalette = gameState.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
         }
         else
         {
-          this.selectedPalette = JSON.parse(this.selectedPalette);
+          gameState.selectedPalette = JSON.parse(gameState.selectedPalette);
         }
       }
    }
    else {
-      this.gameFlags.localStorage = false;
-      this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+      gameState.gameFlags.localStorage = false;
+      gameState.selectedPalette = gameState.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
    }
 
-    this.BallMovSpeed = this.DefaultSpeed;
-    this.CPUMovSpeed = this.DefaultCPUSpeed;
+    gameState.BallMovSpeed = gameState.DefaultSpeed;
+    gameState.CPUMovSpeed = gameState.DefaultCPUSpeed;
 
-    this.PlayerMovSpeedFull = this.DefaultSpeed;
-    this.PlayerMovSpeedHalf = (this.DefaultSpeed / 2);
-    this.PlayerMovSpeedQuater = (this.DefaultSpeed / 4);
-    this.BackgroundColor = '#00000';
-    this.SpriteColor = '#767676';
-    this.gameBoardWidth = this.DefaultWidth;
-    this.gameBoardHeight = this.DefaultHeight;
+    gameState.PlayerMovSpeedFull = gameState.DefaultSpeed;
+    gameState.PlayerMovSpeedHalf = (gameState.DefaultSpeed / 2);
+    gameState.PlayerMovSpeedQuater = (gameState.DefaultSpeed / 4);
+    gameState.BackgroundColor = '#00000';
+    gameState.SpriteColor = '#767676';
+    gameState.gameBoardWidth = gameState.DefaultWidth;
+    gameState.gameBoardHeight = gameState.DefaultHeight;
 
-    this.canvas.style.paddingLeft = 0;
-    this.canvas.style.paddingRight = 0;
-    this.canvas.style.marginLeft = this.canvasMarginLeft;
-    this.canvas.style.marginRight = this.canvasMarginRight;
-    this.canvas.style.display = this.canvasStyleDisplay;
-    this.canvas.style.width = this.canvasStyleWidth;
+    gameState.style.paddingLeft = 0;
+    gameState.style.paddingRight = 0;
+    gameState.style.marginLeft = gameState.canvasMarginLeft;
+    gameState.style.marginRight = gameState.canvasMarginRight;
+    gameState.style.display = gameState.canvasStyleDisplay;
+    gameState.style.width = gameState.canvasStyleWidth;
 
-    this.Ball = { 'x' : 0, 'y' : 0, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
-    this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.DefaultHeight / 2) - this.PaddleHeight) };
-    this.CPUPaddle = { 'x' : 0, 'y' : 0 };
+    gameState.Ball = { 'x' : 0, 'y' : 0, 'radius' : gameState.BallRad, 'velocityY' : gameState.BallMovSpeed, 'velocityX' : gameState.BallMovSpeed, 'divisor' : 2};
+    gameState.PlayerPaddle = { 'x' : gameState.PaddleHeight, 'y' : ((gameState.DefaultHeight / 2) - gameState.PaddleHeight) };
+    gameState.CPUPaddle = { 'x' : 0, 'y' : 0 };
 
-    this.PlayerScore = 1;
-    this.CPUScore = 1;
+    gameState.PlayerScore = 1;
+    gameState.CPUScore = 1;
 
     //Debug element array
-    this.gameElements = [this.PlayerPaddle, this.CPUPaddle, this.Ball];
-    this.SelectedElement = {'gameElement' : null, 'Index' : 0 };
-    this.BallSpawnDelay = 0;
+    gameState.gameElements = [gameState.PlayerPaddle, gameState.CPUPaddle, gameState.Ball];
+    gameState.SelectedElement = {'gameElement' : null, 'Index' : 0 };
+    gameState.BallSpawnDelay = 0;
 
-    this.lastKey = '';
-    this.lastController = null;
-    this.GameboardBoundary = 30;
+    gameState.lastKey = '';
+    gameState.lastController = null;
+    gameState.GameboardBoundary = 30;
 
-    this.paddleHit = new Audio(this.paddleHitSound);
-    this.paddleServe = new Audio(this.paddleServeSound);
-    this.tableHit = new Audio(this.tableHitSound);
-    this.ScoreBeep = new Audio(this.ScoreBeepSound);
+    gameState.paddleHit = new Audio(gameState.paddleHitSound);
+    gameState.paddleServe = new Audio(gameState.paddleServeSound);
+    gameState.tableHit = new Audio(gameState.tableHitSound);
+    gameState.ScoreBeep = new Audio(gameState.ScoreBeepSound);
 
-    this.GamepadHandler = this.GamepadHandler.bind(this);
-    this.MouseHandler = this.MouseHandler.bind(this);
+    gameState.FullScreenHandler = { EventHandler() {
+      if(gameState.gameFlags.StartGame){
+      if (document.fullScreen || 
+          document.mozFullScreen || 
+          document.webkitIsFullScreen) {
+  
+        gameState.BallSpawnDelay = Date.now() + 4000;
+          if (import.meta.env.DEV){
+            console.log('Entered Full Screen');
+            gameState.BallSpawnDelay = Date.now();
+          }
+        gameState.gameFlags.DrawBall = false;
+        gameState.PlayerPaddle = { 'x' : gameState.PaddleHeight, 'y' : ((gameState.gameBoardHeight / 2) - gameState.PaddleHeight) };
+        gameState.gameBoardWidth = window.screen.width;
+        gameState.gameBoardHeight = window.screen.height;
+        gameState.Ball = { 'x' : 10, 'y' : 10, 'radius' : gameState.BallRad, 'velocityY' : gameState.BallMovSpeed, 'velocityX' : gameState.BallMovSpeed, 'divisor' : 2};
+        gameState.ctx.canvas.style.paddingLeft = 0;
+        gameState.ctx.canvas.style.paddingRight = 0;
+        gameState.ctx.canvas.style.marginLeft = '0%';
+        gameState.ctx.canvas.style.marginRight = '0%';
+        gameState.ctx.canvas.style.width = '';
+        gameState.ctx.canvas.style.height = '';
+        gameState.ctx.canvas.style.display = '';
+        gameState.ctx.canvas.style.class = 'mainGamebroad';
+        document.body.style.setProperty('--main-visibility', 'hidden');
+        document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
+        document.body.style.setProperty('--main-gameControl-display', 'none');
+        document.body.style.setProperty('--main-display-flex', 'none');
+        document.body.style.setProperty('--main-display-flexbox', 'none');
+        document.body.style.setProperty('--main-display-block', 'none');
+        document.body.style.setProperty('--main-article-margin', '0%');
+        gameState.ctx.canvas.style.display = gameState.canvasStyleDisplay;
+        document.body.style.width = window.screen.height;
+        document.body.style.height = window.screen.width;
+      } else {
+        gameState.BallSpawnDelay = Date.now() + 4000;
+        if (import.meta.env.DEV){
+        console.log('Exited Full Screen');
+        gameState.BallSpawnDelay = Date.now();
+        }
+        gameState.gameFlags.DrawBall = false;
+        gameState.BallMovSpeed = 0.45;
+
+        gameState.gameBoardWidth = gameState.DefaultWidth;
+        gameState.gameBoardHeight = gameState.DefaultHeight;
+        gameState.PlayerPaddle = { 'x' : gameState.PaddleHeight, 'y' : ((gameState.gameBoardHeight / 2) - gameState.PaddleHeight) };
+        gameState.Ball = { 'x' : (gameState.gameBoardWidth / 2), 'y' : Math.floor(Math.random() * gameState.gameBoardHeight), 'radius' : gameState.BallRad, 'velocityY' : gameState.BallMovSpeed, 'velocityX' : gameState.BallMovSpeed, 'divisor' : 2};
+        document.body.style.setProperty('--main-visibility', 'visible');
+        document.body.style.setProperty('--main-gameControl-visibility', 'visible');
+        document.body.style.setProperty('--main-gameControl-display', 'block');
+        document.body.style.setProperty('--main-display-flex', 'flex');
+        document.body.style.setProperty('--main-display-flexbox', 'flexbox');
+        document.body.style.setProperty('--main-display-block', 'block');
+        document.body.style.setProperty('--main-article-margin', '25%');
+      }
+    }
+    }
+  }
+
+  gameState.MouseHandler = { EventHandler(event) {
+      let movementY = event.movementY ||
+      event.mozMovementY      ||
+      event.webkitMovementY   ||
+          0;
+  
+      if(gameState.gameFlags.StartGame === true)
+      {
+        if (((gameState.PlayerPaddle.y - gameState.GameboardBoundary) + movementY) >= 0 && (gameState.PlayerPaddle.y + movementY) <= ((gameState.gameBoardHeight - gameState.GameboardBoundary) - gameState.PaddleHeight))
+        {
+          gameState.PlayerPaddle.y += movementY;
+        }
+        else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+        {
+          gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
+        }
+      }
+      if(gameState.frameId !== null)
+      {
+      gameState.frameId = window.requestAnimationFrame(gameState.MouseHandler.EventHandler);
+      }
+    }
+  };
 
     document.addEventListener('click', () => {
-      this.gameFlags.AudioPlayable = true;
+      gameState.gameFlags.AudioPlayable = true;
       /* the audio is now playable; play it if permissions allow */
       if (import.meta.env.DEV){
       console.log('The audio is now playable. ');
     }
     });
     document.addEventListener('pointerlockchange', () => {
-      if(document.pointerLockElement === this.canvas) {
-        document.addEventListener('mousemove', this.MouseHandler, false);
+      if(document.pointerLockElement === gameState.ctx.canvas) {
+        document.addEventListener('mousemove', gameState.MouseHandler.EventHandler, false);
       }
       else {
-        document.removeEventListener('mousemove', this.MouseHandler, false);
+        document.removeEventListener('mousemove', gameState.MouseHandler.EventHandler, false);
       }
     }, true);
-    document.addEventListener('fullscreenchange', this.FullScreenHandler.bind(this));
-    this.canvas.addEventListener('click', async () => {
-      if (!this.canvas.pointerLockElement)
+    document.addEventListener('fullscreenchange', gameState.FullScreenHandler.EventHandler);
+    gameState.addEventListener('click', async () => {
+      if (!gameState.ctx.canvas.pointerLockElement)
       {
         try{
-        await this.canvas.requestPointerLock({
+        await gameState.requestPointerLock({
           unadjustedMovement: true,
         });
       }
@@ -152,14 +312,14 @@ class GameHandler {
       }
     });
     window.addEventListener('keyup', (event)  => {
-      if(event.key === this.lastKey)
+      if(event.key === gameState.lastKey)
       {
-        this.lastKey = '';
+        gameState.lastKey = '';
       }
     }, true);
     window.addEventListener('keydown', (event) => {
-      this.lastKey = event.key;
-      if(this.gameFlags.Debug === 1)
+      gameState.lastKey = event.key;
+      if(gameState.gameFlags.Debug === 1)
       {
         console.log(event.key);
       }
@@ -168,53 +328,33 @@ class GameHandler {
       switch(event.key) {
         case 'c': //Red
         {
-        let PattleIndex = this.ColorPalettes.findIndex(x => x.PaletteName === this.selectedPalette.PaletteName);
-        if((PattleIndex + 1) < this.ColorPalettes.length)
+        let PattleIndex = gameState.ColorPalettes.findIndex(x => x.PaletteName === gameState.selectedPalette.PaletteName);
+        if((PattleIndex + 1) < gameState.ColorPalettes.length)
           {
-            this.selectedPalette = this.ColorPalettes[(PattleIndex + 1)];
+            gameState.selectedPalette = gameState.ColorPalettes[(PattleIndex + 1)];
           }
           else
           {
-            this.selectedPalette = this.ColorPalettes[0];
+            gameState.selectedPalette = gameState.ColorPalettes[0];
           }
 
-          if(this.gameFlags.localStorage === true)
+          if(gameState.gameFlags.localStorage === true)
           {
-            localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
+            localStorage.setItem('savedPalette', JSON.stringify(gameState.selectedPalette));
           }
-          break;
-        }
-        case '2': //Green
-        {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'GreenPalette');
-          break;
-        }
-        case '3': // Blue
-        {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BluePalette');
-          break;
-        } 
-        case '4': // Purple
-        {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'PurplePalette');
-          break;
-        }
-        case '5': // Black
-        {
-          this.selectedPalette = this.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
           break;
         }
         case 'Enter':
         {
-          if(this.gameFlags.StartGame === true)
+          if(gameState.gameFlags.StartGame === true)
           {
-            this.gameFlags.StartGame = false;
-            this.BallMovSpeed = 0;
+            gameState.gameFlags.StartGame = false;
+            gameState.BallMovSpeed = 0;
           }
           else
           {
-            this.BallMovSpeed = this.DefaultSpeed;
-            this.StartGame();
+            gameState.BallMovSpeed = gameState.DefaultSpeed;
+            gameState.StartGame();
           }
           break;
         }
@@ -242,754 +382,675 @@ class GameHandler {
           return
       }
 
-      if(this.gameFlags.localStorage === true)
+      if(gameState.gameFlags.localStorage === true)
       {
-        localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
+        localStorage.setItem('savedPalette', JSON.stringify(gameState.selectedPalette));
       }
     }
     }, true);
-    window.addEventListener('gamepadconnected', this.GamepadHandler, false);
-    window.addEventListener('gamepaddisconnected', this.GamepadHandler, false);
-  }
-  Draw(timeStamp)
-  {
-    let deltaTime = timeStamp - this.previousTimeStamp;
-    if(deltaTime >= 500){
-    this.previousTimeStamp = timeStamp;
-    if(this.frameId !== null)
-    {
-      this.frameId = window.requestAnimationFrame(this.Draw.bind(this));
-    }
-  }
-    this.ctx.canvas.width  = this.gameBoardWidth;
-    this.ctx.canvas.height = this.gameBoardHeight;
-    this.CPUPaddle.x = (this.gameBoardWidth - this.PaddleHeight);
-    this.ScalingFactorX = (this.gameBoardWidth / this.DefaultWidth);
-    this.ScalingFactorY = (this.gameBoardHeight / this.DefaultHeight);
-    this.BallMovSpeed = (this.DefaultSpeed * (this.ScalingFactorX * 1.3));
-    this.CPUMovSpeed = ((this.DefaultCPUSpeed / 4) * this.ScalingFactorY);
-    
-    this.PlayerMovSpeedFull = (this.DefaultSpeed * this.ScalingFactorY);
-    this.PlayerMovSpeedHalf = (this.DefaultSpeed * this.ScalingFactorY);
-    this.PlayerMovSpeedQuater = (this.DefaultSpeed * this.ScalingFactorY);
 
-    let Gamepads = navigator.getGamepads 
-      ? navigator.getGamepads() 
-      : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [0])
+    gameState.ctx = gameState.getContext("2d");
+
+
+    gameState.Renderer = { Draw(timeStamp)
+    {
+      let deltaTime = timeStamp - gameState.previousTimeStamp;
+      if(deltaTime >= 500){
+      gameState.previousTimeStamp = timeStamp;
+      if(gameState.frameId !== null)
+      {
+        gameState.frameId = window.requestAnimationFrame(gameState.Renderer.Draw);
+      }
+    }
+      gameState.ctx.canvas.width  = gameState.gameBoardWidth;
+      gameState.ctx.canvas.height = gameState.gameBoardHeight;
+      gameState.CPUPaddle.x = (gameState.gameBoardWidth - gameState.PaddleHeight);
+      gameState.ScalingFactorX = (gameState.gameBoardWidth / gameState.DefaultWidth);
+      gameState.ScalingFactorY = (gameState.gameBoardHeight / gameState.DefaultHeight);
+      gameState.BallMovSpeed = (gameState.DefaultSpeed * (gameState.ScalingFactorX * 1.3));
+      gameState.CPUMovSpeed = ((gameState.DefaultCPUSpeed / 4) * gameState.ScalingFactorY);
       
-    let firstController = this.ControllerSlots.find(x => typeof x !== 'undefined');
-    if( firstController !== null && typeof firstController !== 'undefined' && 'buttons' in firstController && 'connected' in firstController && firstController.connected === true)
-    {
-      firstController = Gamepads[firstController.index];
-      if (firstController.buttons[4].value === 1 && this.lastController !== null && this.lastController.buttons[4].value !== 1) {
-        let PattleIndex = this.ColorPalettes.findIndex(x => x.PaletteName === this.selectedPalette.PaletteName);
-        if((PattleIndex + 1) < this.ColorPalettes.length)
+      gameState.PlayerMovSpeedFull = (gameState.DefaultSpeed * gameState.ScalingFactorY);
+      gameState.PlayerMovSpeedHalf = (gameState.DefaultSpeed * gameState.ScalingFactorY);
+      gameState.PlayerMovSpeedQuater = (gameState.DefaultSpeed * gameState.ScalingFactorY);
+  
+      let Gamepads = navigator.getGamepads 
+        ? navigator.getGamepads() 
+        : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : [0])
+        
+      let firstController = gameState.ControllerSlots.find(x => typeof x !== 'undefined');
+      if( firstController !== null && typeof firstController !== 'undefined' && 'buttons' in firstController && 'connected' in firstController && firstController.connected === true)
+      {
+        firstController = Gamepads[firstController.index];
+        if (firstController.buttons[4].value === 1 && gameState.lastController !== null && gameState.lastController.buttons[4].value !== 1) {
+          let PattleIndex = gameState.ColorPalettes.findIndex(x => x.PaletteName === gameState.selectedPalette.PaletteName);
+          if((PattleIndex + 1) < gameState.ColorPalettes.length)
+            {
+              gameState.selectedPalette = gameState.ColorPalettes[(PattleIndex + 1)];
+            }
+            else
+            {
+              gameState.selectedPalette = gameState.ColorPalettes[0];
+            }
+  
+            if(gameState.gameFlags.localStorage === true)
+            {
+              localStorage.setItem('savedPalette', JSON.stringify(gameState.selectedPalette));
+            }
+        }
+        else if (firstController.buttons[5].value === 1 && gameState.lastController !== null && gameState.lastController.buttons[5].value !== 1) {
+          let PattleIndex = gameState.ColorPalettes.findIndex(x => x.PaletteName === gameState.selectedPalette.PaletteName);
+          if((PattleIndex + 1) < gameState.ColorPalettes.length)
+            {
+              gameState.selectedPalette = gameState.ColorPalettes[(PattleIndex + 1)];
+            }
+            else
+            {
+              gameState.selectedPalette = gameState.ColorPalettes[0];
+            }
+  
+            if(gameState.gameFlags.localStorage === true)
+            {
+              localStorage.setItem('savedPalette', JSON.stringify(gameState.selectedPalette));
+            }
+        }
+        else if (firstController.buttons[8].value === 1 && gameState.lastController !== null && gameState.lastController.buttons[8].value !== 1) {
+          if(gameState.gameFlags.StartGame === true)
           {
-            this.selectedPalette = this.ColorPalettes[(PattleIndex + 1)];
+          if(document.fullScreen || 
+            document.mozFullScreen || 
+            document.webkitIsFullScreen) {
+            window.document.exitFullscreen().catch((err) => {
+              if (import.meta.env.DEV){
+                console.log(err);
+              }
+            });
+        } else {
+            window.document.documentElement.requestFullscreen().catch((err) => {
+              if (import.meta.env.DEV){
+                console.log(err);
+              }
+            });
+        }
+      }
+        }
+        else if (firstController.buttons[9].value === 1 && gameState.lastController !== null && gameState.lastController.buttons[9].value !== 1) { // Start
+          if(gameState.gameFlags.StartGame === true)
+          {
+            gameState.gameFlags.StartGame = false;
+            gameState.BallMovSpeed = 0;
           }
           else
           {
-            this.selectedPalette = this.ColorPalettes[0];
+            gameState.BallMovSpeed = gameState.DefaultSpeed;
+            gameState.StartGame();
           }
-
-          if(this.gameFlags.localStorage === true)
+        }
+        if (firstController.buttons[12].value === 1 && gameState.lastKey === '') {// Up
+          if(gameState.gameFlags.StartGame === true)
           {
-            localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
-          }
-      }
-      else if (firstController.buttons[5].value === 1 && this.lastController !== null && this.lastController.buttons[5].value !== 1) {
-        let PattleIndex = this.ColorPalettes.findIndex(x => x.PaletteName === this.selectedPalette.PaletteName);
-        if((PattleIndex + 1) < this.ColorPalettes.length)
-          {
-            this.selectedPalette = this.ColorPalettes[(PattleIndex + 1)];
-          }
-          else
-          {
-            this.selectedPalette = this.ColorPalettes[0];
-          }
-
-          if(this.gameFlags.localStorage === true)
-          {
-            localStorage.setItem('savedPalette', JSON.stringify(this.selectedPalette));
-          }
-      }
-      else if (firstController.buttons[8].value === 1 && this.lastController !== null && this.lastController.buttons[8].value !== 1) {
-        if(this.gameFlags.StartGame === true)
-        {
-        if(document.fullScreen || 
-          document.mozFullScreen || 
-          document.webkitIsFullScreen) {
-          window.document.exitFullscreen().catch((err) => {
-            if (import.meta.env.DEV){
-              console.log(err);
+            if ((gameState.PlayerPaddle.y - (gameState.PlayerMovSpeedFull * deltaTime)) >= gameState.GameboardBoundary)
+            {
+              gameState.PlayerPaddle.y -= (gameState.PlayerMovSpeedFull * deltaTime);
             }
-          });
-      } else {
-          window.document.documentElement.requestFullscreen().catch((err) => {
-            if (import.meta.env.DEV){
-              console.log(err);
+            else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+            {
+              gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
             }
-          });
-      }
-    }
-      }
-      else if (firstController.buttons[9].value === 1 && this.lastController !== null && this.lastController.buttons[9].value !== 1) { // Start
-        if(this.gameFlags.StartGame === true)
-        {
-          this.gameFlags.StartGame = false;
-          this.BallMovSpeed = 0;
+          }
         }
-        else
-        {
-          this.BallMovSpeed = this.DefaultSpeed;
-          this.StartGame();
-        }
-      }
-      if (firstController.buttons[12].value === 1 && this.lastKey === '') {// Up
-        if(this.gameFlags.StartGame === true)
-        {
-          if ((this.PlayerPaddle.y - (this.PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
+        else if (firstController.buttons[13].value === 1 && gameState.lastKey === '') {// Down
+          if(gameState.gameFlags.StartGame === true)
           {
-            this.PlayerPaddle.y -= (this.PlayerMovSpeedFull * deltaTime);
+            if ((gameState.PlayerPaddle.y + (gameState.PlayerMovSpeedFull * deltaTime)) <= ((gameState.gameBoardHeight - gameState.GameboardBoundary) - gameState.PaddleHeight))
+            {
+              gameState.PlayerPaddle.y += (gameState.PlayerMovSpeedFull * deltaTime);
+            }
+            else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+            {
+              gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
+            }
           }
-          else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
+        }
+  
+        if(firstController.axes[1] <= -0.75)//Left analog
+        {
+          if(gameState.gameFlags.StartGame === true)
           {
-            this.PlayerPaddle.y = (this.gameBoardHeight / 2);
+            if ((gameState.PlayerPaddle.y - (gameState.PlayerMovSpeedFull * deltaTime)) >= gameState.GameboardBoundary)
+            {
+              gameState.PlayerPaddle.y -= (gameState.PlayerMovSpeedFull * deltaTime);
+            }
+            else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+            {
+              gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
+            }
+          }
+        }
+        else if(firstController.axes[1] <= -0.5)//Left analog
+        {
+          if(gameState.gameFlags.StartGame === true)
+          {
+            if ((gameState.PlayerPaddle.y - (gameState.PlayerMovSpeedHalf * deltaTime)) >= gameState.GameboardBoundary)
+            {
+              gameState.PlayerPaddle.y -= (gameState.PlayerMovSpeedHalf * deltaTime);
+            }
+            else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+            {
+              gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
+            }
+          }
+        }
+        else if(firstController.axes[1] <= -0.35)//Left analog
+        {
+          if(gameState.gameFlags.StartGame === true)
+          {
+            if ((gameState.PlayerPaddle.y - (gameState.PlayerMovSpeedQuater * deltaTime)) >= gameState.GameboardBoundary)
+            {
+              gameState.PlayerPaddle.y -= (gameState.PlayerMovSpeedQuater * deltaTime);
+            }
+            else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+            {
+              gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
+            }
+          }
+        }
+        else if(firstController.axes[1] >= 0.75)//Left analog
+        {
+          if(gameState.gameFlags.StartGame === true)
+          {
+            if ((gameState.PlayerPaddle.y + (gameState.PlayerMovSpeedFull * deltaTime)) <= ((gameState.gameBoardHeight - gameState.GameboardBoundary) - gameState.PaddleHeight))
+            {
+              gameState.PlayerPaddle.y += (gameState.PlayerMovSpeedFull * deltaTime);
+            }
+            else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+            {
+              gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
+            }
+          }
+        }
+        else if(firstController.axes[1] >= 0.5)//Left analog
+        {
+          if(gameState.gameFlags.StartGame === true)
+          {
+            if ((gameState.PlayerPaddle.y + (gameState.PlayerMovSpeedHalf * deltaTime)) <= ((gameState.gameBoardHeight - gameState.GameboardBoundary) - gameState.PaddleHeight))
+            {
+              gameState.PlayerPaddle.y += (gameState.PlayerMovSpeedHalf * deltaTime);
+            }
+            else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+            {
+              gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
+            }
+          }
+        }
+        else if(firstController.axes[1] >= 0.35)//Left analog
+        {
+          if(gameState.gameFlags.StartGame === true)
+          {
+            if ((gameState.PlayerPaddle.y + (gameState.PlayerMovSpeedQuater * deltaTime)) <= ((gameState.gameBoardHeight - gameState.GameboardBoundary) - gameState.PaddleHeight))
+            {
+              gameState.PlayerPaddle.y += (gameState.PlayerMovSpeedQuater * deltaTime);
+            }
+            else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+            {
+              gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
+            }
+          }
+        }
+        gameState.lastController = firstController;
+      }
+  
+      if (gameState.lastKey === 'ArrowUp' || gameState.lastKey === 'w') {// Up keyboard
+        if(gameState.gameFlags.StartGame === true)
+        {
+          if ((gameState.PlayerPaddle.y - (gameState.PlayerMovSpeedFull * deltaTime)) >= gameState.GameboardBoundary)
+          {
+            gameState.PlayerPaddle.y -= (gameState.PlayerMovSpeedFull * deltaTime);
+          }
+          else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
+          {
+            gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
           }
         }
       }
-      else if (firstController.buttons[13].value === 1 && this.lastKey === '') {// Down
-        if(this.gameFlags.StartGame === true)
+      else if (gameState.lastKey === 'ArrowDown' || gameState.lastKey === 's') {// Down keyboard
+        if(gameState.gameFlags.StartGame === true)
         {
-          if ((this.PlayerPaddle.y + (this.PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
+          if ((gameState.PlayerPaddle.y + (gameState.PlayerMovSpeedFull * deltaTime)) <= ((gameState.gameBoardHeight - gameState.GameboardBoundary) - gameState.PaddleHeight))
           {
-            this.PlayerPaddle.y += (this.PlayerMovSpeedFull * deltaTime);
+            gameState.PlayerPaddle.y += (gameState.PlayerMovSpeedFull * deltaTime);
           }
-          else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
+          else if (gameState.PlayerPaddle.y < 0 || gameState.PlayerPaddle.y > gameState.gameBoardHeight)// Paddle out of bounds
           {
-            this.PlayerPaddle.y = (this.gameBoardHeight / 2);
+            gameState.PlayerPaddle.y = (gameState.gameBoardHeight / 2);
           }
         }
       }
-
-      if(firstController.axes[1] <= -0.75)//Left analog
-      {
-        if(this.gameFlags.StartGame === true)
-        {
-          if ((this.PlayerPaddle.y - (this.PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
-          {
-            this.PlayerPaddle.y -= (this.PlayerMovSpeedFull * deltaTime);
-          }
-          else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
-          {
-            this.PlayerPaddle.y = (this.gameBoardHeight / 2);
-          }
-        }
+      
+      gameState.BackgroundColor = gameState.selectedPalette.BackgroundColor;
+      gameState.SpriteColor = gameState.selectedPalette.SpriteColor;
+  
+      if (import.meta.env.DEV){
+      //console.log('Width:' + gameState.ctx.canvas.width);
+      //console.log('Height:' + gameState.ctx.canvas.height);
       }
-      else if(firstController.axes[1] <= -0.5)//Left analog
-      {
-        if(this.gameFlags.StartGame === true)
+      //Game Logic
+      if( gameState.BallSpawnDelay < Date.now()  && gameState.BallSpawnDelay !== 0){
+        gameState.Ball.x = (gameState.gameBoardWidth / 2);
+        gameState.Ball.y = Math.floor(Math.random() * gameState.gameBoardHeight);
+        gameState.gameFlags.DrawBall = true;
+        gameState.BallSpawnDelay = 0;
+      }
+      if (gameState.gameFlags.DrawBall === true){
+        if ((gameState.Ball.x + gameState.Ball.radius) < 0)//CPU Scored
         {
-          if ((this.PlayerPaddle.y - (this.PlayerMovSpeedHalf * deltaTime)) >= this.GameboardBoundary)
+          if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
           {
-            this.PlayerPaddle.y -= (this.PlayerMovSpeedHalf * deltaTime);
+            firstController = Gamepads[firstController.index];
+            firstController.vibrationActuator.playEffect('dual-rumble', {
+              startDelay: 0,
+              duration: 1000,
+              weakMagnitude: 1.0,
+              strongMagnitude: 1.0,
+            });
           }
-          else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
-          {
-            this.PlayerPaddle.y = (this.gameBoardHeight / 2);
-          }
-        }
-      }
-      else if(firstController.axes[1] <= -0.35)//Left analog
-      {
-        if(this.gameFlags.StartGame === true)
-        {
-          if ((this.PlayerPaddle.y - (this.PlayerMovSpeedQuater * deltaTime)) >= this.GameboardBoundary)
-          {
-            this.PlayerPaddle.y -= (this.PlayerMovSpeedQuater * deltaTime);
-          }
-          else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
-          {
-            this.PlayerPaddle.y = (this.gameBoardHeight / 2);
-          }
-        }
-      }
-      else if(firstController.axes[1] >= 0.75)//Left analog
-      {
-        if(this.gameFlags.StartGame === true)
-        {
-          if ((this.PlayerPaddle.y + (this.PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
-          {
-            this.PlayerPaddle.y += (this.PlayerMovSpeedFull * deltaTime);
-          }
-          else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
-          {
-            this.PlayerPaddle.y = (this.gameBoardHeight / 2);
-          }
-        }
-      }
-      else if(firstController.axes[1] >= 0.5)//Left analog
-      {
-        if(this.gameFlags.StartGame === true)
-        {
-          if ((this.PlayerPaddle.y + (this.PlayerMovSpeedHalf * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
-          {
-            this.PlayerPaddle.y += (this.PlayerMovSpeedHalf * deltaTime);
-          }
-          else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
-          {
-            this.PlayerPaddle.y = (this.gameBoardHeight / 2);
-          }
-        }
-      }
-      else if(firstController.axes[1] >= 0.35)//Left analog
-      {
-        if(this.gameFlags.StartGame === true)
-        {
-          if ((this.PlayerPaddle.y + (this.PlayerMovSpeedQuater * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
-          {
-            this.PlayerPaddle.y += (this.PlayerMovSpeedQuater * deltaTime);
-          }
-          else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
-          {
-            this.PlayerPaddle.y = (this.gameBoardHeight / 2);
-          }
-        }
-      }
-      this.lastController = firstController;
-    }
-
-    if (this.lastKey === 'ArrowUp' || this.lastKey === 'w') {// Up keyboard
-      if(this.gameFlags.StartGame === true)
-      {
-        if ((this.PlayerPaddle.y - (this.PlayerMovSpeedFull * deltaTime)) >= this.GameboardBoundary)
-        {
-          this.PlayerPaddle.y -= (this.PlayerMovSpeedFull * deltaTime);
-        }
-        else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
-        {
-          this.PlayerPaddle.y = (this.gameBoardHeight / 2);
-        }
-      }
-    }
-    else if (this.lastKey === 'ArrowDown' || this.lastKey === 's') {// Down keyboard
-      if(this.gameFlags.StartGame === true)
-      {
-        if ((this.PlayerPaddle.y + (this.PlayerMovSpeedFull * deltaTime)) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
-        {
-          this.PlayerPaddle.y += (this.PlayerMovSpeedFull * deltaTime);
-        }
-        else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
-        {
-          this.PlayerPaddle.y = (this.gameBoardHeight / 2);
-        }
-      }
-    }
-    
-    this.BackgroundColor = this.selectedPalette.BackgroundColor;
-    this.SpriteColor = this.selectedPalette.SpriteColor;
-
-    if (import.meta.env.DEV){
-    //console.log('Width:' + this.ctx.canvas.width);
-    //console.log('Height:' + this.ctx.canvas.height);
-    }
-    //Game Logic
-    if( this.BallSpawnDelay < Date.now()  && this.BallSpawnDelay !== 0){
-      this.Ball.x = (this.gameBoardWidth / 2);
-      this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
-      this.gameFlags.DrawBall = true;
-      this.BallSpawnDelay = 0;
-    }
-    if (this.gameFlags.DrawBall === true){
-      if ((this.Ball.x + this.Ball.radius) < 0)//CPU Scored
-      {
-        if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
-        {
-          firstController = Gamepads[firstController.index];
-          firstController.vibrationActuator.playEffect('dual-rumble', {
-            startDelay: 0,
-            duration: 1000,
-            weakMagnitude: 1.0,
-            strongMagnitude: 1.0,
-          });
-        }
-        this.Ball.divisor = 1;
-        this.CPUScore++;
-        this.BallSpawnDelay = Date.now() + 4000;
-        this.gameFlags.DrawBall = false;
-        if(this.gameFlags.AudioPlayable === true)
-        {
-          if (!import.meta.env.DEV){
-          this.ScoreBeep.play();
-          }
-        }
-      }
-      else if ((this.Ball.x - this.Ball.radius) > (this.gameBoardWidth))//Player Scored
-      {
-        if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
-        {
-          firstController = Gamepads[firstController.index];
-          firstController.vibrationActuator.playEffect('dual-rumble', {
-            startDelay: 0,
-            duration: 1000,
-            weakMagnitude: 1.0,
-            strongMagnitude: 1.0,
-          });
-        }
-        this.Ball.divisor = 1;
-        this.PlayerScore++;
-        this.BallSpawnDelay = Date.now() + 4000;
-        this.gameFlags.DrawBall = false;
-        if(this.gameFlags.AudioPlayable === true)
-        {
-          if (!import.meta.env.DEV){
-          this.ScoreBeep.play();
-          }
-        }
-      }
-      else if ((this.Ball.y + this.Ball.radius) >= (this.gameBoardHeight))
-      {
-        if(this.gameFlags.AudioPlayable === true){
-          if (!import.meta.env.DEV){
-        this.tableHit.play();
-          }
-        }
-        this.Ball.velocityY = this.Ball.velocityY * -1;
-        this.Ball.velocityX = this.Ball.velocityX * 1;
-        this.Ball.y -= this.PaddleWidth;
-      }
-      else if ((this.Ball.y - this.Ball.radius) <= 0)
-      {
-        if(this.gameFlags.AudioPlayable === true){
-          if (!import.meta.env.DEV){
-        this.tableHit.play();
-          }
-        }
-        this.Ball.velocityY = this.Ball.velocityY * -1;
-        this.Ball.velocityX = this.Ball.velocityX * 1;
-        this.Ball.y += this.PaddleWidth;
-      }
-      else if ((this.Ball.x + this.Ball.radius) >= this.CPUPaddle.x  && (this.Ball.x + this.Ball.radius) <= (this.CPUPaddle.x + this.PaddleWidth ) &&  this.Ball.y >= this.CPUPaddle.y &&  (this.Ball.y + this.Ball.radius)  <= (this.CPUPaddle.y + this.PaddleHeight))
-      {
-        if (import.meta.env.DEV){
-        console.log('CPU Paddle Hit');
-        }
-        if(this.gameFlags.AudioPlayable === true){
-          if((Math.floor(Math.random() * 2) === 0))
+          gameState.Ball.divisor = 1;
+          gameState.CPUScore++;
+          gameState.BallSpawnDelay = Date.now() + 4000;
+          gameState.gameFlags.DrawBall = false;
+          if(gameState.gameFlags.AudioPlayable === true)
           {
             if (!import.meta.env.DEV){
-            this.paddleServe.play();
+            gameState.ScoreBeep.play();
             }
           }
-          else
+        }
+        else if ((gameState.Ball.x - gameState.Ball.radius) > (gameState.gameBoardWidth))//Player Scored
+        {
+          if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
+          {
+            firstController = Gamepads[firstController.index];
+            firstController.vibrationActuator.playEffect('dual-rumble', {
+              startDelay: 0,
+              duration: 1000,
+              weakMagnitude: 1.0,
+              strongMagnitude: 1.0,
+            });
+          }
+          gameState.Ball.divisor = 1;
+          gameState.PlayerScore++;
+          gameState.BallSpawnDelay = Date.now() + 4000;
+          gameState.gameFlags.DrawBall = false;
+          if(gameState.gameFlags.AudioPlayable === true)
           {
             if (!import.meta.env.DEV){
-            this.paddleHit.play();
+            gameState.ScoreBeep.play();
             }
           }
         }
-        this.Ball.divisor = Math.floor(Math.random() * 12);
-        this.Ball.x -= this.PaddleWidth;
-        this.Ball.velocityY = this.Ball.velocityY * 1;
-        this.Ball.velocityX = this.Ball.velocityX * -1;
-      }
-      else if ((this.Ball.x - this.Ball.radius)  >= this.PlayerPaddle.x  && (this.Ball.x - this.Ball.radius)  <= (this.PlayerPaddle.x + this.PaddleWidth ) &&  (this.Ball.y - this.Ball.radius)  >= this.PlayerPaddle.y &&  (this.Ball.y - this.Ball.radius)   <= (this.PlayerPaddle.y + this.PaddleHeight))
-      {
-        if (import.meta.env.DEV){
-        console.log('Player Paddle Hit');
-        }
-        if(this.gameFlags.AudioPlayable === true){
-          if((Math.floor(Math.random() * 2) === 0))
-          {
+        else if ((gameState.Ball.y + gameState.Ball.radius) >= (gameState.gameBoardHeight))
+        {
+          if(gameState.gameFlags.AudioPlayable === true){
             if (!import.meta.env.DEV){
-            this.paddleServe.play();
+          gameState.tableHit.play();
             }
           }
-          else
-          {
+          gameState.Ball.velocityY = gameState.Ball.velocityY * -1;
+          gameState.Ball.velocityX = gameState.Ball.velocityX * 1;
+          gameState.Ball.y -= gameState.PaddleWidth;
+        }
+        else if ((gameState.Ball.y - gameState.Ball.radius) <= 0)
+        {
+          if(gameState.gameFlags.AudioPlayable === true){
             if (!import.meta.env.DEV){
-            this.paddleHit.play();
+          gameState.tableHit.play();
             }
           }
+          gameState.Ball.velocityY = gameState.Ball.velocityY * -1;
+          gameState.Ball.velocityX = gameState.Ball.velocityX * 1;
+          gameState.Ball.y += gameState.PaddleWidth;
         }
-        if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
-        {
-          firstController = Gamepads[firstController.index];
-          firstController.vibrationActuator.playEffect('dual-rumble', {
-            startDelay: 0,
-            duration: 50,
-            weakMagnitude: 0.75,
-            strongMagnitude: 0.75,
-          });
-        }
-        this.Ball.divisor = Math.floor(Math.random() * 12);
-        this.Ball.x += this.PaddleWidth;
-        this.Ball.velocityY = this.Ball.velocityY * 1;
-        this.Ball.velocityX = this.Ball.velocityX * -1;
-      }
-
-      //y up and down x left to right
-      if(this.gameFlags.StartGame)
-      {
-        this.Ball.x += this.Ball.velocityX * deltaTime;
-        this.Ball.y += (this.Ball.velocityY / 2) * deltaTime;
-      }
-    //this.Ball.x = 100;
-    //this.Ball.y = 354;
-  }
-
-    // Background
-    this.ctx.fillStyle = this.BackgroundColor;
-    this.ctx.fillRect(0, 0, this.gameBoardWidth, this.gameBoardHeight);
-    this.ctx.stroke();
-
-    this.ctx.font = `40px Verdana`;
-    //Player Score
-    this.ctx.fillStyle = this.SpriteColor;
-    this.ctx.fillText(this.PlayerScore.toString(), ((this.gameBoardWidth - 500) / 2), 100);
-
-    //CPU Score
-    this.ctx.fillStyle = this.SpriteColor;
-    this.ctx.fillText(this.CPUScore.toString(), ((this.gameBoardWidth + 500) / 2), 100);
-
-    //Net
-    this.ctx.fillStyle = this.SpriteColor;
-    for (let y = 0; y < this.gameBoardHeight; y += 80)
-    {
-      this.ctx.fillRect((this.gameBoardWidth / 2), y, 20, 40);
-    }
-    //Paddles
-    if(this.gameFlags.StartGame === true)
-    {
-      this.ctx.roundRect(this.PlayerPaddle.x, this.PlayerPaddle.y, this.PaddleWidth, this.PaddleHeight, this.PaddleRad);
-      this.ctx.fill();
-      this.ctx.stroke();
-
-      if (this.gameFlags.DrawBall === true)
-      {
-        if ((this.CPUPaddle.y + (this.CPUMovSpeed * deltaTime)) <= (this.Ball.y - (this.PaddleHeight / 2)) && ((this.CPUPaddle.y + this.PaddleHeight) + this.CPUMovSpeed) <= (this.gameBoardHeight - this.GameboardBoundary)  && (this.Ball.x >= (this.gameBoardWidth / 3)))
-        {
-          this.CPUPaddle.y += this.CPUMovSpeed * deltaTime;
-        }
-        else if ((this.CPUPaddle.y - (this.CPUMovSpeed * deltaTime)) >= this.GameboardBoundary && (this.Ball.x >= (this.gameBoardWidth / 3)))
-        {
-          this.CPUPaddle.y -= this.CPUMovSpeed * deltaTime;
-        }
-        else if ((this.CPUPaddle.y + (this.CPUMovSpeed * deltaTime)) >= this.gameBoardHeight && (this.Ball.x >= (this.gameBoardWidth / 2)))
-        {
-          this.CPUPaddle.y = ((this.gameBoardHeight / 2) - this.PaddleHeight);
-        }
-      }
-      else if (this.CPUPaddle.y > this.gameBoardHeight)
-      {
-        this.CPUPaddle.y = (this.gameBoardHeight - this.PaddleHeight);
-      }
-      else if (((this.CPUPaddle.y + this.PaddleHeight) + this.CPUMovSpeed) <= (this.gameBoardHeight / 2))
-      {
-        this.CPUPaddle.y += (this.CPUMovSpeed * deltaTime);
-      }
-      else if(((this.CPUPaddle.y - this.PaddleHeight) - this.CPUMovSpeed) >= (this.gameBoardHeight / 2))
-      {
-        this.CPUPaddle.y -= (this.CPUMovSpeed * deltaTime);
-      }
-      this.ctx.roundRect(this.CPUPaddle.x, this.CPUPaddle.y, this.PaddleWidth, this.PaddleHeight, this.PaddleRad);
-      this.ctx.fill();
-      this.ctx.stroke();
-
-      if(this.gameFlags.DrawBall === true){
-      this.ctx.beginPath();
-      this.ctx.arc(this.Ball.x, this.Ball.y, this.BallRad, 0, 2 * Math.PI);
-      this.ctx.fill();
-      this.ctx.stroke();
-      }
-    }
-    this.previousTimeStamp = timeStamp;
-    if(this.frameId !== null)
-    {
-      this.frameId = window.requestAnimationFrame(this.Draw.bind(this));
-    }
-  }
-  GamepadHandler(event)
-  {
-    switch(event.type)
-    {
-      case 'gamepadconnected':
+        else if ((gameState.Ball.x + gameState.Ball.radius) >= gameState.CPUPaddle.x  && (gameState.Ball.x + gameState.Ball.radius) <= (gameState.CPUPaddle.x + gameState.PaddleWidth ) &&  gameState.Ball.y >= gameState.CPUPaddle.y &&  (gameState.Ball.y + gameState.Ball.radius)  <= (gameState.CPUPaddle.y + gameState.PaddleHeight))
         {
           if (import.meta.env.DEV){
-        console.log('Gamepad connected');
+          console.log('CPU Paddle Hit');
           }
-        if(event.gamepad.mapping !== '')
+          if(gameState.gameFlags.AudioPlayable === true){
+            if((Math.floor(Math.random() * 2) === 0))
+            {
+              if (!import.meta.env.DEV){
+              gameState.paddleServe.play();
+              }
+            }
+            else
+            {
+              if (!import.meta.env.DEV){
+              gameState.paddleHit.play();
+              }
+            }
+          }
+          gameState.Ball.divisor = Math.floor(Math.random() * 12);
+          gameState.Ball.x -= gameState.PaddleWidth;
+          gameState.Ball.velocityY = gameState.Ball.velocityY * 1;
+          gameState.Ball.velocityX = gameState.Ball.velocityX * -1;
+        }
+        else if ((gameState.Ball.x - gameState.Ball.radius)  >= gameState.PlayerPaddle.x  && (gameState.Ball.x - gameState.Ball.radius)  <= (gameState.PlayerPaddle.x + gameState.PaddleWidth ) &&  (gameState.Ball.y - gameState.Ball.radius)  >= gameState.PlayerPaddle.y &&  (gameState.Ball.y - gameState.Ball.radius)   <= (gameState.PlayerPaddle.y + gameState.PaddleHeight))
         {
-          this.ControllerSlots[event.gamepad.index] = event.gamepad;
+          if (import.meta.env.DEV){
+          console.log('Player Paddle Hit');
+          }
+          if(gameState.gameFlags.AudioPlayable === true){
+            if((Math.floor(Math.random() * 2) === 0))
+            {
+              if (!import.meta.env.DEV){
+              gameState.paddleServe.play();
+              }
+            }
+            else
+            {
+              if (!import.meta.env.DEV){
+              gameState.paddleHit.play();
+              }
+            }
+          }
+          if( firstController !== null && typeof firstController !== 'undefined' && 'vibrationActuator' in firstController && 'connected' in firstController && firstController.connected === true)
+          {
+            firstController = Gamepads[firstController.index];
+            firstController.vibrationActuator.playEffect('dual-rumble', {
+              startDelay: 0,
+              duration: 50,
+              weakMagnitude: 0.75,
+              strongMagnitude: 0.75,
+            });
+          }
+          gameState.Ball.divisor = Math.floor(Math.random() * 12);
+          gameState.Ball.x += gameState.PaddleWidth;
+          gameState.Ball.velocityY = gameState.Ball.velocityY * 1;
+          gameState.Ball.velocityX = gameState.Ball.velocityX * -1;
         }
-        break;
-        }
-        case 'gamepaddisconnected':
-        {
-        delete this.ControllerSlots[event.gamepad.index];
-        if (import.meta.env.DEV){
-        console.log('Gamepad disconnected');
-        }
-        break;
-        }
-    }
-  }
-  MouseHandler(event) {
-    let movementY = event.movementY ||
-    event.mozMovementY      ||
-    event.webkitMovementY   ||
-        0;
-
-    if(this.gameFlags.StartGame === true)
-    {
-      if (((this.PlayerPaddle.y - this.GameboardBoundary) + movementY) >= 0 && (this.PlayerPaddle.y + movementY) <= ((this.gameBoardHeight - this.GameboardBoundary) - this.PaddleHeight))
-      {
-        this.PlayerPaddle.y += movementY;
-      }
-      else if (this.PlayerPaddle.y < 0 || this.PlayerPaddle.y > this.gameBoardHeight)// Paddle out of bounds
-      {
-        this.PlayerPaddle.y = (this.gameBoardHeight / 2);
-      }
-    }
-    if(this.frameId !== null)
-    {
-    this.frameId = window.requestAnimationFrame(this.MouseHandler);
-    }
-  }
-
-  FullScreenHandler() {
-    if(this.gameFlags.StartGame){
-    if (document.fullScreen || 
-        document.mozFullScreen || 
-        document.webkitIsFullScreen) {
-
-      this.BallSpawnDelay = Date.now() + 4000;
-        if (import.meta.env.DEV){
-          console.log('Entered Full Screen');
-          this.BallSpawnDelay = Date.now();
-        }
-      this.gameFlags.DrawBall = false;
-      this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight) };
-      this.gameBoardWidth = window.screen.width;
-      this.gameBoardHeight = window.screen.height;
-      this.Ball = { 'x' : 10, 'y' : 10, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
-      this.canvas.style.paddingLeft = 0;
-      this.canvas.style.paddingRight = 0;
-      this.canvas.style.marginLeft = 'auto';
-      this.canvas.style.marginRight = 'auto';
-      this.canvas.style.width = '';
-      this.canvas.style.height = '';
-      this.canvas.style.display = '';
-      document.body.style.setProperty('--main-visibility', 'hidden');
-      document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
-      document.body.style.setProperty('--main-gameControl-display', 'none');
-      document.body.style.setProperty('--main-display-flex', 'none');
-      document.body.style.setProperty('--main-display-flexbox', 'none');
-      document.body.style.setProperty('--main-display-block', 'none');
-      this.canvas.style.display = this.canvasStyleDisplay;
-      document.body.style.width = window.screen.height;
-      document.body.style.height = window.screen.width;
-    } else {
-      this.BallSpawnDelay = Date.now() + 4000;
-      if (import.meta.env.DEV){
-      console.log('Exited Full Screen');
-      this.BallSpawnDelay = Date.now();
-      }
-      this.gameFlags.DrawBall = false;
-      this.BallMovSpeed = 0.45;
-      this.gameBoardWidth = this.DefaultWidth;
-      this.gameBoardHeight = this.DefaultHeight;
-      this.PlayerPaddle = { 'x' : this.PaddleHeight, 'y' : ((this.gameBoardHeight / 2) - this.PaddleHeight) };
-      this.Ball = { 'x' : (this.gameBoardWidth / 2), 'y' : Math.floor(Math.random() * this.gameBoardHeight), 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
-      document.body.style.setProperty('--main-visibility', 'visible');
-      document.body.style.setProperty('--main-gameControl-visibility', 'visible');
-      document.body.style.setProperty('--main-gameControl-display', 'block');
-      document.body.style.setProperty('--main-display-flex', 'flex');
-      document.body.style.setProperty('--main-display-flexbox', 'flexbox');
-      document.body.style.setProperty('--main-display-block', 'block');
-    }
-  }
-  }
-  getGameComponent(){
-    let keyBoardIcon_W_Key_Path = '';
-    let keyBoardIcon_S_Key_Path = '';
-    let keyBoardIcon_Up_Key_Path = '';
-    let keyBoardIcon_Down_Key_Path = '';
-    let keyBoardIcon_Enter_Key_Path = '';
-    let keyBoardIcon_F11_Key_Path = '';
-    let keyBoardIcon_C_Key_Path = '';
-    let MouseIcon_Path = '';
-    
-    //addLightImgElement('keyBoardIcon_W_Key', '/icons/TPONG/W_Key_Dark.png', '/icons/TPONG/W_Key_Light.png');
-    //addLightImgElement('keyBoardIcon_S_Key','/icons/TPONG/S_Key_Dark.png',  '/icons/TPONG/S_Key_Light.png');
-    //addLightImgElement('keyBoardIcon_Up_Key', '/icons/TPONG/Arrow_Up_Key_Dark.png', '/icons/TPONG/Arrow_Up_Key_Light.png');
-    //addLightImgElement('keyBoardIcon_Down_Key', '/icons/TPONG/Arrow_Down_Key_Dark.png', '/icons/TPONG/Arrow_Down_Key_Light.png');
-    //addLightImgElement('MouseIcon', '/icons/TPONG/Mouse_Simple_Key_Dark.png', '/icons/TPONG/Mouse_Simple_Key_Light.png');
-    //addLightImgElement('keyBoardIcon_Enter_Key', '/icons/TPONG/Enter_Key_Dark.png', '/icons/TPONG/Enter_Key_Light.png');
-    //addLightImgElement('keyBoardIcon_F11_Key','/icons/TPONG/F11_Key_Dark.png',  '/icons/TPONG/F11_Key_Light.png');
-    //addLightImgElement('keyBoardIcon_C_Key','/icons/TPONG/C_Key_Dark.png',  '/icons/TPONG/C_Key_Light.png');
-
-    switch ('dark')
-    {
-        case 'dark':
-        {
-          keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Light.png';
-          keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Light.png';
-          keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Light.png';
-          keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Light.png';
-          MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Light.png';
-          keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Light.png';
-          keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Light.png';
-          keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Light.png';
-          break;
-        }
-        case 'light':
-        {
-          keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
-          keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
-          keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
-          keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
-          MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
-          keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
-          keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
-          keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
-          break;
-        }
-        default:
-        {
-          keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
-          keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
-          keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
-          keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
-          MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
-          keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
-          keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
-          keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
-          break;
-        }
-    }
-    return (
-    <>
-    <table className='gameControls'>
-  <thead>
-    <tr>
-      <th colSpan='5'><b>Keyboard & Mouse Controls:</b><br></br></th>
-    </tr>
-  </thead>
-  <tbody>
-  <tr>
-    </tr>
-    <tr>
-    <td><b>Up</b></td>
-    <td><b>Down</b></td>
-    <td><b>Cycle Colors</b></td>
-    <td><b>Fullscreen</b></td>
-    <td><b>Pause</b></td>
-    </tr>
-    <tr>
-    <td><img width='50px' height='50px' src={MouseIcon_Path} className='MouseIcon'/></td>
-    <td><img width='50px' height='50px' src={MouseIcon_Path} className='MouseIcon'/></td>
-    <td><img width='50px' height='50px' src={keyBoardIcon_C_Key_Path} id='keyBoardIcon_C_Key'/></td>
-    <td><img width='50px' height='50px' src={keyBoardIcon_F11_Key_Path} id='keyBoardIcon_F11_Key'/></td>
-    <td><img width='50px' height='50px' src={keyBoardIcon_Enter_Key_Path} id='keyBoardIcon_Enter_Key'/></td>
-    </tr>
-    <tr>
-    <td><img width='50px' height='50px' src={keyBoardIcon_W_Key_Path} id='keyBoardIcon_W_Key'/></td>
-    <td><img width='50px' height='50px' src={keyBoardIcon_S_Key_Path} id='keyBoardIcon_S_Key'/></td>
-    </tr>
-    <tr>
-    <td><img width='50px' height='50px' src={keyBoardIcon_Up_Key_Path} id='keyBoardIcon_Up_Key'/></td>
-    <td><img width='50px' height='50px' src={keyBoardIcon_Down_Key_Path} id='keyBoardIcon_Down_Key'/></td>
-    </tr>
-  </tbody>
-  <thead>
-    <tr>
-      <th colSpan='5'><b>Gamepad Controls:</b><br></br></th>
-    </tr>
-  </thead>
-  <tbody>
-  <tr>
-    </tr>
-    <tr>
-    <td><b>Up</b></td>
-    <td><b>Down</b></td>
-    <td><b>Cycle Colors</b></td>
-    <td><b>Fullscreen</b></td>
-    <td><b>Pause</b></td>
-    </tr>
-    <tr>
-    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
-    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
-    <td><img src='\icons\TPONG\XboxSeriesX_RB_LB.png'/></td>
-    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_View.png'/></td>
-    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Menu.png'/></td>
-    </tr>
-    <tr>
-    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
-    <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
-    </tr>
-  </tbody>
-    </table>
-    <Container child={ this.canvas }/>
-    </>
-    );
-  }
   
-  StartGame()
-  {
-    this.gameFlags.StartGame = true;
-    this.PlayerScore = 0;
-    this.CPUScore = 0;
-    this.Ball.x = (this.gameBoardWidth / 2);
-    this.Ball.y = Math.floor(Math.random() * this.gameBoardHeight);
-    this.BallMovSpeed = this.DefaultSpeed;
-    this.CPUMovSpeed = this.DefaultSpeed;
-    this.LeaderBoardTime = Date.now();
-    this.BallSpawnDelay = Date.now() + 8000;
-    this.PlayerScore = 0;
-    this.CPUScore = 0;
-    document.body.style.setProperty('--main-gameControl-display', 'block');
-    if(this.gameFlags.Debug)
-    {
-      this.gameFlags.DrawBall = true;
-      this.BallSpawnDelay = 0;
+        //y up and down x left to right
+        if(gameState.gameFlags.StartGame)
+        {
+          gameState.Ball.x += gameState.Ball.velocityX * deltaTime;
+          gameState.Ball.y += (gameState.Ball.velocityY / 2) * deltaTime;
+        }
+      //gameState.Ball.x = 100;
+      //gameState.Ball.y = 354;
     }
-    if(this.frameId === null)
+  
+      // Background
+      gameState.ctx.fillStyle = gameState.BackgroundColor;
+      gameState.ctx.fillRect(0, 0, gameState.gameBoardWidth, gameState.gameBoardHeight);
+      gameState.ctx.stroke();
+  
+      gameState.ctx.font = `40px Verdana`;
+      //Player Score
+      gameState.ctx.fillStyle = gameState.SpriteColor;
+      gameState.ctx.fillText(gameState.PlayerScore.toString(), ((gameState.gameBoardWidth - 500) / 2), 100);
+  
+      //CPU Score
+      gameState.ctx.fillStyle = gameState.SpriteColor;
+      gameState.ctx.fillText(gameState.CPUScore.toString(), ((gameState.gameBoardWidth + 500) / 2), 100);
+  
+      //Net
+      gameState.ctx.fillStyle = gameState.SpriteColor;
+      for (let y = 0; y < gameState.gameBoardHeight; y += 80)
+      {
+        gameState.ctx.fillRect((gameState.gameBoardWidth / 2), y, 20, 40);
+      }
+      //Paddles
+      if(gameState.gameFlags.StartGame === true)
+      {
+        gameState.ctx.roundRect(gameState.PlayerPaddle.x, gameState.PlayerPaddle.y, gameState.PaddleWidth, gameState.PaddleHeight, gameState.PaddleRad);
+        gameState.ctx.fill();
+        gameState.ctx.stroke();
+  
+        if (gameState.gameFlags.DrawBall === true)
+        {
+          if ((gameState.CPUPaddle.y + (gameState.CPUMovSpeed * deltaTime)) <= (gameState.Ball.y - (gameState.PaddleHeight / 2)) && ((gameState.CPUPaddle.y + gameState.PaddleHeight) + gameState.CPUMovSpeed) <= (gameState.gameBoardHeight - gameState.GameboardBoundary)  && (gameState.Ball.x >= (gameState.gameBoardWidth / 3)))
+          {
+            gameState.CPUPaddle.y += gameState.CPUMovSpeed * deltaTime;
+          }
+          else if ((gameState.CPUPaddle.y - (gameState.CPUMovSpeed * deltaTime)) >= gameState.GameboardBoundary && (gameState.Ball.x >= (gameState.gameBoardWidth / 3)))
+          {
+            gameState.CPUPaddle.y -= gameState.CPUMovSpeed * deltaTime;
+          }
+          else if ((gameState.CPUPaddle.y + (gameState.CPUMovSpeed * deltaTime)) >= gameState.gameBoardHeight && (gameState.Ball.x >= (gameState.gameBoardWidth / 2)))
+          {
+            gameState.CPUPaddle.y = ((gameState.gameBoardHeight / 2) - gameState.PaddleHeight);
+          }
+        }
+        else if (gameState.CPUPaddle.y > gameState.gameBoardHeight)
+        {
+          gameState.CPUPaddle.y = (gameState.gameBoardHeight - gameState.PaddleHeight);
+        }
+        else if (((gameState.CPUPaddle.y + gameState.PaddleHeight) + gameState.CPUMovSpeed) <= (gameState.gameBoardHeight / 2))
+        {
+          gameState.CPUPaddle.y += (gameState.CPUMovSpeed * deltaTime);
+        }
+        else if(((gameState.CPUPaddle.y - gameState.PaddleHeight) - gameState.CPUMovSpeed) >= (gameState.gameBoardHeight / 2))
+        {
+          gameState.CPUPaddle.y -= (gameState.CPUMovSpeed * deltaTime);
+        }
+        gameState.ctx.roundRect(gameState.CPUPaddle.x, gameState.CPUPaddle.y, gameState.PaddleWidth, gameState.PaddleHeight, gameState.PaddleRad);
+        gameState.ctx.fill();
+        gameState.ctx.stroke();
+  
+        if(gameState.gameFlags.DrawBall === true){
+        gameState.ctx.beginPath();
+        gameState.ctx.arc(gameState.Ball.x, gameState.Ball.y, gameState.BallRad, 0, 2 * Math.PI);
+        gameState.ctx.fill();
+        gameState.ctx.stroke();
+        }
+      }
+      gameState.previousTimeStamp = timeStamp;
+      if(gameState.frameId !== null)
+      {
+        gameState.frameId = window.requestAnimationFrame(gameState.Renderer.Draw);
+      }
+    }
+  }
+    gameState.GamepadHandler = { EventHandler(event)
     {
-    this.frameId = window.requestAnimationFrame(this.Draw.bind(this));
+      switch(event.type)
+      {
+        case 'gamepadconnected':
+          {
+            if (import.meta.env.DEV){
+          console.log('Gamepad connected');
+            }
+          if(event.gamepad.mapping !== '')
+          {
+            gameState.ControllerSlots[event.gamepad.index] = event.gamepad;
+          }
+          break;
+          }
+          case 'gamepaddisconnected':
+          {
+          delete gameState.ControllerSlots[event.gamepad.index];
+          if (import.meta.env.DEV){
+          console.log('Gamepad disconnected');
+          }
+          break;
+          }
+      }
+    }
+  }
+  gameState.GameHandler = { StartGame()
+  {
+    gameState.gameFlags.StartGame = true;
+    gameState.PlayerScore = 0;
+    gameState.CPUScore = 0;
+    gameState.Ball.x = (gameState.gameBoardWidth / 2);
+    gameState.Ball.y = Math.floor(Math.random() * gameState.gameBoardHeight);
+    gameState.BallMovSpeed = gameState.DefaultSpeed;
+    gameState.CPUMovSpeed = gameState.DefaultSpeed;
+    gameState.LeaderBoardTime = Date.now();
+    gameState.BallSpawnDelay = Date.now() + 4000;
+    gameState.PlayerScore = 0;
+    gameState.CPUScore = 0;
+    document.body.style.setProperty('--main-gameControl-display', 'block');
+    if(gameState.gameFlags.Debug)
+    {
+      gameState.gameFlags.DrawBall = true;
+      gameState.BallSpawnDelay = 0;
+    }
+    if(gameState.frameId === null)
+    {
+    gameState.frameId = window.requestAnimationFrame(gameState.Renderer.Draw);
     }
     if(window.innerWidth == screen.width && window.innerHeight == screen.height) {
-      this.FullScreenHandler.bind(this);
+      gameState.FullScreenHandler;
     }
-  }
-  PauseGame()
+  },
+  EndGame()
   {
-    this.gameFlags.StartGame = false;
-    this.Ball = { 'x' : 0, 'y' : 0, 'radius' : this.BallRad, 'velocityY' : this.BallMovSpeed, 'velocityX' : this.BallMovSpeed, 'divisor' : 2};
-    if(this.frameId)
+    gameState.gameFlags.StartGame = false;
+    gameState.Ball = { 'x' : 0, 'y' : 0, 'radius' : gameState.BallRad, 'velocityY' : gameState.BallMovSpeed, 'velocityX' : gameState.BallMovSpeed, 'divisor' : 2};
+    if(gameState.frameId)
     {
-      window.cancelAnimationFrame(this.frameId);
+      window.cancelAnimationFrame(gameState.frameId);
       document.body.style.setProperty('--main-gameControl-display', 'none');
-      this.frameId = null;
+      gameState.frameId = null;
     }
   }
-}
-export function GameStart(gameSetup, bDebug) {
-  if(__TPONGHandler === null)
-  {
-    __TPONGHandler = new GameHandler(null, gameSetup, bDebug);
   }
-  if(__TPONGHandler !== null)
-  {
-  __TPONGHandler.StartGame();
-  }
-  return __TPONGHandler.getGameComponent();
-}
+  window.addEventListener('gamepadconnected', gameState.GamepadHandler.EventHandler, false);
+  window.addEventListener('gamepaddisconnected', gameState.GamepadHandler.EventHandler, false);
 
-export function EndGame() {
-  if(__TPONGHandler !== null)
+  gameState.GameHandler.StartGame(0, true);
+    return () => {
+      gameState.GameHandler.EndGame();
+    };
+  }, [gameState, bDebug]);
+
+  gameState.keyBoardIcon_W_Key_Path = '';
+  gameState.keyBoardIcon_S_Key_Path = '';
+  gameState.keyBoardIcon_Up_Key_Path = '';
+  gameState.keyBoardIcon_Down_Key_Path = '';
+  gameState.keyBoardIcon_Enter_Key_Path = '';
+  gameState.keyBoardIcon_F11_Key_Path = '';
+  gameState.keyBoardIcon_C_Key_Path = '';
+  gameState.MouseIcon_Path = '';
+  let GameControlsContext = useContext(ContentContext);
+
+  switch (GameControlsContext.ContentState.theme)
   {
-      __TPONGHandler.PauseGame();
+      case 'dark':
+      {
+        gameState.keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Light.png';
+        gameState.keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Light.png';
+        gameState.keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Light.png';
+        gameState.keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Light.png';
+        gameState.MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Light.png';
+        gameState.keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Light.png';
+        gameState.keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Light.png';
+        gameState.keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Light.png';
+        break;
+      }
+      case 'light':
+      {
+        gameState.keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
+        gameState.keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
+        gameState.keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
+        gameState.keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
+        gameState.MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
+        gameState.keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
+        gameState.keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
+        gameState.keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
+        break;
+      }
+      default:
+      {
+        gameState.keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
+        gameState.keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
+        gameState.keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
+        gameState.keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
+        gameState.MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
+        gameState.keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
+        gameState.keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
+        gameState.keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
+        break;
+      }
   }
-  return __TPONGHandler;
+  if(GameControlsContext.ContentState.UpdateImgLightArray.findIndex((e) => (e.ElementName === 'keyBoardIcon_W_Key')) === -1)
+  {
+    
+    GameControlsContext.ContentState.UpdateImgLightArray.push({'ElementName' : 'keyBoardIcon_W_Key', 'LightSvgPath' : '/icons/TPONG/W_Key_Dark.png', 'DarkSvgPath' : '/icons/TPONG/W_Key_Light.png'});
+    GameControlsContext.ContentState.UpdateImgLightArray.push({'ElementName' : 'keyBoardIcon_S_Key', 'LightSvgPath' : '/icons/TPONG/S_Key_Dark.png', 'DarkSvgPath' : '/icons/TPONG/S_Key_Light.png'});
+    GameControlsContext.ContentState.UpdateImgLightArray.push({'ElementName' : 'keyBoardIcon_Up_Key', 'LightSvgPath' : '/icons/TPONG/Arrow_Up_Key_Dark.png', 'DarkSvgPath' : '/icons/TPONG/Arrow_Down_Key_Light.png'});
+    GameControlsContext.ContentState.UpdateImgLightArray.push({'ElementName' : 'keyBoardIcon_Down_Key', 'LightSvgPath' : '/icons/TPONG/Arrow_Down_Key_Dark.png', 'DarkSvgPath' : '/icons/TPONG/Arrow_Down_Key_Light.png'});
+    GameControlsContext.ContentState.UpdateImgLightArray.push({'ElementName' : 'MouseIcon', 'LightSvgPath' : '/icons/TPONG/Mouse_Simple_Key_Dark.png', 'DarkSvgPath' : '/icons/TPONG/Mouse_Simple_Key_Light.png'});
+    GameControlsContext.ContentState.UpdateImgLightArray.push({'ElementName' : 'keyBoardIcon_Enter_Key', 'LightSvgPath' : '/icons/TPONG/Enter_Key_Dark.png', 'DarkSvgPath' : '/icons/TPONG/Enter_Key_Light.png'});
+    GameControlsContext.ContentState.UpdateImgLightArray.push({'ElementName' : 'keyBoardIcon_F11_Key', 'LightSvgPath' : '/icons/TPONG/F11_Key_Dark.png', 'DarkSvgPath' : '/icons/TPONG/F11_Key_Light.png'});
+    GameControlsContext.ContentState.UpdateImgLightArray.push({'ElementName' : 'keyBoardIcon_C_Key', 'LightSvgPath' : '/icons/TPONG/C_Key_Dark.png', 'DarkSvgPath' : '/icons/TPONG/C_Key_Light.png'});
+  }
+  return (
+  <>
+  <table className='gameControls'>
+<thead>
+  <tr>
+    <th colSpan='5'><b>Keyboard & Mouse Controls:</b><br></br></th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+  </tr>
+  <tr>
+  <td><b>Up</b></td>
+  <td><b>Down</b></td>
+  <td><b>Cycle Colors</b></td>
+  <td><b>Fullscreen</b></td>
+  <td><b>Pause</b></td>
+  </tr>
+  <tr>
+  <td><img width='50px' height='50px' src={gameState.MouseIcon_Path} className='MouseIcon'/></td>
+  <td><img width='50px' height='50px' src={gameState.MouseIcon_Path} className='MouseIcon'/></td>
+  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_C_Key_Path} id='keyBoardIcon_C_Key'/></td>
+  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_F11_Key_Path} id='keyBoardIcon_F11_Key'/></td>
+  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_Enter_Key_Path} id='keyBoardIcon_Enter_Key'/></td>
+  </tr>
+  <tr>
+  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_W_Key_Path} id='keyBoardIcon_W_Key'/></td>
+  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_S_Key_Path} id='keyBoardIcon_S_Key'/></td>
+  </tr>
+  <tr>
+  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_Up_Key_Path} id='keyBoardIcon_Up_Key'/></td>
+  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_Down_Key_Path} id='keyBoardIcon_Down_Key'/></td>
+  </tr>
+</tbody>
+<thead>
+  <tr>
+    <th colSpan='5'><b>Gamepad Controls:</b><br></br></th>
+  </tr>
+</thead>
+<tbody>
+<tr>
+  </tr>
+  <tr>
+  <td><b>Up</b></td>
+  <td><b>Down</b></td>
+  <td><b>Cycle Colors</b></td>
+  <td><b>Fullscreen</b></td>
+  <td><b>Pause</b></td>
+  </tr>
+  <tr>
+  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
+  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
+  <td><img src='\icons\TPONG\XboxSeriesX_RB_LB.png'/></td>
+  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_View.png'/></td>
+  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Menu.png'/></td>
+  </tr>
+  <tr>
+  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+  </tr>
+</tbody>
+  </table>
+  <canvas width='800' ref={setGameState} onClick={ () => {
+    gameState.gameFlags.AudioPlayable = true;
+  }}></canvas>
+  </>
+  );
 }

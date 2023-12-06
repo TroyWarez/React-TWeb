@@ -3,7 +3,7 @@ import terminalLightIcon from '/terminal_light.svg'
 import { setManifestAndIcons } from './manifestSet'
 import './Homebutton.css'
 import  { SiteDescription } from './Articles.js'
-import { useContext} from 'react'
+import { useContext } from 'react'
 import propTypes from 'prop-types';
 import { ContentContext } from './App'
 Homebutton.propTypes = {
@@ -12,6 +12,11 @@ Homebutton.propTypes = {
 function Homebutton(props)
 {
     const ArticleContent = useContext(ContentContext);
+    if(ArticleContent.ContentState.UpdateImgLightArray.findIndex((e) => (e.ElementName == 'terminalIcon')) === -1)
+    {
+        ArticleContent.ContentState.UpdateImgLightArray.push({'ElementName' : 'terminalIcon', 'LightSvgPath' : terminalLightIcon, 'DarkSvgPath' : terminalDarkIcon});
+    }
+
     let terminalIconSrc = '';
     switch (ArticleContent.ContentState.theme)
     {
@@ -31,7 +36,6 @@ function Homebutton(props)
             break;
         }
     }
-    ArticleContent.ContentState.UpdateImgLightArray.push({'ElementName' : 'terminalIcon', 'LightSvgPath' : terminalLightIcon, 'DarkSvgPath' : terminalDarkIcon});
     return (<a href={window.location.origin}   onClick={(e) => {
         e.preventDefault();
         if(window.location.pathname !== '/')
@@ -43,6 +47,6 @@ function Homebutton(props)
         ArticleContent.ContentState.ContentTitle = 'About';
         ArticleContent.ContentState.Content = <p className='Article'>{SiteDescription}</p>;
         ArticleContent.setContent({Content: ArticleContent.Content, ContentTitle: ArticleContent.ContentState.ContentTitle, 'theme': ArticleContent.ContentState.theme, 'UpdateImgLightArray': ArticleContent.ContentState.UpdateImgLightArray});
-      }} className='WebsiteTitle'><h1><img src={terminalIconSrc} className='terminalIcon' alt='Terminal Icon' ></img>{props.name}</h1></a>);
+      }} className='WebsiteTitle'><h1><img className='terminalIcon' src={terminalIconSrc} alt='Terminal Icon' ></img>{props.name}</h1></a>);
 }
 export default Homebutton;

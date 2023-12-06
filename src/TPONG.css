@@ -2,14 +2,14 @@
     display: var(--main-gameControl-display);
     justify-content: start;
     text-align: center;
-    visibility:var(--main-gameControl-visibility);
-    float:left;
+    visibility: var(--main-gameControl-visibility);
+    float: left;
 }
 
 .gameControlsGamepad {
     display: var(--main-gameControl-display);
     justify-content: start;
     text-align: center;
-    visibility:var(--main-gameControl-visibility);
+    visibility: var(--main-gameControl-visibility);
     position:  relative;
 }

@@ -1,7 +1,6 @@
 import Navbar from './Navbar'
 import Article from './Article'
 import Footer from './Footer'
-import './HistoryHandler'
 import { useState, createContext } from 'react';
 
 export const ContentContext = createContext();

@@ -14,6 +14,8 @@
   --main-display-flex: flex;
   --main-display-flexbox: flexbox;
   --main-display-block: block;
+  --main-article-margin: 25%;
+  --main-gameControl-display: block;
   --main-gameControl-display: block;
 }
 
