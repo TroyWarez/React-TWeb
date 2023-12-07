@@ -80,7 +80,7 @@ export function TPONG(gameSetup, bDebug) {
     ScoreBeep : null,
 
   });
-
+  const [controlText, setControlText] = useState('');
   useLayoutEffect(() => {
 
       if (typeof gameState.getContext !== "function") { 
@@ -173,10 +173,12 @@ export function TPONG(gameSetup, bDebug) {
    if(gameState.gameFlags.ShowControls)
    {
      document.body.style.setProperty('--main-gameControl-visibility', 'visible');
+     setControlText('Hide Controls');
    }
    else
    {
      document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
+     setControlText('Show Controls');
    }
     gameState.BallMovSpeed = gameState.DefaultSpeed;
     gameState.CPUMovSpeed = gameState.DefaultCPUSpeed;
@@ -1013,7 +1015,7 @@ export function TPONG(gameSetup, bDebug) {
   }
   return (
   <>
-  <input type='button' value={'Hide Game Controls'} className='gameControlsMouse' onClick={() => {
+  <input type='button' value={controlText} className='gameControlsMouse' onClick={() => {
     let bShowControls = true;
     switch (getComputedStyle(document.body).getPropertyValue('--main-gameControl-visibility'))
     {
@@ -1021,12 +1023,14 @@ export function TPONG(gameSetup, bDebug) {
       {
         document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
         bShowControls = false;
+        setControlText('Show Controls');
         break;
       }
       case 'hidden':
       {
         document.body.style.setProperty('--main-gameControl-visibility', 'visible');
         bShowControls = true;
+        setControlText('Hide Controls');
         break;
       }
       default:
