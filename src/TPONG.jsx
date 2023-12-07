@@ -1,6 +1,7 @@
 import './TPONG.css';
 import  { ContentContext } from './App'
-import { useState, useEffect, useContext } from 'react';
+import { useState, useLayoutEffect, useContext } from 'react';
+import { Leaderboard } from './Leaderboard';
 export function TPONG(gameSetup, bDebug) {
   const [gameState, setGameState] = useState({
     paddleHitSound : 'sounds/TPONG/paddleHit.m4a',
@@ -45,7 +46,7 @@ export function TPONG(gameSetup, bDebug) {
 
     LeaderBoardTime : null,
 
-    gameFlags : { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false },
+    gameFlags : { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false, 'ShowControls' : true },
 
     selectedPalette : null,
 
@@ -80,7 +81,7 @@ export function TPONG(gameSetup, bDebug) {
 
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
 
       if (typeof gameState.getContext !== "function") { 
         return;
@@ -117,7 +118,7 @@ export function TPONG(gameSetup, bDebug) {
     gameState.width = gameState.DefaultWidth;
     gameState.height = gameState.DefaultHeight;
     gameState.ColorPalettes = [{PaletteName : 'RedPalette', BackgroundColor : gameState.Red,  SpriteColor : gameState.White}, { PaletteName : 'GreenPalette', BackgroundColor : gameState.Green,  SpriteColor : gameState.White}, { PaletteName : 'BluePalette', BackgroundColor : gameState.Blue,  SpriteColor : gameState.White }, { PaletteName : 'PurplePalette', BackgroundColor : gameState.Purple,  SpriteColor : gameState.White}, { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }];
-
+    gameState.selectedPalette = gameState.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
     gameState.BallRad = 10;
 
     gameState.ctx = gameState.getContext('2d');
@@ -131,26 +132,36 @@ export function TPONG(gameSetup, bDebug) {
 
     gameState.LeaderBoardTime = null;
 
-    gameState.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false } //booleans
+    gameState.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false,  'ShowControls' : true  } //booleans
 
     if (typeof(Storage) !== 'undefined') {
       gameState.gameFlags.localStorage = true;
-      gameState.selectedPalette = localStorage.getItem('savedPalette');
-      if(gameState.selectedPalette === null)
+      let Preferences = localStorage.getItem('savedPreferences');
+      if(Preferences === null)
       {
-           localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }));
-           gameState.selectedPalette = gameState.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+           localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }, 'savedControlsPreference' : { 'ShowControls' : true }}}));
       }
       else
       {
-        if(typeof gameState.selectedPalette === 'undefined')
+        if(typeof Preferences === 'undefined')
         {
-          localStorage.setItem('savedPalette', JSON.stringify({ PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }));
-          gameState.selectedPalette = gameState.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
+          localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }, 'savedControlsPreference' : { 'ShowControls' : true }}}));
         }
         else
         {
-          gameState.selectedPalette = JSON.parse(gameState.selectedPalette);
+          Preferences = JSON.parse(Preferences);
+          if(typeof Preferences.savedPreferences === 'undefined' ||
+             typeof Preferences.savedPreferences.savedPalette === 'undefined' ||
+             typeof Preferences.savedPreferences.savedControlsPreference === 'undefined')
+          {
+            localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }, 'savedControlsPreference' : { 'ShowControls' : true }}}));
+          }
+          else
+          {
+            gameState.selectedPalette = Preferences.savedPreferences.savedPalette;
+            gameState.gameFlags.ShowControls = Preferences.savedPreferences.savedControlsPreference;
+          }
+
         }
       }
    }
@@ -159,6 +170,14 @@ export function TPONG(gameSetup, bDebug) {
       gameState.selectedPalette = gameState.ColorPalettes.find(x => x.PaletteName === 'BlackPalette');
    }
 
+   if(gameState.gameFlags.ShowControls)
+   {
+     document.body.style.setProperty('--main-gameControl-visibility', 'visible');
+   }
+   else
+   {
+     document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
+   }
     gameState.BallMovSpeed = gameState.DefaultSpeed;
     gameState.CPUMovSpeed = gameState.DefaultCPUSpeed;
 
@@ -346,7 +365,7 @@ export function TPONG(gameSetup, bDebug) {
 
           if(gameState.gameFlags.localStorage === true)
           {
-            localStorage.setItem('savedPalette', JSON.stringify(gameState.selectedPalette));
+            localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : gameState.gameFlags.ShowControls}));
           }
           break;
         }
@@ -390,7 +409,7 @@ export function TPONG(gameSetup, bDebug) {
 
       if(gameState.gameFlags.localStorage === true)
       {
-        localStorage.setItem('savedPalette', JSON.stringify(gameState.selectedPalette));
+        localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : gameState.gameFlags.ShowControls}));
       }
     }
     }
@@ -442,7 +461,7 @@ export function TPONG(gameSetup, bDebug) {
   
             if(gameState.gameFlags.localStorage === true)
             {
-              localStorage.setItem('savedPalette', JSON.stringify(gameState.selectedPalette));
+            localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : gameState.gameFlags.ShowControls}));
             }
         }
         else if (firstController.buttons[5].value === 1 && gameState.lastController !== null && gameState.lastController.buttons[5].value !== 1) {
@@ -458,7 +477,7 @@ export function TPONG(gameSetup, bDebug) {
   
             if(gameState.gameFlags.localStorage === true)
             {
-              localStorage.setItem('savedPalette', JSON.stringify(gameState.selectedPalette));
+              localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : gameState.gameFlags.ShowControls}));
             }
         }
         else if (firstController.buttons[8].value === 1 && gameState.lastController !== null && gameState.lastController.buttons[8].value !== 1) {
@@ -931,53 +950,52 @@ export function TPONG(gameSetup, bDebug) {
       gameState.GameHandler.EndGame();
     };
   }, [gameState, bDebug]);
-
-  gameState.keyBoardIcon_W_Key_Path = '';
-  gameState.keyBoardIcon_S_Key_Path = '';
-  gameState.keyBoardIcon_Up_Key_Path = '';
-  gameState.keyBoardIcon_Down_Key_Path = '';
-  gameState.keyBoardIcon_Enter_Key_Path = '';
-  gameState.keyBoardIcon_F11_Key_Path = '';
-  gameState.keyBoardIcon_C_Key_Path = '';
-  gameState.MouseIcon_Path = '';
+  
+  let keyBoardIcon_W_Key_Path = '';
+  let keyBoardIcon_S_Key_Path = '';
+  let keyBoardIcon_Up_Key_Path = '';
+  let keyBoardIcon_Down_Key_Path = '';
+  let keyBoardIcon_Enter_Key_Path = '';
+  let keyBoardIcon_F11_Key_Path = '';
+  let keyBoardIcon_C_Key_Path = '';
+  let MouseIcon_Path = '';
   let GameControlsContext = useContext(ContentContext);
-
   switch (GameControlsContext.ContentState.theme)
   {
       case 'dark':
       {
-        gameState.keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Light.png';
-        gameState.keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Light.png';
-        gameState.keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Light.png';
-        gameState.keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Light.png';
-        gameState.MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Light.png';
-        gameState.keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Light.png';
-        gameState.keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Light.png';
-        gameState.keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Light.png';
+        keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Light.png';
+        keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Light.png';
+        keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Light.png';
+        keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Light.png';
+        MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Light.png';
+        keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Light.png';
+        keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Light.png';
+        keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Light.png';
         break;
       }
       case 'light':
       {
-        gameState.keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
-        gameState.keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
-        gameState.keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
-        gameState.keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
-        gameState.MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
-        gameState.keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
-        gameState.keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
-        gameState.keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
+        keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
+        keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
+        keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
+        keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
+        MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
+        keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
+        keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
+        keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
         break;
       }
       default:
       {
-        gameState.keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
-        gameState.keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
-        gameState.keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
-        gameState.keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
-        gameState.MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
-        gameState.keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
-        gameState.keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
-        gameState.keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
+        keyBoardIcon_W_Key_Path = '/icons/TPONG/W_Key_Dark.png';
+        keyBoardIcon_S_Key_Path = '/icons/TPONG/S_Key_Dark.png';
+        keyBoardIcon_Up_Key_Path = '/icons/TPONG/Arrow_Up_Key_Dark.png';
+        keyBoardIcon_Down_Key_Path = '/icons/TPONG/Arrow_Down_Key_Dark.png';
+        MouseIcon_Path = '/icons/TPONG/Mouse_Simple_Key_Dark.png';
+        keyBoardIcon_F11_Key_Path = '/icons/TPONG/F11_Key_Dark.png';
+        keyBoardIcon_Enter_Key_Path = '/icons/TPONG/Enter_Key_Dark.png';
+        keyBoardIcon_C_Key_Path = '/icons/TPONG/C_Key_Dark.png';
         break;
       }
   }
@@ -996,16 +1014,19 @@ export function TPONG(gameSetup, bDebug) {
   return (
   <>
   <input type='button' value={'Hide Game Controls'} className='gameControlsMouse' onClick={() => {
+    let bShowControls = true;
     switch (getComputedStyle(document.body).getPropertyValue('--main-gameControl-visibility'))
     {
       case 'visible':
       {
         document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
+        bShowControls = false;
         break;
       }
       case 'hidden':
       {
         document.body.style.setProperty('--main-gameControl-visibility', 'visible');
+        bShowControls = true;
         break;
       }
       default:
@@ -1014,9 +1035,13 @@ export function TPONG(gameSetup, bDebug) {
           console.warn('Warning: the main gamecontrol display css variable was set to this unknown value: \'' + getComputedStyle(document.body).getPropertyValue('--main-gameControl-visibility') + '\'');
         }
         document.body.style.setProperty('--main-gameControl-visibility', 'visible');
+        bShowControls = true;
         break;
       }
     }
+    if (gameState.gameFlags.localStorage === true) {
+        localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : bShowControls}}));
+        }
   }}/>
   <table className='gameControls'>
 <thead>
@@ -1039,19 +1064,19 @@ export function TPONG(gameSetup, bDebug) {
   {
     gameState.ctx.canvas.style.marginLeft = '1%';
     gameState.ctx.canvas.style.marginRight = 'auto';
-  }} src={gameState.MouseIcon_Path} className='MouseIcon'/></td>
-  <td><img width='50px' height='50px' alt='Mouse Down' src={gameState.MouseIcon_Path} className='MouseIcon'/></td>
-  <td><img width='50px' height='50px' alt='C Key' src={gameState.keyBoardIcon_C_Key_Path} id='keyBoardIcon_C_Key'/></td>
-  <td><img width='50px' height='50px' alt='F11 Key' src={gameState.keyBoardIcon_F11_Key_Path} id='keyBoardIcon_F11_Key'/></td>
-  <td><img width='50px' height='50px' alt='Enter Key' src={gameState.keyBoardIcon_Enter_Key_Path} id='keyBoardIcon_Enter_Key'/></td>
+  }} src={MouseIcon_Path} className='MouseIcon'/></td>
+  <td><img width='50px' height='50px' alt='Mouse Down' src={MouseIcon_Path} className='MouseIcon'/></td>
+  <td><img width='50px' height='50px' alt='C Key' src={keyBoardIcon_C_Key_Path} id='keyBoardIcon_C_Key'/></td>
+  <td><img width='50px' height='50px' alt='F11 Key' src={keyBoardIcon_F11_Key_Path} id='keyBoardIcon_F11_Key'/></td>
+  <td><img width='50px' height='50px' alt='Enter Key' src={keyBoardIcon_Enter_Key_Path} id='keyBoardIcon_Enter_Key'/></td>
   </tr>
   <tr>
-  <td><img width='50px' height='50px' alt='W Key' src={gameState.keyBoardIcon_W_Key_Path} id='keyBoardIcon_W_Key'/></td>
-  <td><img width='50px' height='50px' alt='S Key' src={gameState.keyBoardIcon_S_Key_Path} id='keyBoardIcon_S_Key'/></td>
+  <td><img width='50px' height='50px' alt='W Key' src={keyBoardIcon_W_Key_Path} id='keyBoardIcon_W_Key'/></td>
+  <td><img width='50px' height='50px' alt='S Key' src={keyBoardIcon_S_Key_Path} id='keyBoardIcon_S_Key'/></td>
   </tr>
   <tr>
-  <td><img width='50px' height='50px' alt='Up Arrow Key' src={gameState.keyBoardIcon_Up_Key_Path} id='keyBoardIcon_Up_Key'/></td>
-  <td><img width='50px' height='50px' alt='Down Arrow Key' src={gameState.keyBoardIcon_Down_Key_Path} id='keyBoardIcon_Down_Key'/></td>
+  <td><img width='50px' height='50px' alt='Up Arrow Key' src={keyBoardIcon_Up_Key_Path} id='keyBoardIcon_Up_Key'/></td>
+  <td><img width='50px' height='50px' alt='Down Arrow Key' src={keyBoardIcon_Down_Key_Path} id='keyBoardIcon_Down_Key'/></td>
   </tr>
 </tbody>
 <thead>
@@ -1085,6 +1110,7 @@ export function TPONG(gameSetup, bDebug) {
   <canvas ref={setGameState} onClick={ () => {
     gameState.gameFlags.AudioPlayable = true;
   }}></canvas>
+  <Leaderboard></Leaderboard>
   </>
   );
 }

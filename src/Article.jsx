@@ -3,7 +3,7 @@ import  { ContentContext } from './App'
 import './Article.css';
 import  { SiteDescription, BetterMediaKeysDescription, GenericInputDescription } from './Articles.js'
 import { setManifestAndIcons } from './manifestSet.jsx'
-import { useContext, useEffect } from 'react';
+import { useContext, useLayoutEffect } from 'react';
 export default function Article() {
     const ArticleContent = useContext(ContentContext);
     switch(window.location.pathname)
@@ -50,7 +50,7 @@ export default function Article() {
                 break;
             }
     }
-    useEffect(() => {
+    useLayoutEffect(() => {
         window.addEventListener("popstate", function(){
             switch(window.location.pathname)
             {
