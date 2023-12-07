@@ -11,3 +11,6 @@
     margin-right: var(--main-article-margin);
     visibility: var(--main-visibility);
 }
+img.ArticleTitle {
+    margin: auto;
+}

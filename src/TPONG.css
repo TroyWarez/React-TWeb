@@ -46,9 +46,9 @@
     min-width: 128px;
     overflow: hidden;
     text-decoration: none;
-    position:  block;
     font-size: small;
     font-weight: bold;
+    visibility: var(--main-gameControl-visibility);
 }
 .gameControlsMouseAudio:hover {
     background-color: var(--main-bg-hovercolor)
