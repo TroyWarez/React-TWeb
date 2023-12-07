@@ -46,7 +46,7 @@ export function TPONG(gameSetup, bDebug) {
 
     LeaderBoardTime : null,
 
-    gameFlags : { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false, 'ShowControls' : true },
+    gameFlags : { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'AudioMuted' : false, 'localStorage' : false, 'ShowControls' : true },
 
     selectedPalette : null,
 
@@ -81,6 +81,7 @@ export function TPONG(gameSetup, bDebug) {
 
   });
   const [controlText, setControlText] = useState('');
+  const [controlAudioText, setControlAudioText] = useState('');
   useLayoutEffect(() => {
 
       if (typeof gameState.getContext !== "function") { 
@@ -132,34 +133,36 @@ export function TPONG(gameSetup, bDebug) {
 
     gameState.LeaderBoardTime = null;
 
-    gameState.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'localStorage' : false,  'ShowControls' : true  } //booleans
+    gameState.gameFlags = { 'GameSet': false, 'StartGame' : false, 'IdleMode': true, 'DrawBall' : false, 'Debug' : bDebug, 'AudioPlayable' : false, 'AudioMuted' : false, 'localStorage' : false,  'ShowControls' : true } //booleans
 
     if (typeof(Storage) !== 'undefined') {
       gameState.gameFlags.localStorage = true;
       let Preferences = localStorage.getItem('savedPreferences');
       if(Preferences === null)
       {
-           localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }, 'savedControlsPreference' : { 'ShowControls' : true }}}));
+           localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }, 'savedControlsPreference' : { 'ShowControls' : true, 'AudioMuted' : false }}}));
       }
       else
       {
         if(typeof Preferences === 'undefined')
         {
-          localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }, 'savedControlsPreference' : { 'ShowControls' : true }}}));
+          localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }, 'savedControlsPreference' : { 'ShowControls' : true, 'AudioMuted' : false }}}));
         }
         else
         {
           Preferences = JSON.parse(Preferences);
-          if(typeof Preferences.savedPreferences === 'undefined' ||
-             typeof Preferences.savedPreferences.savedPalette === 'undefined' ||
-             typeof Preferences.savedPreferences.savedControlsPreference === 'undefined')
+          if(typeof Preferences.savedControlsPreference === 'undefined' ||
+          typeof Preferences.savedControlsPreference.AudioMuted === 'undefined' ||
+             typeof Preferences.savedControlsPreference.ShowControls === 'undefined' ||
+             typeof Preferences.savedPalette === 'undefined')
           {
-            localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }, 'savedControlsPreference' : { 'ShowControls' : true }}}));
+            localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : { PaletteName : 'BlackPalette', BackgroundColor : gameState.Black,  SpriteColor : gameState.DimGray }, 'savedControlsPreference' : { 'ShowControls' : true, 'AudioMuted' : false }}}));
           }
           else
           {
-            gameState.selectedPalette = Preferences.savedPreferences.savedPalette;
-            gameState.gameFlags.ShowControls = Preferences.savedPreferences.savedControlsPreference;
+            gameState.selectedPalette = Preferences.savedPalette;
+            gameState.gameFlags.ShowControls = Preferences.savedControlsPreference.ShowControls;
+            gameState.gameFlags.AudioMuted = Preferences.savedControlsPreference.AudioMuted;
           }
 
         }
@@ -179,6 +182,14 @@ export function TPONG(gameSetup, bDebug) {
    {
      document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
      setControlText('Show Controls');
+   }
+   if(gameState.gameFlags.AudioMuted)
+   {
+    setControlAudioText('Turn on sound');
+   }
+   else
+   {
+    setControlAudioText('Turn off sound');
    }
     gameState.BallMovSpeed = gameState.DefaultSpeed;
     gameState.CPUMovSpeed = gameState.DefaultCPUSpeed;
@@ -353,7 +364,7 @@ export function TPONG(gameSetup, bDebug) {
       if(event.repeat === false)
       {
       switch(event.key) {
-        case 'c': //Red
+        case 'c': //Cycle colors
         {
         let PattleIndex = gameState.ColorPalettes.findIndex(x => x.PaletteName === gameState.selectedPalette.PaletteName);
         if((PattleIndex + 1) < gameState.ColorPalettes.length)
@@ -367,7 +378,7 @@ export function TPONG(gameSetup, bDebug) {
 
           if(gameState.gameFlags.localStorage === true)
           {
-            localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : gameState.gameFlags.ShowControls}));
+            localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : {'ShowControls' : gameState.gameFlags.ShowControls, 'AudioMuted' : gameState.gameFlags.AudioMuted}}));
           }
           break;
         }
@@ -411,7 +422,7 @@ export function TPONG(gameSetup, bDebug) {
 
       if(gameState.gameFlags.localStorage === true)
       {
-        localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : gameState.gameFlags.ShowControls}));
+        localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : {'ShowControls' : gameState.gameFlags.ShowControls, 'AudioMuted' : gameState.gameFlags.AudioMuted}}));
       }
     }
     }
@@ -463,7 +474,7 @@ export function TPONG(gameSetup, bDebug) {
   
             if(gameState.gameFlags.localStorage === true)
             {
-            localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : gameState.gameFlags.ShowControls}));
+            localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : {'ShowControls' : gameState.gameFlags.ShowControls, 'AudioMuted' : gameState.gameFlags.AudioMuted}}));
             }
         }
         else if (firstController.buttons[5].value === 1 && gameState.lastController !== null && gameState.lastController.buttons[5].value !== 1) {
@@ -479,7 +490,7 @@ export function TPONG(gameSetup, bDebug) {
   
             if(gameState.gameFlags.localStorage === true)
             {
-              localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : gameState.gameFlags.ShowControls}));
+              localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : {'ShowControls' : gameState.gameFlags.ShowControls, 'AudioMuted' : gameState.gameFlags.AudioMuted}}));
             }
         }
         else if (firstController.buttons[8].value === 1 && gameState.lastController !== null && gameState.lastController.buttons[8].value !== 1) {
@@ -686,11 +697,9 @@ export function TPONG(gameSetup, bDebug) {
           gameState.CPUScore++;
           gameState.BallSpawnDelay = Date.now() + 4000;
           gameState.gameFlags.DrawBall = false;
-          if(gameState.gameFlags.AudioPlayable === true)
+          if (gameState.gameFlags.AudioPlayable === true && gameState.gameFlags.AudioMuted === false)
           {
-            if (!import.meta.env.DEV){
             gameState.ScoreBeep.play();
-            }
           }
         }
         else if ((gameState.Ball.x - gameState.Ball.radius) > (gameState.gameBoardWidth))//Player Scored
@@ -709,30 +718,24 @@ export function TPONG(gameSetup, bDebug) {
           gameState.PlayerScore++;
           gameState.BallSpawnDelay = Date.now() + 4000;
           gameState.gameFlags.DrawBall = false;
-          if(gameState.gameFlags.AudioPlayable === true)
+          if (gameState.gameFlags.AudioPlayable === true && gameState.gameFlags.AudioMuted === false)
           {
-            if (!import.meta.env.DEV){
             gameState.ScoreBeep.play();
-            }
           }
         }
         else if ((gameState.Ball.y + gameState.Ball.radius) >= (gameState.gameBoardHeight))
         {
-          if(gameState.gameFlags.AudioPlayable === true){
-            if (!import.meta.env.DEV){
+          if (gameState.gameFlags.AudioPlayable === true && gameState.gameFlags.AudioMuted === false){
           gameState.tableHit.play();
             }
-          }
           gameState.Ball.velocityY = gameState.Ball.velocityY * -1;
           gameState.Ball.velocityX = gameState.Ball.velocityX * 1;
           gameState.Ball.y -= gameState.PaddleWidth;
         }
         else if ((gameState.Ball.y - gameState.Ball.radius) <= 0)
         {
-          if(gameState.gameFlags.AudioPlayable === true){
-            if (!import.meta.env.DEV){
+          if (gameState.gameFlags.AudioPlayable === true && gameState.gameFlags.AudioMuted === false){
           gameState.tableHit.play();
-            }
           }
           gameState.Ball.velocityY = gameState.Ball.velocityY * -1;
           gameState.Ball.velocityX = gameState.Ball.velocityX * 1;
@@ -746,13 +749,13 @@ export function TPONG(gameSetup, bDebug) {
           if(gameState.gameFlags.AudioPlayable === true){
             if((Math.floor(Math.random() * 2) === 0))
             {
-              if (!import.meta.env.DEV){
+              if (gameState.gameFlags.AudioPlayable === true && gameState.gameFlags.AudioMuted === false){
               gameState.paddleServe.play();
               }
             }
             else
             {
-              if (!import.meta.env.DEV){
+              if (gameState.gameFlags.AudioPlayable === true && gameState.gameFlags.AudioMuted === false){
               gameState.paddleHit.play();
               }
             }
@@ -770,13 +773,13 @@ export function TPONG(gameSetup, bDebug) {
           if(gameState.gameFlags.AudioPlayable === true){
             if((Math.floor(Math.random() * 2) === 0))
             {
-              if (!import.meta.env.DEV){
+              if (gameState.gameFlags.AudioPlayable === true && gameState.gameFlags.AudioMuted === false){
               gameState.paddleServe.play();
               }
             }
             else
             {
-              if (!import.meta.env.DEV){
+              if (gameState.gameFlags.AudioPlayable === true && gameState.gameFlags.AudioMuted === false){
               gameState.paddleHit.play();
               }
             }
@@ -1044,7 +1047,22 @@ export function TPONG(gameSetup, bDebug) {
       }
     }
     if (gameState.gameFlags.localStorage === true) {
-        localStorage.setItem('savedPreferences', JSON.stringify({'savedPreferences' : {'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : bShowControls}}));
+      localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : {'ShowControls' : bShowControls, 'AudioMuted' : gameState.gameFlags.AudioMuted}}));
+        }
+  }}/>
+    <input type='button' value={controlAudioText} className='gameControlsMouseAudio' onClick={() => {
+      if(gameState.gameFlags.AudioMuted === false)
+      {
+        gameState.gameFlags.AudioMuted = true;
+        setControlAudioText('Turn on sound');
+      }
+      else
+      {
+        gameState.gameFlags.AudioMuted = false;
+        setControlAudioText('Turn off sound');
+      }
+    if (gameState.gameFlags.localStorage === true) {
+      localStorage.setItem('savedPreferences', JSON.stringify({'savedPalette' : gameState.selectedPalette, 'savedControlsPreference' : {'ShowControls' : gameState.gameFlags.ShowControls, 'AudioMuted' : gameState.gameFlags.AudioMuted}}));
         }
   }}/>
   <table className='gameControls'>

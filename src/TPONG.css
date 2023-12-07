@@ -22,7 +22,7 @@
     color:var( --main-textColor);
     color-scheme: var(--main-scheme);
     min-height: 24px;
-    min-width: 24px;
+    min-width: 128px;
     overflow: hidden;
     text-decoration: none;
     position:  relative;
@@ -33,5 +33,26 @@
     background-color: var(--main-bg-hovercolor)
 }
 .gameControlsMouse:active {
+    transform: scale(.97);
+}
+.gameControlsMouseAudio {
+    display: var(--main-gameControl-display-alt);
+    border: var(--main-textColor);
+    border-radius: 8px;
+    background-color: var(--main-bg-color);
+    color:var( --main-textColor);
+    color-scheme: var(--main-scheme);
+    min-height: 24px;
+    min-width: 128px;
+    overflow: hidden;
+    text-decoration: none;
+    position:  block;
+    font-size: small;
+    font-weight: bold;
+}
+.gameControlsMouseAudio:hover {
+    background-color: var(--main-bg-hovercolor)
+}
+.gameControlsMouseAudio:active {
     transform: scale(.97);
 }
