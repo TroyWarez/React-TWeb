@@ -36,6 +36,7 @@ export function TPONG(gameSetup, bDebug) {
     ctx : null,
 
     ControllerSlots : new Array(),
+    ControllerAnalogZones : new Array(-0.75, -0.5, -0.35, 0.35, 0.5, 0.75),
 
     ScalingFactorX : 1,
     ScalingFactorY : 1,
@@ -93,7 +94,7 @@ export function TPONG(gameSetup, bDebug) {
     gameState.PaddleRad = 20;
     gameState.DefaultWidth = 800;
     gameState.DefaultHeight = 600;
-    gameState.DefaultSpeed = 0.45;
+    gameState.DefaultSpeed = 0.35;
     gameState.DefaultCPUSpeed = 0.90;
     gameState.Red = '#7F0000';
     gameState.Green = '#007F00';
@@ -122,6 +123,7 @@ export function TPONG(gameSetup, bDebug) {
     gameState.ctx = gameState.getContext('2d');
 
     gameState.ControllerSlots = new Array();
+    gameState.ControllerAnalogZones = new Array(-0.75, -0.5, -0.35, 0.75, 0.5, 0.35);
     gameState.ScalingFactorX = 1;
     gameState.ScalingFactorY = 1;
 
@@ -518,7 +520,7 @@ export function TPONG(gameSetup, bDebug) {
           }
         }
   
-        if(firstController.axes[1] <= -0.75)//Left analog
+        if(firstController.axes[1] <= gameState.ControllerAnalogZones[0])//Left analog
         {
           if(gameState.gameFlags.StartGame === true)
           {
@@ -532,7 +534,7 @@ export function TPONG(gameSetup, bDebug) {
             }
           }
         }
-        else if(firstController.axes[1] <= -0.5)//Left analog
+        else if(firstController.axes[1] <= gameState.ControllerAnalogZones[1])//Left analog
         {
           if(gameState.gameFlags.StartGame === true)
           {
@@ -546,7 +548,7 @@ export function TPONG(gameSetup, bDebug) {
             }
           }
         }
-        else if(firstController.axes[1] <= -0.35)//Left analog
+        else if(firstController.axes[1] <= gameState.ControllerAnalogZones[2])//Left analog
         {
           if(gameState.gameFlags.StartGame === true)
           {
@@ -560,7 +562,7 @@ export function TPONG(gameSetup, bDebug) {
             }
           }
         }
-        else if(firstController.axes[1] >= 0.75)//Left analog
+        else if(firstController.axes[1] >= gameState.ControllerAnalogZones[3])//Left analog
         {
           if(gameState.gameFlags.StartGame === true)
           {
@@ -574,7 +576,7 @@ export function TPONG(gameSetup, bDebug) {
             }
           }
         }
-        else if(firstController.axes[1] >= 0.5)//Left analog
+        else if(firstController.axes[1] >= gameState.ControllerAnalogZones[4])//Left analog
         {
           if(gameState.gameFlags.StartGame === true)
           {
@@ -588,7 +590,7 @@ export function TPONG(gameSetup, bDebug) {
             }
           }
         }
-        else if(firstController.axes[1] >= 0.35)//Left analog
+        else if(firstController.axes[1] >= gameState.ControllerAnalogZones[5])//Left analog
         {
           if(gameState.gameFlags.StartGame === true)
           {
