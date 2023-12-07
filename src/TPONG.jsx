@@ -417,9 +417,9 @@ export function TPONG(gameSetup, bDebug) {
       gameState.BallMovSpeed = (gameState.DefaultSpeed * (gameState.ScalingFactorX * 1.3));
       gameState.CPUMovSpeed = ((gameState.DefaultCPUSpeed / 4) * gameState.ScalingFactorY);
       
-      gameState.PlayerMovSpeedFull = (gameState.DefaultSpeed * gameState.ScalingFactorY);
-      gameState.PlayerMovSpeedHalf = (gameState.DefaultSpeed * gameState.ScalingFactorY);
-      gameState.PlayerMovSpeedQuater = (gameState.DefaultSpeed * gameState.ScalingFactorY);
+      gameState.PlayerMovSpeedFull = ((gameState.DefaultSpeed  / 2) * (gameState.ScalingFactorY * 1.5));
+      gameState.PlayerMovSpeedHalf = ((gameState.DefaultSpeed / 2) * gameState.ScalingFactorY);
+      gameState.PlayerMovSpeedQuater = ((gameState.DefaultSpeed / 4) * gameState.ScalingFactorY);
   
       let Gamepads = navigator.getGamepads 
         ? navigator.getGamepads() 
