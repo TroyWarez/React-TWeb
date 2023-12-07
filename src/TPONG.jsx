@@ -1033,19 +1033,23 @@ export function TPONG(gameSetup, bDebug) {
   <td><b>Pause</b></td>
   </tr>
   <tr>
-  <td><img width='50px' height='50px' src={gameState.MouseIcon_Path} className='MouseIcon'/></td>
-  <td><img width='50px' height='50px' src={gameState.MouseIcon_Path} className='MouseIcon'/></td>
-  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_C_Key_Path} id='keyBoardIcon_C_Key'/></td>
-  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_F11_Key_Path} id='keyBoardIcon_F11_Key'/></td>
-  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_Enter_Key_Path} id='keyBoardIcon_Enter_Key'/></td>
+  <td><img width='50px' height='50px' alt='Mouse Up' onError={() =>
+  {
+    gameState.ctx.canvas.style.marginLeft = '1%';
+    gameState.ctx.canvas.style.marginRight = 'auto';
+  }} src={gameState.MouseIcon_Path} className='MouseIcon'/></td>
+  <td><img width='50px' height='50px' alt='Mouse Down' src={gameState.MouseIcon_Path} className='MouseIcon'/></td>
+  <td><img width='50px' height='50px' alt='C Key' src={gameState.keyBoardIcon_C_Key_Path} id='keyBoardIcon_C_Key'/></td>
+  <td><img width='50px' height='50px' alt='F11 Key' src={gameState.keyBoardIcon_F11_Key_Path} id='keyBoardIcon_F11_Key'/></td>
+  <td><img width='50px' height='50px' alt='Enter Key' src={gameState.keyBoardIcon_Enter_Key_Path} id='keyBoardIcon_Enter_Key'/></td>
   </tr>
   <tr>
-  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_W_Key_Path} id='keyBoardIcon_W_Key'/></td>
-  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_S_Key_Path} id='keyBoardIcon_S_Key'/></td>
+  <td><img width='50px' height='50px' alt='W Key' src={gameState.keyBoardIcon_W_Key_Path} id='keyBoardIcon_W_Key'/></td>
+  <td><img width='50px' height='50px' alt='S Key' src={gameState.keyBoardIcon_S_Key_Path} id='keyBoardIcon_S_Key'/></td>
   </tr>
   <tr>
-  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_Up_Key_Path} id='keyBoardIcon_Up_Key'/></td>
-  <td><img width='50px' height='50px' src={gameState.keyBoardIcon_Down_Key_Path} id='keyBoardIcon_Down_Key'/></td>
+  <td><img width='50px' height='50px' alt='Up Arrow Key' src={gameState.keyBoardIcon_Up_Key_Path} id='keyBoardIcon_Up_Key'/></td>
+  <td><img width='50px' height='50px' alt='Down Arrow Key' src={gameState.keyBoardIcon_Down_Key_Path} id='keyBoardIcon_Down_Key'/></td>
   </tr>
 </tbody>
 <thead>
@@ -1064,15 +1068,15 @@ export function TPONG(gameSetup, bDebug) {
   <td><b>Pause</b></td>
   </tr>
   <tr>
-  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
-  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
-  <td><img src='\icons\TPONG\XboxSeriesX_RB_LB.png'/></td>
-  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_View.png'/></td>
-  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Menu.png'/></td>
+  <td><img width='50px' height='50px' alt='Left Stick Up' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+  <td><img width='50px' height='50px' alt='Left Stick Down' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+  <td><img alt='Right & Left Bumpers' src='\icons\TPONG\XboxSeriesX_RB_LB.png'/></td>
+  <td><img width='50px' height='50px' alt='Select Button'   src='\icons\TPONG\XboxSeriesX_View.png'/></td>
+  <td><img width='50px' height='50px' alt='Start Button'  src='\icons\TPONG\XboxSeriesX_Menu.png'/></td>
   </tr>
   <tr>
-  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
-  <td><img width='50px' height='50px' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+  <td><img width='50px' height='50px' alt='Dpad Up' src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
+  <td><img width='50px' height='50px' alt='Dpad Down'  src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
   </tr>
 </tbody>
   </table>
