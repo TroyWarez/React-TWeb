@@ -16,7 +16,7 @@ export default function Article() {
                 ArticleContent.ContentState.Content = <article className='Article'>{BetterMediaKeysDescription}</article>;
                 ArticleContent.ContentState.ContentTitle = 
                 (<>
-                <img className='ArticleTitle' src='/BetterMediaKeysLogo.svg' width='128px' height='64px'/>
+                <img alt='BetterMediaKeysIcon' className='ArticleTitle' src='/BetterMediaKeysLogo.svg' width='128px' height='64px'/>
                 <h2 className='ArticleTitle'>{'BetterMediaKeys'}</h2>
                 </>);
                 setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/safari-pinned-tab.svg?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/main-manifest.json?v=2'} }));
@@ -49,7 +49,7 @@ export default function Article() {
                 }
                 ArticleContent.ContentState.ContentTitle = 
                 (<>
-                <img className='ArticleTitle' id='controllerIcon' src={ControllerIconPath} width='128px' height='64px'/>
+                <img alt='ControllerIcon' className='ArticleTitle' id='controllerIcon' src={ControllerIconPath} width='128px' height='64px'/>
                 <h2 className='ArticleTitle'>{'GenericInput'}</h2>
                 </>);
                 ArticleContent.ContentState.Content = <article className='Article'>{GenericInputDescription}</article>;
@@ -92,7 +92,7 @@ export default function Article() {
                         ArticleContent.ContentState.Content = <article className='Article'>{BetterMediaKeysDescription}</article>;
                         ArticleContent.ContentState.ContentTitle = 
                         (<>
-                        <img className='ArticleTitle' src='/BetterMediaKeysLogo.svg' width='128px' height='64px'/>
+                        <img className='ArticleTitle' alt='BetterMediaKeysIcon' src='/BetterMediaKeysLogo.svg' width='128px' height='64px'/>
                         <h2 className='ArticleTitle'>{'BetterMediaKeys'}</h2>
                         </>);
                         setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/safari-pinned-tab.svg?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/main-manifest.json?v=2'} }));
@@ -121,7 +121,7 @@ export default function Article() {
                         }
                         ArticleContent.ContentState.ContentTitle = 
                         (<>
-                        <img className='controllerIcon' src={ControllerIconPath} width='128px' height='64px'/>
+                        <img className='controllerIcon' alt='ControllerIcon' src={ControllerIconPath} width='128px' height='64px'/>
                         <h2 className='ArticleTitle'>{'GenericInput'}</h2>
                         </>);
                         ArticleContent.ContentState.Content = <article className='Article'>{GenericInputDescription}</article>;
