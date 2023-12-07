@@ -223,6 +223,7 @@ export function TPONG(gameSetup, bDebug) {
         document.body.style.setProperty('--main-visibility', 'hidden');
         document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
         document.body.style.setProperty('--main-gameControl-display', 'none');
+        document.body.style.setProperty('--main-gameControl-display-alt', 'none');
         document.body.style.setProperty('--main-display-flex', 'none');
         document.body.style.setProperty('--main-display-flexbox', 'none');
         document.body.style.setProperty('--main-display-block', 'none');
@@ -246,6 +247,7 @@ export function TPONG(gameSetup, bDebug) {
         document.body.style.setProperty('--main-visibility', 'visible');
         document.body.style.setProperty('--main-gameControl-visibility', 'visible');
         document.body.style.setProperty('--main-gameControl-display', 'block');
+        document.body.style.setProperty('--main-gameControl-display-alt', 'block');
         document.body.style.setProperty('--main-display-flex', 'flex');
         document.body.style.setProperty('--main-display-flexbox', 'flexbox');
         document.body.style.setProperty('--main-display-block', 'block');
@@ -991,7 +993,29 @@ export function TPONG(gameSetup, bDebug) {
   }
   return (
   <>
-  <input type='button' value={'Hide Game Controls'} className='gameControls'/>
+  <input type='button' value={'Hide Game Controls'} className='gameControlsMouse' onClick={() => {
+    switch (getComputedStyle(document.body).getPropertyValue('--main-gameControl-visibility'))
+    {
+      case 'visible':
+      {
+        document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
+        break;
+      }
+      case 'hidden':
+      {
+        document.body.style.setProperty('--main-gameControl-visibility', 'visible');
+        break;
+      }
+      default:
+      {
+        if (import.meta.env.DEV){
+          console.warn('Warning: the main gamecontrol display css variable was set to this unknown value: \'' + getComputedStyle(document.body).getPropertyValue('--main-gameControl-visibility') + '\'');
+        }
+        document.body.style.setProperty('--main-gameControl-visibility', 'visible');
+        break;
+      }
+    }
+  }}/>
   <table className='gameControls'>
 <thead>
   <tr>

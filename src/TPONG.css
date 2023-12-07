@@ -13,3 +13,25 @@
     visibility: var(--main-gameControl-visibility);
     position:  relative;
 }
+
+.gameControlsMouse {
+    display: var(--main-gameControl-display-alt);
+    border: var(--main-textColor);
+    border-radius: 8px;
+    background-color: var(--main-bg-color);
+    color:var( --main-textColor);
+    color-scheme: var(--main-scheme);
+    min-height: 24px;
+    min-width: 24px;
+    overflow: hidden;
+    text-decoration: none;
+    position:  relative;
+    font-size: small;
+    font-weight: bold;
+}
+.gameControlsMouse:hover {
+    background-color: var(--main-bg-hovercolor)
+}
+.gameControlsMouse:active {
+    transform: scale(.97);
+}

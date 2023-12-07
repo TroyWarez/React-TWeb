@@ -16,7 +16,7 @@
   --main-display-block: block;
   --main-article-margin: 25%;
   --main-gameControl-display: block;
-  --main-gameControl-display: block;
+  --main-gameControl-display-alt: block;
 }
 
 body {
@@ -28,7 +28,7 @@ body {
   background-color: var(--main-bg-color);
   color-scheme: var(--main-scheme);
   color: var(--main-textColor);
-  overflow:hidden;
+  overflow: hidden;
 }
 @media (prefers-color-scheme: light) {
   :root {
