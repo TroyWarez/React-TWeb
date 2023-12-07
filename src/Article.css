@@ -2,7 +2,7 @@
     margin-left: var(--main-article-margin);
     margin-right: var(--main-article-margin);
     text-align: justify;
-    border: 0px;
+    outline: none;
 }
 .ArticleTitle {
     text-align: center;
