@@ -1,5 +1,7 @@
 import './Navbutton.css';
 import { ContentContext } from './App'
+import controllerDarkIcon from '/Controller_dark.svg'
+import controllerLightIcon from '/Controller_light.svg'
 import { setManifestAndIcons } from './manifestSet'
 import  { SiteDescription, BetterMediaKeysDescription, GenericInputDescription} from './Articles.js'
 import { useContext } from 'react';
@@ -26,8 +28,13 @@ function Navbutton(props)
                             document.body.style.setProperty('--main-article-text-alignment', 'center');
                         }
                         window.document.title = 'TWeb | BetterMediaKeys';
-                        ArticleContent.ContentState.ContentTitle = 'BetterMediaKeys';
-                        ArticleContent.ContentState.Content = <p className='Article'>{BetterMediaKeysDescription}</p>;
+                        document.body.style.setProperty('--main-article-text-alignment', 'center');
+                        ArticleContent.ContentState.Content = <article className='Article'>{BetterMediaKeysDescription}</article>;
+                        ArticleContent.ContentState.ContentTitle = 
+                        (<>
+                        <a href='https://github.com/TroyWarez/BetterMediaKeys'></a><img alt='BetterMediaKeysIcon' className='ArticleTitle' src='/BetterMediaKeysLogo.svg' width='128px' height='64px'/>
+                        <b className='ArticleTitle'>{'BetterMediaKeys'}</b>
+                        </>);
                         break;
                     }
                 case 'GenericInput':
@@ -40,15 +47,42 @@ function Navbutton(props)
                             document.body.style.setProperty('--main-article-text-alignment', 'center');
                         }
                         window.document.title = 'TWeb | GenericInput';
-                        ArticleContent.ContentState.ContentTitle = 'GenericInput';
-                        ArticleContent.ContentState.Content = <p className='Article'>{GenericInputDescription}</p>;
+                        document.body.style.setProperty('--main-article-text-alignment', 'center');
+                        if(ArticleContent.ContentState.UpdateImgLightArray.findIndex((e) => (e.ElementName == 'controllerIcon')) === -1)
+                        {
+                            ArticleContent.ContentState.UpdateImgLightArray.push({'ElementName' : 'controllerIcon', 'LightSvgPath' : controllerLightIcon, 'DarkSvgPath' : controllerDarkIcon});
+                        }
+                        let ControllerIconPath = '';
+                        switch (ArticleContent.ContentState.theme) {
+                            case 'dark':
+                                {
+                                    ControllerIconPath = controllerDarkIcon;
+                                    break;
+                                }
+                            case 'light':
+                                {
+                                    ControllerIconPath = controllerLightIcon;
+                                    break;
+                                }
+                            default:
+                                {
+                                    ControllerIconPath = controllerDarkIcon;
+                                    break;
+                                }
+                        }
+                        ArticleContent.ContentState.ContentTitle = 
+                        (<>
+                        <a href='https://github.com/TroyWarez/GenericInput'><img alt='ControllerIcon' className='ArticleTitle' id='controllerIcon' src={ControllerIconPath} width='128px' height='64px'/></a>
+                        <b className='ArticleTitle'>{'GenericInput'}</b>
+                        </>);
+                        ArticleContent.ContentState.Content = <article className='Article'>{GenericInputDescription}</article>;
                         break;
                     }
                 default:
                     {
                         window.document.title = 'TWeb | Dev';
-                        ArticleContent.ContentState.ContentTitle = 'About';
-                        ArticleContent.ContentState.Content = <p className='Article'>{SiteDescription}</p>;
+                        ArticleContent.ContentState.ContentTitle = <b className='ArticleTitle'>{'About'}</b>;
+                        ArticleContent.ContentState.Content = <article className='Article'>{SiteDescription}</article>;
                         document.body.style.setProperty('--main-article-margin', '25%');
                         document.body.style.setProperty('--main-article-text-alignment', 'center');
                         break;
