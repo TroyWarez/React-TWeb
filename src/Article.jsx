@@ -61,7 +61,7 @@ export default function Article() {
         case '/TPONG':
             {
                 window.document.title = 'TWeb | TPONG';
-                ArticleContent.ContentState.ContentTitle = <b className='ArticleTitle'>TPONG</b>;
+                ArticleContent.ContentState.ContentTitle = <b className='ArticleTitle'>{'TPONG'}</b>;
                 if (import.meta.env.DEV){
                     ArticleContent.ContentState.Content = <TPONG/>;
                 }
