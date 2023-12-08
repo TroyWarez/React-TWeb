@@ -1,11 +1,13 @@
 .Article {
     margin-left: var(--main-article-margin);
     margin-right: var(--main-article-margin);
-    text-align: justify;
+    text-align: var(--main-article-text-alignment);
     outline: none;
 }
 .ArticleTitle {
     text-align: center;
+    font-weight: bold;
+    font-size: x-large;
     display: var(--main-display-block);
     margin-left: var(--main-article-margin);
     margin-right: var(--main-article-margin);

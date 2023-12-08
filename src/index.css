@@ -17,6 +17,7 @@
   --main-article-margin: 25%;
   --main-gameControl-display: block;
   --main-gameControl-display-alt: block;
+  --main-article-text-alignment: justify;
 }
 
 body {

@@ -13,11 +13,12 @@ export default function Article() {
         case '/BetterMediaKeys':
             {
                 window.document.title = 'TWeb | BetterMediaKeys';
+                document.body.style.setProperty('--main-article-text-alignment', 'center');
                 ArticleContent.ContentState.Content = <article className='Article'>{BetterMediaKeysDescription}</article>;
                 ArticleContent.ContentState.ContentTitle = 
                 (<>
                 <img alt='BetterMediaKeysIcon' className='ArticleTitle' src='/BetterMediaKeysLogo.svg' width='128px' height='64px'/>
-                <h2 className='ArticleTitle'>{'BetterMediaKeys'}</h2>
+                <b className='ArticleTitle'>{'BetterMediaKeys'}</b>
                 </>);
                 setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/safari-pinned-tab.svg?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/main-manifest.json?v=2'} }));
                 break;
@@ -25,6 +26,7 @@ export default function Article() {
         case '/GenericInput':
             {
                 window.document.title = 'TWeb | GenericInput';
+                document.body.style.setProperty('--main-article-text-alignment', 'center');
                 if(ArticleContent.ContentState.UpdateImgLightArray.findIndex((e) => (e.ElementName == 'controllerIcon')) === -1)
                 {
                     ArticleContent.ContentState.UpdateImgLightArray.push({'ElementName' : 'controllerIcon', 'LightSvgPath' : controllerLightIcon, 'DarkSvgPath' : controllerDarkIcon});
@@ -50,7 +52,7 @@ export default function Article() {
                 ArticleContent.ContentState.ContentTitle = 
                 (<>
                 <img alt='ControllerIcon' className='ArticleTitle' id='controllerIcon' src={ControllerIconPath} width='128px' height='64px'/>
-                <h2 className='ArticleTitle'>{'GenericInput'}</h2>
+                <b className='ArticleTitle'>{'GenericInput'}</b>
                 </>);
                 ArticleContent.ContentState.Content = <article className='Article'>{GenericInputDescription}</article>;
                 setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/safari-pinned-tab.svg?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/main-manifest.json?v=2'} }));
@@ -59,7 +61,7 @@ export default function Article() {
         case '/TPONG':
             {
                 window.document.title = 'TWeb | TPONG';
-                ArticleContent.ContentState.ContentTitle = <h2 className='ArticleTitle'>TPONG</h2>;
+                ArticleContent.ContentState.ContentTitle = <b className='ArticleTitle'>TPONG</b>;
                 if (import.meta.env.DEV){
                     ArticleContent.ContentState.Content = <TPONG/>;
                 }
@@ -70,13 +72,14 @@ export default function Article() {
                 document.body.style.setProperty('--main-gameControl-display', 'block');
                 document.body.style.setProperty('--main-gameControl-display-alt', 'block');
                 document.body.style.setProperty('--main-article-margin', '3%');
+                document.body.style.setProperty('--main-article-text-alignment', 'justify');
                 setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/icons/TPONG/favicon.ico?v=2?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/icons/TPONG/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/icons/TPONG/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/icons/TPONG/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/icons/TPONG/safari-pinned-tab.svg?v=2'}}, {'manifest-apple-touch-icon-logo192' : {'href' : window.location.origin + '/icons/TPONG/logo192.png?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/TPONG-manifest.json?v=2'} }));
                 break;
             }
         default:
             {
                 window.document.title = 'TWeb | Dev';
-                ArticleContent.ContentState.ContentTitle = <h2 className='ArticleTitle'>About</h2>;
+                ArticleContent.ContentState.ContentTitle = <b className='ArticleTitle'>{'About'}</b>;
                 ArticleContent.ContentState.Content = <article className='Article'>{SiteDescription}</article>;
                 setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/safari-pinned-tab.svg?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/main-manifest.json?v=2'} }));
                 break;
@@ -89,11 +92,12 @@ export default function Article() {
                 case '/BetterMediaKeys':
                     {
                         window.document.title = 'TWeb | BetterMediaKeys';
+                        document.body.style.setProperty('--main-article-text-alignment', 'center');
                         ArticleContent.ContentState.Content = <article className='Article'>{BetterMediaKeysDescription}</article>;
                         ArticleContent.ContentState.ContentTitle = 
                         (<>
                         <img className='ArticleTitle' alt='BetterMediaKeysIcon' src='/BetterMediaKeysLogo.svg' width='128px' height='64px'/>
-                        <h2 className='ArticleTitle'>{'BetterMediaKeys'}</h2>
+                        <b className='ArticleTitle'>{'BetterMediaKeys'}</b>
                         </>);
                         setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/safari-pinned-tab.svg?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/main-manifest.json?v=2'} }));
                         break;
@@ -101,6 +105,7 @@ export default function Article() {
                 case '/GenericInput':
                     {
                         window.document.title = 'TWeb | GenericInput';
+                        document.body.style.setProperty('--main-article-text-alignment', 'center');
                         let ControllerIconPath = '';
                         switch (ArticleContent.ContentState.theme) {
                             case 'dark':
@@ -122,7 +127,7 @@ export default function Article() {
                         ArticleContent.ContentState.ContentTitle = 
                         (<>
                         <img className='controllerIcon' alt='ControllerIcon' src={ControllerIconPath} width='128px' height='64px'/>
-                        <h2 className='ArticleTitle'>{'GenericInput'}</h2>
+                        <b className='ArticleTitle'>{'GenericInput'}</b>
                         </>);
                         ArticleContent.ContentState.Content = <article className='Article'>{GenericInputDescription}</article>;
                         setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/safari-pinned-tab.svg?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/main-manifest.json?v=2'} }));
@@ -131,7 +136,7 @@ export default function Article() {
                 case '/TPONG':
                     {
                         window.document.title = 'TWeb | TPONG';
-                        ArticleContent.ContentState.ContentTitle = <h2 className='ArticleTitle'>TPONG</h2>;
+                        ArticleContent.ContentState.ContentTitle = <b className='ArticleTitle'>TPONG</b>;
                         if (import.meta.env.DEV){
                             ArticleContent.ContentState.Content = <TPONG/>;
                         }
@@ -142,14 +147,16 @@ export default function Article() {
                         document.body.style.setProperty('--main-gameControl-display', 'block');
                         document.body.style.setProperty('--main-gameControl-display-alt', 'block');
                         document.body.style.setProperty('--main-article-margin', '3%');
+                        document.body.style.setProperty('--main-article-text-alignment', 'justify');
                         setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/icons/TPONG/favicon.ico?v=2?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/icons/TPONG/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/icons/TPONG/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/icons/TPONG/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/icons/TPONG/safari-pinned-tab.svg?v=2'}}, {'manifest-apple-touch-icon-logo192' : {'href' : window.location.origin + '/icons/TPONG/logo192.png?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/TPONG-manifest.json?v=2'} }));
                         break;
                     }
                 default:
                     {
                         window.document.title = 'TWeb | Dev';
-                        ArticleContent.ContentState.ContentTitle = <h2 className='ArticleTitle'>About</h2>;
+                        ArticleContent.ContentState.ContentTitle = <b className='ArticleTitle'>{'About'}</b>;
                         ArticleContent.ContentState.Content = <article className='Article'>{SiteDescription}</article>;
+                        document.body.style.setProperty('--main-article-text-alignment', 'center');
                         setManifestAndIcons(new Array({ 'manifest-favicon': {'href' : window.location.origin + '/favicon.ico?v=2'}}, {'manifest-apple-touch' : {'href' : window.location.origin + '/apple-touch-icon.png?v=2'}}, {'manifest-favicon-32x32': {'href' : window.location.origin + '/favicon-32x32.png?v=2'}}, {'manifest-favicon-16x16' : {'href' : window.location.origin + '/favicon-16x16.png?v=2'}}, {'manifest-jsafari-pinned-tab' : {'href' : window.location.origin + '/safari-pinned-tab.svg?v=2'}}, {'manifest-main' : {'href' : window.location.origin + '/main-manifest.json?v=2'} }));
                         break;
                     }

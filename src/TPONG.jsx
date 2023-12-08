@@ -31,6 +31,7 @@ export function TPONG(gameSetup, bDebug) {
     canvas : null,
     frameId : null,
     ColorPalettes: [],
+    controlStyleValue: null,
 
     BallRad : 10,
 
@@ -254,6 +255,7 @@ export function TPONG(gameSetup, bDebug) {
         gameState.ctx.canvas.style.height = '';
         gameState.ctx.canvas.style.display = '';
         gameState.ctx.canvas.style.class = 'mainGamebroad';
+        gameState.controlStyleValue = getComputedStyle(document.body).getPropertyValue('--main-gameControl-visibility');
         document.body.style.setProperty('--main-visibility', 'hidden');
         document.body.style.setProperty('--main-gameControl-visibility', 'hidden');
         document.body.style.setProperty('--main-gameControl-display', 'none');
@@ -279,8 +281,8 @@ export function TPONG(gameSetup, bDebug) {
         gameState.PlayerPaddle = { 'x' : gameState.PaddleHeight, 'y' : ((gameState.gameBoardHeight / 2) - gameState.PaddleHeight) };
         gameState.Ball = { 'x' : (gameState.gameBoardWidth / 2), 'y' : Math.floor(Math.random() * gameState.gameBoardHeight), 'radius' : gameState.BallRad, 'velocityY' : gameState.BallMovSpeed, 'velocityX' : gameState.BallMovSpeed, 'divisor' : 2};
         document.body.style.setProperty('--main-visibility', 'visible');
-        document.body.style.setProperty('--main-gameControl-visibility', 'visible');
         document.body.style.setProperty('--main-gameControl-display', 'block');
+        document.body.style.setProperty('--main-gameControl-visibility', gameState.controlStyleValue);
         document.body.style.setProperty('--main-gameControl-display-alt', 'block');
         document.body.style.setProperty('--main-display-flex', 'flex');
         document.body.style.setProperty('--main-display-flexbox', 'flexbox');
