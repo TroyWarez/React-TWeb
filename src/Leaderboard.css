@@ -1,4 +1,5 @@
 .Leaderboard {
     display: block;
     float: right;
+    overflow: auto;
 }

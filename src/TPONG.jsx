@@ -322,7 +322,6 @@ export function TPONG(gameSetup, bDebug) {
 
     document.addEventListener('click', () => {
       gameState.gameFlags.AudioPlayable = true;
-      /* the audio is now playable; play it if permissions allow */
       if (import.meta.env.DEV && gameState.gameFlags.AudioPlayable === false){
       console.log('The audio is now playable. ');
     }
@@ -1068,69 +1067,69 @@ export function TPONG(gameSetup, bDebug) {
         }
   }}/>
   <table className='gameControls'>
-<thead>
-  <tr>
-    <th colSpan='5'><b>Keyboard & Mouse Controls:</b><br></br></th>
-  </tr>
-</thead>
-<tbody>
-<tr>
-  </tr>
-  <tr>
-  <td><b>Up</b></td>
-  <td><b>Down</b></td>
-  <td><b>Cycle Colors</b></td>
-  <td><b>Fullscreen</b></td>
-  <td><b>Pause</b></td>
-  </tr>
-  <tr>
-  <td><img width='50px' height='50px' alt='Mouse Up' onError={() =>
-  {
-    gameState.ctx.canvas.style.marginLeft = '1%';
-    gameState.ctx.canvas.style.marginRight = 'auto';
-  }} src={MouseIcon_Path} className='MouseIcon'/></td>
-  <td><img width='50px' height='50px' alt='Mouse Down' src={MouseIcon_Path} className='MouseIcon'/></td>
-  <td><img width='50px' height='50px' alt='C Key' src={keyBoardIcon_C_Key_Path} id='keyBoardIcon_C_Key'/></td>
-  <td><img width='50px' height='50px' alt='F11 Key' src={keyBoardIcon_F11_Key_Path} id='keyBoardIcon_F11_Key'/></td>
-  <td><img width='50px' height='50px' alt='Enter Key' src={keyBoardIcon_Enter_Key_Path} id='keyBoardIcon_Enter_Key'/></td>
-  </tr>
-  <tr>
-  <td><img width='50px' height='50px' alt='W Key' src={keyBoardIcon_W_Key_Path} id='keyBoardIcon_W_Key'/></td>
-  <td><img width='50px' height='50px' alt='S Key' src={keyBoardIcon_S_Key_Path} id='keyBoardIcon_S_Key'/></td>
-  </tr>
-  <tr>
-  <td><img width='50px' height='50px' alt='Up Arrow Key' src={keyBoardIcon_Up_Key_Path} id='keyBoardIcon_Up_Key'/></td>
-  <td><img width='50px' height='50px' alt='Down Arrow Key' src={keyBoardIcon_Down_Key_Path} id='keyBoardIcon_Down_Key'/></td>
-  </tr>
-</tbody>
-<thead>
+  <thead>
+      <tr>
+        <th colSpan='5'><b>Keyboard & Mouse Controls:</b><br></br></th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+    </tr>
+    <tr>
+    <td><b>Up</b></td>
+    <td><b>Down</b></td>
+    <td><b>Cycle Colors</b></td>
+    <td><b>Fullscreen</b></td>
+    <td><b>Pause</b></td>
+    </tr>
+    <tr>
+    <td><img width='50px' height='50px' alt='Mouse Up' onError={() =>
+    {
+      gameState.ctx.canvas.style.marginLeft = '1%';
+      gameState.ctx.canvas.style.marginRight = 'auto';
+    }} src={MouseIcon_Path} className='MouseIcon'/></td>
+    <td><img width='50px' height='50px' alt='Mouse Down' src={MouseIcon_Path} className='MouseIcon'/></td>
+    <td><img width='50px' height='50px' alt='C Key' src={keyBoardIcon_C_Key_Path} id='keyBoardIcon_C_Key'/></td>
+    <td><img width='50px' height='50px' alt='F11 Key' src={keyBoardIcon_F11_Key_Path} id='keyBoardIcon_F11_Key'/></td>
+    <td><img width='50px' height='50px' alt='Enter Key' src={keyBoardIcon_Enter_Key_Path} id='keyBoardIcon_Enter_Key'/></td>
+    </tr>
+    <tr>
+    <td><img width='50px' height='50px' alt='W Key' src={keyBoardIcon_W_Key_Path} id='keyBoardIcon_W_Key'/></td>
+    <td><img width='50px' height='50px' alt='S Key' src={keyBoardIcon_S_Key_Path} id='keyBoardIcon_S_Key'/></td>
+    </tr>
+    <tr>
+    <td><img width='50px' height='50px' alt='Up Arrow Key' src={keyBoardIcon_Up_Key_Path} id='keyBoardIcon_Up_Key'/></td>
+    <td><img width='50px' height='50px' alt='Down Arrow Key' src={keyBoardIcon_Down_Key_Path} id='keyBoardIcon_Down_Key'/></td>
+    </tr>
+  </tbody>
+  <thead>
   <tr>
     <th colSpan='5'><b>Gamepad Controls:</b><br></br></th>
   </tr>
-</thead>
-<tbody>
-<tr>
-  </tr>
+  </thead>
+  <tbody>
   <tr>
-  <td><b>Up</b></td>
-  <td><b>Down</b></td>
-  <td><b>Cycle Colors</b></td>
-  <td><b>Fullscreen</b></td>
-  <td><b>Pause</b></td>
-  </tr>
-  <tr>
-  <td><img width='50px' height='50px' alt='Left Stick Up' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
-  <td><img width='50px' height='50px' alt='Left Stick Down' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
-  <td><img alt='Right & Left Bumpers' src='\icons\TPONG\XboxSeriesX_RB_LB.png'/></td>
-  <td><img width='50px' height='50px' alt='Select Button'   src='\icons\TPONG\XboxSeriesX_View.png'/></td>
-  <td><img width='50px' height='50px' alt='Start Button'  src='\icons\TPONG\XboxSeriesX_Menu.png'/></td>
-  </tr>
-  <tr>
-  <td><img width='50px' height='50px' alt='Dpad Up' src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
-  <td><img width='50px' height='50px' alt='Dpad Down'  src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
-  </tr>
-</tbody>
-  </table>
+    </tr>
+    <tr>
+    <td><b>Up</b></td>
+    <td><b>Down</b></td>
+    <td><b>Cycle Colors</b></td>
+    <td><b>Fullscreen</b></td>
+    <td><b>Pause</b></td>
+    </tr>
+    <tr>
+    <td><img width='50px' height='50px' alt='Left Stick Up' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+    <td><img width='50px' height='50px' alt='Left Stick Down' src='\icons\TPONG\XboxSeriesX_Left_Stick.png'/></td>
+    <td><img alt='Right & Left Bumpers' src='\icons\TPONG\XboxSeriesX_RB_LB.png'/></td>
+    <td><img width='50px' height='50px' alt='Select Button'   src='\icons\TPONG\XboxSeriesX_View.png'/></td>
+    <td><img width='50px' height='50px' alt='Start Button'  src='\icons\TPONG\XboxSeriesX_Menu.png'/></td>
+    </tr>
+    <tr>
+    <td><img width='50px' height='50px' alt='Dpad Up' src='\icons\TPONG\XboxSeriesX_Dpad_Up.png'/></td>
+    <td><img width='50px' height='50px' alt='Dpad Down'  src='\icons\TPONG\XboxSeriesX_Dpad_Down.png'/></td>
+    </tr>
+  </tbody>
+    </table>
   <canvas ref={setGameState} onClick={ () => {
     gameState.gameFlags.AudioPlayable = true;
   }}></canvas>
