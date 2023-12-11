@@ -33,6 +33,6 @@ export function Leaderboard() {
   </tr>
   {boardData}
   </tbody>
-    </table>
+  </table>
   )
 }
