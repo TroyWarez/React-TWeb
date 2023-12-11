@@ -1133,7 +1133,7 @@ export function TPONG(gameSetup, bDebug) {
   <canvas ref={setGameState} onClick={ () => {
     gameState.gameFlags.AudioPlayable = true;
   }}></canvas>
-  <Leaderboard></Leaderboard>
+  <Leaderboard/>
   </>
   );
 }

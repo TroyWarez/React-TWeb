@@ -36,6 +36,7 @@ function LightButton()
         let savedlightType = localStorage.getItem('lightSwitchState');
         if(savedlightType !== 'dark' && savedlightType !== 'light' ) {
             localStorage.setItem('lightSwitchState', lightType);
+            savedlightType = lightType;
         }
         lightType = savedlightType;
     }
