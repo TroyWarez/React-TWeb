@@ -1,17 +1,21 @@
-import { useState, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { ApiUrl } from './ApiUrl'
 import './Leaderboard.css'
-import Data  from './TestData.json?raw';
 export function Leaderboard() {
-  let gameboardData = null;
-  if (import.meta.env.DEV){
-    gameboardData = JSON.parse(Data);// Replace with rest api call
-  }
-  else
+  const [boardData, setBoardData] = useState( new Array([<tr key='LoadingRow'><td><b> Loading Leaderboard...</b></td></tr>]));
+  useEffect(() =>
   {
-    gameboardData = undefined;
-  }
-  const listItems = gameboardData.map(leaderboardEntry => <tr key={leaderboardEntry.position}><td><b>{(leaderboardEntry.position + 1)  + '.'}</b></td><td><b>{leaderboardEntry.username}</b></td><td><b>{new Date(leaderboardEntry.time).getHours() + ':' + new Date(leaderboardEntry.time).getMinutes()}</b></td><td><b>{new Date(leaderboardEntry.date).getMonth() + '/' + new Date(leaderboardEntry.date).getDate() + '/' + new Date(leaderboardEntry.date).getFullYear()}</b></td></tr>);
-  const [boardData, setBoardData] = useState( Data );
+    const fetchData = async () => {
+        const result = await fetch(ApiUrl,{method: 'GET', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }});
+        let listItems = await result.json();
+                listItems = listItems.map(leaderboardEntry => <tr key={leaderboardEntry.id}><td><b>{(leaderboardEntry.id + 1)  + '.'}</b></td><td><b>{leaderboardEntry.username}</b></td><td><b>{new Date(leaderboardEntry.time).getHours() + ':' + new Date(leaderboardEntry.time).getMinutes()}</b></td><td><b>{new Date(leaderboardEntry.date).getMonth() + '/' + new Date(leaderboardEntry.date).getDate() + '/' + new Date(leaderboardEntry.date).getFullYear()}</b></td></tr>);
+                setBoardData(listItems);
+    }
+    fetchData();
+  }, []);
+
+  
+
 
   return (
     <table className='Leaderboard' cellPadding='5' cellSpacing='0'> 
@@ -27,7 +31,7 @@ export function Leaderboard() {
     <td><b>Time to 11 Points</b></td>
     <td><b>Date</b></td>
   </tr>
-  {listItems}
+  {boardData}
   </tbody>
     </table>
   )

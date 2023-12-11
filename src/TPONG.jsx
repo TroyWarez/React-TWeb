@@ -844,7 +844,7 @@ export function TPONG(gameSetup, bDebug) {
           {
             gameState.CPUPaddle.y += gameState.CPUMovSpeed * deltaTime;
           }
-          else if ((gameState.CPUPaddle.y - (gameState.CPUMovSpeed * deltaTime)) >= gameState.GameboardBoundary && (gameState.Ball.x >= (gameState.gameBoardWidth / 3)))
+          else if ((gameState.CPUPaddle.y - (gameState.CPUMovSpeed * deltaTime)) >= gameState.GameboardBoundary && (gameState.Ball.x >= (gameState.gameBoardWidth / 3.5)))
           {
             gameState.CPUPaddle.y -= gameState.CPUMovSpeed * deltaTime;
           }
